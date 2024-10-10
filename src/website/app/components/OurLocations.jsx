@@ -31,4 +31,4 @@ const OurLocations = () => {
   );
 };
 
-export default SectionWrapper(OurLocations, "");
+export default SectionWrapper(OurLocations, "/");

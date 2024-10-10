@@ -12,7 +12,7 @@ import { element } from "prop-types";
 import AllCustomers from "./dashboard/app/views/customers/AllCustomers";
 import Branches from "./dashboard/app/views/branches/Branches";
 import Layout from "./website/app/components/Layout";
-import { Home, About } from "./website/app/views";
+import { Home, About, Estimation } from "./website/app/views";
 import Error404 from "./website/app/components/Error404";
 
 const routes = [
@@ -31,6 +31,10 @@ const routes = [
       {
         path: "/about",
         element: <About />,
+      },
+      {
+        path: "/get-estimation",
+        element: <Estimation />,
       },
     ],
   },

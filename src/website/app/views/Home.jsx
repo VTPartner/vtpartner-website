@@ -10,6 +10,8 @@ import {
   FrequentlyAskedQuestions,
   Contact,
   StarsCanvas,
+  WhyChooseUs,
+  QRCode,
 } from "../components";
 
 const Home = () => {
@@ -22,6 +24,8 @@ const Home = () => {
       <AllServices />
       <Testimonials />
       <OurLocations />
+      <WhyChooseUs />
+      <QRCode />
       <FrequentlyAskedQuestions />
       <div className="relative z-0">
         <Contact />

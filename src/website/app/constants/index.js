@@ -223,6 +223,7 @@ const testimonials = [
 const projects = [
   {
     name: "3 Wheeler",
+    price: "200",
     description:
       "The 3-Wheeled Transport Vehicle is a versatile and efficient solution designed for transporting goods with ease and reliability. Engineered to carry up to 500 kg, this vehicle is ideal for urban logistics, delivery services, and small-scale transportation needs.",
     tags: [
@@ -246,6 +247,7 @@ const projects = [
   },
   {
     name: "Tata Ace",
+    price: "350",
     description:
       "This vehicle has a substantial load capacity of around 750 kg, making it suitable for transporting various goods, including groceries, merchandise, and construction materials. Its small footprint allows for easy navigation through congested streets, making it perfect for last-mile delivery.",
     tags: [
@@ -269,6 +271,7 @@ const projects = [
   },
   {
     name: "Cab",
+    price: "100",
     description:
       "We offer dependable cab services tailored to meet your transportation needs. Our fleet of well-maintained vehicles ensures a comfortable ride, whether you're commuting to work, heading to the airport, or exploring the city. Our professional drivers are trained to provide safe and efficient travel, guaranteeing timely arrivals at your destination.",
     tags: [
@@ -291,6 +294,7 @@ const projects = [
   },
   {
     name: "407",
+    price: "1200",
     description:
       "With its spacious cargo area, the 407 allows for efficient loading and unloading, optimizing operational efficiency. Whether used for urban deliveries or long-distance transport, the 407 Big Truck stands out as a dependable choice for businesses seeking a capable and efficient solution for their transportation needs.",
     tags: [
@@ -314,6 +318,7 @@ const projects = [
   },
   {
     name: "Tata Ace",
+    price: "550",
     description:
       "The Tata Ace Mini is a compact and efficient 4-wheeler truck designed to meet the demands of urban and rural transportation. With a load capacity of up to 1200 kg, it offers a practical solution for businesses needing to transport goods quickly and reliably.",
     tags: [
@@ -337,6 +342,7 @@ const projects = [
   },
   {
     name: "JCB",
+    price: "1500",
     description:
       "At VT Partner, we offer professional JCB drivers to ensure your construction and excavation projects run smoothly and efficiently. Our skilled operators are trained to handle JCB machinery with expertise, ensuring safe and effective operation on any job site.",
     tags: [
@@ -360,6 +366,7 @@ const projects = [
   },
   {
     name: "Crane",
+    price: "2000",
     description:
       "At VT Partner, we offer professional crane services tailored to your heavy lifting and transportation needs. Our diverse fleet includes a range of cranes specifically designed for various applications, allowing us to effectively meet the unique requirements of your project—be it in construction, industrial work, or logistics.",
     tags: [
@@ -383,6 +390,7 @@ const projects = [
   },
   {
     name: "Vendor Service",
+    price: "200",
     description:
       "VT Partner provides a range of professional vendor services to meet your everyday needs. From skilled electricians and plumbers to reliable mechanics and cleaners, our vetted experts are just a call away. We prioritize quality and efficiency, ensuring that you receive prompt, trustworthy service for all your household and business requirements.",
     tags: [

@@ -16,7 +16,7 @@ const FrequentlyAskedQuestions = () => {
   };
 
   return (
-    <div className="p-8">
+    <div className="sm:p-8 p-2">
       <div className="text-center mb-6">
         <motion.div
           initial="hidden"
@@ -28,7 +28,7 @@ const FrequentlyAskedQuestions = () => {
           </h3>
         </motion.div>
       </div>
-      <div className="space-y-4 sm:ml-20 sm:mr-20">
+      <div className="space-y-4 sm:ml-10 sm:mr-10">
         {faqData.map((item, index) => (
           <div key={index} className=" border-0">
             <button

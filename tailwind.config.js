@@ -5,6 +5,13 @@ export default {
   theme: {
     extend: {
       colors: {
+        // primary: "#F0F3FF",
+        // secondary: "#808080",
+        // tertiary: "#FFFFFF",
+        // "black-100": "#100d25",
+        // "black-200": "#090325",
+        // "white-100": "#f3f3f3",
+        // white: "#000",
         primary: "#050816",
         secondary: "#aaa6c3",
         tertiary: "#151030",
