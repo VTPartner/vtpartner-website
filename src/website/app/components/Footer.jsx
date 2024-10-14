@@ -151,7 +151,7 @@ const Footer = () => {
                 </svg>
               </a>
             </div>
-            <div className="grid  gap-10 mt-10">
+            <div className="grid  gap-10 mt-10 hidden">
               <img
                 src="https://d1a3f4spazzrp4.cloudfront.net/uber-com/1.3.8/d1a3f4spazzrp4.cloudfront.net/illustrations/app-store-google-4d63c31a3e.svg"
                 alt=""
@@ -168,11 +168,11 @@ const Footer = () => {
       </div>
 
       <div className="text-center sm:flex justify-between items-center m-10">
-        <p className="text-sm font-semibold">
+        <p className="sm:text-sm text-xs font-semibold">
           © {new Date().getFullYear()} VT Partner Trans Pvt Ltd, Inc. All rights
           reserved.
         </p>
-        <div className="flex items-center justify-center gap-4 sm:mt-0 mt-4 sm:mb-0 mb-4">
+        <div className="flex items-center sm:text-sm text-xs justify-center gap-4 sm:mt-0 mt-4 sm:mb-0 mb-4">
           <a
             href=""
             className="hover:text-white text-gray-400"

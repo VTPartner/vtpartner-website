@@ -23,7 +23,7 @@ const FrequentlyAskedQuestions = () => {
           whileInView="show"
           variants={textVariant()}
         >
-          <h3 className={`${styles.sectionSubText}`}>
+          <h3 className={`${styles.sectionSubText}  font-semibold`}>
             Frequently Asked Questions
           </h3>
         </motion.div>
@@ -32,17 +32,17 @@ const FrequentlyAskedQuestions = () => {
         {faqData.map((item, index) => (
           <div key={index} className=" border-0">
             <button
-              className="w-full text-left sm:p-4 p-2 focus:outline-none flex justify-between items-center text-white"
+              className="w-full text-left sm:p-2 p-2 focus:outline-none flex justify-between items-center text-gray"
               onClick={() => togglePanel(index)}
             >
               <span className=" sm:text-[14px] text-[12px] flex items-center">
-                <FaArrowsToDot className="w-3 h-3  m-2 text-white" />
+                <FaArrowsToDot className="w-3 h-3  m-2 text-gray" />
                 {item.question}
               </span>
               <span>
                 {expandedIndex === index ? (
                   <svg
-                    className="w-4 h-4 text-white"
+                    className="w-4 h-4 text-gray"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -56,7 +56,7 @@ const FrequentlyAskedQuestions = () => {
                   </svg>
                 ) : (
                   <svg
-                    className="w-4 h-4 text-white"
+                    className="w-4 h-4 text-gray"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -73,7 +73,7 @@ const FrequentlyAskedQuestions = () => {
             </button>
             {expandedIndex === index && (
               <div className="sm:p-4 p-2">
-                <p className="text-white-100 sm:text-[12px] text-[10px] ml-7">
+                <p className="text-gray sm:text-[12px] text-[10px] ml-7">
                   {item.answer}
                 </p>
               </div>

@@ -20,7 +20,7 @@ const Branches = () => {
         <Breadcrumb
           routeSegments={[
             { name: "Login", path: "/dashboard" },
-            { name: "Login" },
+            { name: "All Branches" },
           ]}
         />
       </Box>

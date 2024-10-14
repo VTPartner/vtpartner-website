@@ -11,6 +11,7 @@ import * as Yup from "yup";
 import { Tilt } from "react-tilt";
 import { motion } from "framer-motion";
 import { fadeIn } from "../utils/motion";
+import { useNavigate } from "react-router-dom";
 
 const libraries = ["places"]; // Load the places library
 
@@ -131,6 +132,8 @@ const LocationForm = ({ onCitySelect }) => {
     return Object.keys(newErrors).length === 0; // Returns true if no errors
   };
 
+  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent default form submission
     if (validateForm()) {
@@ -141,7 +144,16 @@ const LocationForm = ({ onCitySelect }) => {
         contactNumber,
         userDescription,
       });
-      // Reset form or do further processing
+
+      // Create query string from form data
+      const queryParams = new URLSearchParams({
+        pickupLocation,
+        dropLocation,
+        contactName,
+        contactNumber,
+        userDescription,
+      }).toString();
+      navigate(`/fare_estimation_result?${queryParams}`);
     }
   };
 
@@ -157,7 +169,7 @@ const LocationForm = ({ onCitySelect }) => {
       {/* <Tilt axis="x" scale={0} className="  cursor-pointer"> */}
       <motion.div
         variants={fadeIn("right", "spring", 0.5, 0.75)}
-        className="w-fit green-pink-gradient p-[1px] rounded-[20px] shadow-card"
+        className="w-fit green-pink-gradient p-[1px] rounded-[20px] "
       >
         <div
           options={{

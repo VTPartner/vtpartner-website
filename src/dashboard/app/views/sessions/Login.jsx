@@ -17,6 +17,8 @@ import * as Yup from "yup";
 
 import useAuth from "/src/dashboard/app/hooks/useAuth";
 import { Paragraph } from "/src/dashboard/app/components/Typography";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // STYLED COMPONENTS
 const FlexBox = styled(Box)(() => ({
@@ -57,8 +59,8 @@ const StyledRoot = styled("div")(() => ({
 
 // initial login credentials
 const initialValues = {
-  email: "jason@ui-lib.com",
-  password: "dummyPass",
+  email: "",
+  password: "",
   remember: true,
 };
 
@@ -83,13 +85,34 @@ const Login = () => {
     setLoading(true);
     try {
       await login(values.email, values.password);
-      navigate("/dashboard/branches");
+      toast.success("Login Success");
+      setTimeout(() => {
+        navigate("/dashboard/branches");
+      }, 1000); // 1 second delay
     } catch (e) {
       setLoading(false);
+
+      //Error Handling
+      if (e.message === "No Internet Connection") {
+        toast.error("No internet connection. Please check your network.");
+      } else if (e.message === "No Data Found") {
+        toast.error("Invalid credentials. Please try again.");
+      } else if (e.message === "Internal Server Error") {
+        toast.error(
+          "An internal server error occurred on our side. Please try again later."
+        );
+      } else if (e.message === "Server Down or No Response from Server") {
+        toast.error(
+          "Server is down or not responding. Please try again later."
+        );
+      } else {
+        toast.error("An error occurred. Please try again.");
+      }
     }
   };
   return (
     <StyledRoot>
+      <ToastContainer />
       <Card className="card">
         <Grid container>
           <Grid item sm={6} xs={12}>
@@ -164,6 +187,7 @@ const Login = () => {
                       <NavLink
                         to="/session/forgot-password"
                         style={{ color: theme.palette.primary.main }}
+                        className="hidden"
                       >
                         Forgot password?
                       </NavLink>

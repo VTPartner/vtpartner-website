@@ -12,16 +12,23 @@ import { SectionWrapper } from "../hoc";
 import { projects } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
 import { Link, NavLink } from "react-router-dom";
+import { useMediaQuery } from "@mui/material";
 
 const AllServices = () => {
+  const isSmUp = useMediaQuery("(min-width: 640px)");
   return (
     <>
-      <motion.div initial="hidden" whileInView="show" variants={textVariant()}>
+      <motion.div
+        initial="hidden"
+        whileInView="show"
+        variants={isSmUp ? textVariant() : {}}
+      >
         <p className={`${styles.sectionSubText}`}>We Offer various</p>
         <h2 className={`${styles.sectionHeadText}`}>Our Services</h2>
       </motion.div>
 
-      <div className="w-full sm:flex hidden">
+      {/* sm:flex */}
+      <div className="w-full  hidden">
         <motion.p
           initial="hidden"
           whileInView="show"
@@ -61,11 +68,12 @@ const AllServicesCard = ({
   price,
   source_code_link,
 }) => {
+  const isSmUp = useMediaQuery("(min-width: 640px)");
   return (
     <motion.div
       initial="hidden"
       whileInView="show"
-      variants={fadeIn("up", "spring", index * 0.5, 0.75)}
+      variants={isSmUp ? fadeIn("up", "spring", index * 0.5, 0.75) : {}}
     >
       <Tilt
         options={{
@@ -73,7 +81,7 @@ const AllServicesCard = ({
           scale: 1,
           speed: 450,
         }}
-        className="bg-tertiary p-5 rounded-2xl sm:w-[360px] w-full"
+        className="bg-white shadow-xl mt-[1px] p-5 rounded-2xl sm:w-[360px] w-full cursor-pointer"
       >
         <div className="relative w-full h-[230px]">
           <img
@@ -98,14 +106,14 @@ const AllServicesCard = ({
         </div>
 
         <div className="mt-5">
-          <h3 className="text-white font-bold text-[24px]">{name}</h3>
-          <p className="mt-2 text-secondary text-[14px]">{description}</p>
+          <h3 className="text-black font-bold text-[24px]">{name}</h3>
+          <p className="mt-2 text-gray-500 text-[14px]">{description}</p>
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-4 flex hidden flex-wrap gap-2">
           {tags.map((tag) => (
             <NavLink
-              to="/get-estimation"
+              to="/get_estimation"
               state={{
                 serviceName: name,
                 description,

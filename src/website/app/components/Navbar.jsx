@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { Menu, Close } from "@mui/icons-material";
 import { Drawer, IconButton, Button } from "@mui/material";
@@ -11,7 +12,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="bg-primary text-white fixed w-full z-50">
+    <div className="bg-primary text-white fixed w-full z-50 top-0">
       <nav className="flex justify-between items-center gap-4 sm:p-5 p-2">
         <img src="/vite.svg" alt="logo" className="sm:col-span-2 ml-4" />
 
@@ -41,7 +42,7 @@ const Navbar = () => {
               About us
             </NavLink>
           </li>
-          <li>
+          {/* <li>
             <NavLink
               className={({ isActive }) =>
                 isActive
@@ -52,7 +53,7 @@ const Navbar = () => {
             >
               Business
             </NavLink>
-          </li>
+          </li> */}
           <li>
             <NavLink
               className={({ isActive }) =>
@@ -62,7 +63,7 @@ const Navbar = () => {
               }
               to="/agents"
             >
-              Partners
+              Registrations
             </NavLink>
           </li>
         </ul>
@@ -120,7 +121,7 @@ const Navbar = () => {
                     About us
                   </NavLink>
                 </li>
-                <li>
+                {/* <li>
                   <NavLink
                     onClick={toggleDrawer}
                     className={({ isActive }) =>
@@ -130,7 +131,7 @@ const Navbar = () => {
                   >
                     Business
                   </NavLink>
-                </li>
+                </li> */}
                 <li>
                   <NavLink
                     onClick={toggleDrawer}
@@ -139,18 +140,18 @@ const Navbar = () => {
                     }
                     to="/agents"
                   >
-                    Partners
+                    Registrations
                   </NavLink>
                 </li>
               </ul>
             </div>
 
             {/* Download App Button at Bottom */}
-            <div className="mt-auto">
+            {/* <div className="mt-auto">
               <Button variant="contained" fullWidth>
                 Download App
               </Button>
-            </div>
+            </div> */}
           </div>
         </Drawer>
       </nav>

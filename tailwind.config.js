@@ -4,13 +4,16 @@ export default {
   mode: "jit",
   theme: {
     extend: {
+      gridTemplateColumns: {
+        custom: "1fr 0.1fr 1fr",
+      },
       colors: {
         // primary: "#F0F3FF",
         // secondary: "#808080",
         // tertiary: "#FFFFFF",
         // "black-100": "#100d25",
         // "black-200": "#090325",
-        // "white-100": "#f3f3f3",
+        // "white-100": "#f3f3f3","";
         // white: "#000",
         primary: "#050816",
         secondary: "#aaa6c3",
@@ -25,10 +28,16 @@ export default {
       screens: {
         xs: "450px",
       },
+
       backgroundImage: {
         "hero-pattern": "url('/src/assets/herobg.png')",
       },
     },
   },
+
   plugins: [],
 };
+
+               
+               
+              "";

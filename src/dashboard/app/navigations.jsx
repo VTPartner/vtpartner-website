@@ -1,15 +1,45 @@
 export const navigations = [
   { name: "Dashboard", path: "/dashboard/home", icon: "dashboard" },
+
+  { label: "Enquiry", type: "label" },
+  {
+    name: "All Enquiry",
+    icon: "outlined_flag",
+    // badge: { value: "30+", color: "secondary" },
+    children: [
+      {
+        name: "Goods Driver",
+        iconText: "SI",
+        path: "/goods-driver/all-enquires",
+      },
+      {
+        name: "Cab Driver",
+        iconText: "SI",
+        path: "/cab-driver/all-enquires",
+      },
+      {
+        name: "JCB Driver",
+        iconText: "SI",
+        path: "/jcb-driver/all-enquires",
+      },
+      {
+        name: "Crane Driver",
+        iconText: "SI",
+        path: "/crane-driver/all-enquires",
+      },
+    ],
+  },
+
   { label: "Locations", type: "label" },
   {
-    name: "Service Configuration",
+    name: "Location Configuration",
     icon: "pin_drop",
     // badge: { value: "30+", color: "secondary" },
     children: [
       {
-        name: "Allowed Location Details",
-        iconText: "SI",
-        path: "/location-configuration/all-allow-pincodes",
+        name: "Allowed Cities",
+        iconText: "AC",
+        path: "/location_configuration/all_allow_cities",
       },
     ],
   },

@@ -4,15 +4,28 @@ import { Navigate } from "react-router-dom";
 
 import AuthGuard from "./dashboard/app/auth/AuthGuard";
 import { authRoles } from "./dashboard/app/auth/authRoles";
-import Login from "./dashboard/app/views/sessions/Login";
-import Dashboard from "./dashboard/app/views/dashboard/Dashboard";
+
 import MatxLayout from "./dashboard/app/components/MatxLayout/MatxLayout";
 
 import { element } from "prop-types";
-import AllCustomers from "./dashboard/app/views/customers/AllCustomers";
+import {
+  AllCustomers,
+  Dashboard,
+  GoodsDriverEnquiry,
+  Login,
+  CabDriverEnquiry,
+  JCbDriverEnquiry,
+  CraneDriverEnquiry,
+} from "./dashboard/app/views";
 import Branches from "./dashboard/app/views/branches/Branches";
 import Layout from "./website/app/components/Layout";
-import { Home, About, Estimation } from "./website/app/views";
+import {
+  Home,
+  About,
+  Estimation,
+  FareResults,
+  Registration,
+} from "./website/app/views";
 import Error404 from "./website/app/components/Error404";
 
 const routes = [
@@ -33,13 +46,31 @@ const routes = [
         element: <About />,
       },
       {
-        path: "/get-estimation",
+        path: "/agents",
+        element: <Registration />,
+      },
+      {
+        path: "/get_estimation",
         element: <Estimation />,
+      },
+      {
+        path: "/fare_estimation_result",
+        element: <FareResults />,
       },
     ],
   },
-  { path: "/dashboard", element: <Login /> },
-  { path: "/dashboard/branches", element: <Branches /> },
+  {
+    path: "/dashboard",
+    element: <Login />,
+  },
+  {
+    path: "/dashboard/branches",
+    element: (
+      <AuthGuard>
+        <Branches />{" "}
+      </AuthGuard>
+    ),
+  },
   {
     element: (
       <AuthGuard>
@@ -51,14 +82,34 @@ const routes = [
       {
         path: "/dashboard/home",
         element: <Dashboard />,
-        auth: authRoles.admin,
+        auth: authRoles.sa,
       },
 
       {
         path: "/customer/all-customers",
         element: <AllCustomers />,
-        auth: authRoles.admin,
       },
+
+      {
+        path: "/goods-driver/all-enquires",
+        element: <GoodsDriverEnquiry />,
+      },
+
+      {
+        path: "/cab-driver/all-enquires",
+        element: <CabDriverEnquiry />,
+      },
+
+      {
+        path: "/jcb-driver/all-enquires",
+        element: <JCbDriverEnquiry />,
+      },
+
+      {
+        path: "/crane-driver/all-enquires",
+        element: <CraneDriverEnquiry />,
+      },
+
       // e-chart route
       // { path: "/charts/echarts", element: <AppEchart />, auth: authRoles.editor }
     ],

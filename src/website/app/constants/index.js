@@ -242,7 +242,7 @@ const projects = [
     ],
     weight: "500 kg",
     image:
-      "https://i.pinimg.com/736x/59/45/f0/5945f0bb5de4fbc5fa92ddbe9d43136e.jpg",
+      "https://images.jdmagicbox.com/quickquotes/images_main/piaggio-ape-xtra-ld-mini-truck-2220305507-n9ndvo0n.jpg",
     source_code_link: "https://github.com/",
   },
   {
@@ -289,7 +289,7 @@ const projects = [
       // },
     ],
     weight: "",
-    image: "https://entrackr.com/storage/2017/12/ola-image-1.jpg",
+    image: "https://5.imimg.com/data5/LY/UF/HF/GLADMIN-46187974/c-h-6.jpg",
     source_code_link: "https://github.com/",
   },
   {
@@ -446,3 +446,4 @@ export {
   areas,
   faqData,
 };
+

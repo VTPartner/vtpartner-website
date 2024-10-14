@@ -126,8 +126,11 @@ const PaginationTable = () => {
                 <TableCell align="center">${subscriber.amount}</TableCell>
                 <TableCell align="right">
                   <IconButton>
-                    <Icon color="error">close</Icon>
+                    <Icon color="primary">edit</Icon>
                   </IconButton>
+                  {/* <IconButton>
+                    <Icon color="error">delete</Icon>
+                  </IconButton> */}
                 </TableCell>
               </TableRow>
             ))}

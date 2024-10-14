@@ -22,6 +22,22 @@ import ServiceDetails from "./ServiceDetails";
 import WhyChooseUs from "./WhyChooseUs";
 import QRCode from "./QRCode";
 import ScrollToTop from "./ScrollToTop";
+import FareEstimateResults from "./FareEstimationResults";
+import FareEstimateQr from "./FareEstimateQr";
+import VerticalDivider from "./VerticalDivider";
+import FormSectionDemo from "./Form";
+import RegistrationHero from "./RegistrationHero";
+import VTPartnerAdvantages from "./VTPartnerAdvantages";
+import AdditionalBenefits from "./AdditionalBenefits";
+import ChangingLives from "./ChangingLives";
+import OwnMultipleVehicles from "./OwnMultipleVehicles";
+import Banner from "./Banner";
+import OurMission from "./OurMission";
+import AboutServices from "./AboutServices";
+import BannerMoreDetails from "./BannerMoreDetails";
+import RightSideImage from "./RightSideImage";
+import LeftSideImage from "./LeftSideImage";
+import KeepInTouch from "./KeepInTouch";
 
 export {
   Navbar,
@@ -45,4 +61,20 @@ export {
   WhyChooseUs,
   QRCode,
   ScrollToTop,
+  FareEstimateResults,
+  FareEstimateQr,
+  VerticalDivider,
+  FormSectionDemo,
+  RegistrationHero,
+  VTPartnerAdvantages,
+  AdditionalBenefits,
+  ChangingLives,
+  OwnMultipleVehicles,
+  Banner,
+  OurMission,
+  AboutServices,
+  BannerMoreDetails,
+  RightSideImage,
+  LeftSideImage,
+  KeepInTouch,
 };

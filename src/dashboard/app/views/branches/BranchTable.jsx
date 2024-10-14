@@ -1,4 +1,8 @@
-import { useState } from "react";
+/* eslint-disable no-unused-vars */
+import { useState, useEffect } from "react";
+import Cookies from "js-cookie";
+import { format } from "date-fns";
+import { serverEndPoint } from "../../constants";
 import {
   Box,
   Icon,
@@ -10,8 +14,12 @@ import {
   TableHead,
   IconButton,
   TablePagination,
+  CircularProgress,
+  Typography,
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
+import axios from "axios";
+import useAuth from "/src/dashboard/app/hooks/useAuth";
 
 // STYLED COMPONENT
 const StyledTable = styled(Table)(() => ({
@@ -24,74 +32,45 @@ const StyledTable = styled(Table)(() => ({
   },
 }));
 
-const subscribarList = [
-  {
-    name: "john doe",
-    date: "18 january, 2019",
-    amount: 1000,
-    status: "close",
-    company: "ABC Fintech LTD.",
-  },
-  {
-    name: "kessy bryan",
-    date: "10 january, 2019",
-    amount: 9000,
-    status: "open",
-    company: "My Fintech LTD.",
-  },
-  {
-    name: "kessy bryan",
-    date: "10 january, 2019",
-    amount: 9000,
-    status: "open",
-    company: "My Fintech LTD.",
-  },
-  {
-    name: "james cassegne",
-    date: "8 january, 2019",
-    amount: 5000,
-    status: "close",
-    company: "Collboy Tech LTD.",
-  },
-  {
-    name: "lucy brown",
-    date: "1 january, 2019",
-    amount: 89000,
-    status: "open",
-    company: "ABC Fintech LTD.",
-  },
-  {
-    name: "lucy brown",
-    date: "1 january, 2019",
-    amount: 89000,
-    status: "open",
-    company: "ABC Fintech LTD.",
-  },
-  {
-    name: "lucy brown",
-    date: "1 january, 2019",
-    amount: 89000,
-    status: "open",
-    company: "ABC Fintech LTD.",
-  },
-  {
-    name: "lucy brown",
-    date: "1 january, 2019",
-    amount: 89000,
-    status: "open",
-    company: "ABC Fintech LTD.",
-  },
-  {
-    name: "lucy brown",
-    date: "1 january, 2019",
-    amount: 89000,
-    status: "open",
-    company: "ABC Fintech LTD.",
-  },
-];
 const BranchTable = () => {
+  const [branches, setBranches] = useState([]); // State to store fetched branches
+  const [loading, setLoading] = useState(true); // State for loading indicator
+  const [error, setError] = useState(null); // State for handling errors
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const { user } = useAuth();
+
+  // Fetch branches when the component mounts
+  useEffect(() => {
+    const fetchBranches = async () => {
+      try {
+        // Read the token from cookies
+        const token = Cookies.get("authToken");
+
+        const endPoint = serverEndPoint + "/all_branches";
+        console.log("endPoint::", endPoint);
+
+        const response = await axios.post(
+          endPoint,
+          {
+            admin_id: user.id, // Replace with dynamic admin_id or fetch from context if needed
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+            },
+          }
+        );
+        setBranches(response.data.branches); // Store branches data
+        setLoading(false); // Stop loading when data is fetched
+      } catch (error) {
+        setError("Failed to fetch branches");
+        setLoading(false); // Stop loading on error
+      }
+    };
+
+    fetchBranches();
+  }, []);
 
   const handleChangePage = (_, newPage) => {
     setPage(newPage);
@@ -101,6 +80,40 @@ const BranchTable = () => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  const handleBranchSelect = (branchId) => {
+    Cookies.set("selectedBranchId", branchId, { expires: 1 }); // Save selected branch ID in cookies for 1 day
+  };
+
+  // Render loading spinner
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  // Render error message
+  if (error) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <Typography variant="h6" color="error">
+          {error}
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box width="100%" overflow="auto">
@@ -115,19 +128,27 @@ const BranchTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {subscribarList
+          {branches
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((subscriber, index) => (
+            .map((branch, index) => (
               <TableRow key={index}>
-                <TableCell align="left">{subscriber.name}</TableCell>
-                <TableCell align="left">Belgaum</TableCell>
+                <TableCell align="left">{branch.branch_name}</TableCell>
+                <TableCell align="left">{branch.location}</TableCell>
+                <TableCell align="center">
+                  {format(
+                    new Date(branch.creation_time * 1000),
+                    "MM/dd/yyyy, hh:mm:ss a"
+                  )}
+                </TableCell>
 
-                <TableCell align="center">{subscriber.date}</TableCell>
-                <TableCell align="center">{subscriber.status}</TableCell>
-
+                <TableCell align="center">
+                  {branch.branch_status || "Open"}
+                </TableCell>
                 <TableCell align="right">
-                  <IconButton>
-                    <NavLink to="/dashboard/home">
+                  <IconButton
+                    onClick={() => handleBranchSelect(branch.branch_id)} // Save branch ID before navigating
+                  >
+                    <NavLink to={`/dashboard/home/`}>
                       <Icon color="primary">arrow_forward</Icon>
                     </NavLink>
                   </IconButton>
@@ -142,7 +163,7 @@ const BranchTable = () => {
         page={page}
         component="div"
         rowsPerPage={rowsPerPage}
-        count={subscribarList.length}
+        count={branches.length}
         onPageChange={handleChangePage}
         rowsPerPageOptions={[5, 10, 25]}
         onRowsPerPageChange={handleChangeRowsPerPage}
