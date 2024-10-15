@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
@@ -23,7 +24,7 @@ const AllServices = () => {
         whileInView="show"
         variants={isSmUp ? textVariant() : {}}
       >
-        <p className={`${styles.sectionSubText}`}>We Offer various</p>
+        <p className={`${styles.sectionSubText} `}>We Offer various</p>
         <h2 className={`${styles.sectionHeadText}`}>Our Services</h2>
       </motion.div>
 
@@ -33,7 +34,7 @@ const AllServices = () => {
           initial="hidden"
           whileInView="show"
           variants={fadeIn("", "", 0.1, 0.25)}
-          className="mt-3 text-secondary text-[17px] max-w-3xl leading-[30px]"
+          className="mt-0 text-secondary text-[17px] max-w-3xl leading-[30px]"
         >
           At VT Partner, we are committed to providing a wide range of reliable
           and efficient services to meet your everyday needs. Whether you're
@@ -45,16 +46,50 @@ const AllServices = () => {
         </motion.p>
       </div>
 
-      <div className="sm:mt-20 flex flex-wrap gap-7">
+      <div className="sm:mt-1 flex flex-wrap justify-evenly">
         {projects.map((project, index) => (
-          <AllServicesCard
-            key={`project-${index}`}
-            index={index}
-            {...project}
-          />
+          <ServiceCard key={`project-${index}`} index={index} {...project} />
         ))}
       </div>
     </>
+  );
+};
+
+const ServiceCard = ({
+  index,
+  name,
+  description,
+  tags,
+  image,
+  weight,
+  price,
+  source_code_link,
+}) => {
+  return (
+    <Tilt className="max-w-[30rem] mt-4">
+      <motion.div
+        variants={fadeIn("right", "spring", 0.5 * index, 0.75)}
+        className="w-full  p-[1px] rounded-[20px]"
+      >
+        <div
+          options={{
+            max: 45,
+            scale: 1,
+            speed: 450,
+          }}
+          className="bg-white rounded-[20px] py-5 px-6 min-h-[70px] flex justify-evenly items-center flex-col"
+        >
+          <img
+            src={image}
+            alt={name}
+            className="sm:w-20 sm:h-20 w-8 h-8 object-contain"
+          />
+        </div>
+      </motion.div>
+      <h3 className="text-gray sm:mt-4 mt-2 sm:text-[12px] text-[8px] font-bold text-center overflow-clip">
+        {name}
+      </h3>
+    </Tilt>
   );
 };
 
@@ -134,5 +169,5 @@ const AllServicesCard = ({
     </motion.div>
   );
 };
-
+// export default AllServices;
 export default SectionWrapper(AllServices, "all-services");

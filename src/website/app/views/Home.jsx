@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 // import React from 'react'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Hero,
   Services,
@@ -15,8 +15,10 @@ import {
   EstimationHeroBanner,
   LocationForm,
   FormSectionDemo,
+  CitySelectorMobile,
 } from "../components";
 
+import { MatxLoading } from "../../../dashboard/app/components";
 const Home = () => {
   const cities = [
     {
@@ -47,18 +49,37 @@ const Home = () => {
   const handleCitySelect = (imageUrl) => {
     setBgImage(imageUrl);
   };
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate a loading time for all components
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 100); // Adjust timing as needed
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="bg-gray-100 text-black!">
-      <EstimationHeroBanner bgImage={bgImage} />
-      <LocationForm onCitySelect={handleCitySelect} />
-      {/* <FormSectionDemo /> */}
-      <AllServices />
-      <FrequentlyAskedQuestions />
-      <div className="relative z-0 bg-primary">
-        <Contact />
-        <StarsCanvas />
-      </div>
-      {/* <div className="bg-hero-pattern bg-cover bg-no-repeat bg-center min-h-screen">
+    <>
+      {isLoading ? (
+        // Show shimmer effect while loading
+        <div className="h-screen bg-gray flex flex-col items-center justify-center">
+          <MatxLoading />
+        </div>
+      ) : (
+        <>
+          <div className="bg-gray-100 text-black! lg:mt-[4.5rem] mt-[3.5rem]">
+            <EstimationHeroBanner bgImage={bgImage} onCitySelect={handleCitySelect}/>
+            {/* <LocationForm onCitySelect={handleCitySelect} /> */}
+            {/* <FormSectionDemo /> */}
+            <AllServices />
+            <FrequentlyAskedQuestions />
+            <div className="relative z-0 bg-primary">
+              <Contact />
+              <StarsCanvas />
+            </div>
+            {/* <div className="bg-hero-pattern bg-cover bg-no-repeat bg-center min-h-screen">
         <Hero />
       </div>
       
@@ -72,7 +93,10 @@ const Home = () => {
         <Contact />
         <StarsCanvas />
       </div> */}
-    </div>
+          </div>
+        </>
+      )}
+    </>
   );
 };
 

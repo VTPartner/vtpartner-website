@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {
   RegistrationHero,
   VTPartnerAdvantages,
@@ -10,10 +11,10 @@ const Registration = () => {
   return (
     <>
       <RegistrationHero />
-      <VTPartnerAdvantages />
+      {/* <VTPartnerAdvantages />
       <ChangingLives />
-      <AdditionalBenefits />
-      <OwnMultipleVehicles />
+      <AdditionalBenefits /> */}
+      {/* <OwnMultipleVehicles /> */}
     </>
   );
 };

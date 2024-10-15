@@ -246,7 +246,7 @@ const projects = [
     source_code_link: "https://github.com/",
   },
   {
-    name: "Tata Ace",
+    name: "Tata Ace Mini",
     price: "350",
     description:
       "This vehicle has a substantial load capacity of around 750 kg, making it suitable for transporting various goods, including groceries, merchandise, and construction materials. Its small footprint allows for easy navigation through congested streets, making it perfect for last-mile delivery.",
@@ -336,8 +336,7 @@ const projects = [
       // },
     ],
     weight: "1200 kg",
-    image:
-      "https://imgcdn.zigwheels.vn/large/gallery/exterior/92/995/tata-ace-front-angle-low-view-437424.jpg",
+    image: "https://5.imimg.com/data5/AF/IK/GLADMIN-46404058/tata-ace.jpg",
     source_code_link: "https://github.com/",
   },
   {

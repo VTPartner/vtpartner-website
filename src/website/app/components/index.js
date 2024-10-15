@@ -38,6 +38,9 @@ import BannerMoreDetails from "./BannerMoreDetails";
 import RightSideImage from "./RightSideImage";
 import LeftSideImage from "./LeftSideImage";
 import KeepInTouch from "./KeepInTouch";
+import CitySelectorMobile from "./CitySelectorMobile";
+import DownloadApp from "./DownloadApp";
+import Shimmer from "./Shimmer";
 
 export {
   Navbar,
@@ -56,6 +59,7 @@ export {
   OurLocations,
   EstimationHeroBanner,
   CitySelection,
+  CitySelectorMobile,
   LocationForm,
   ServiceDetails,
   WhyChooseUs,
@@ -77,4 +81,6 @@ export {
   RightSideImage,
   LeftSideImage,
   KeepInTouch,
+  DownloadApp,
+  Shimmer,
 };

@@ -1,15 +1,12 @@
-/* eslint-disable react/no-unknown-property */
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import { FiMapPin } from "react-icons/fi";
 import { FiX } from "react-icons/fi";
 import { Tilt } from "react-tilt";
 import { motion } from "framer-motion";
-// import { styles } from "../../../styles";
-import { fadeIn } from "../utils/motion";
+import LocationSearchingOutlinedIcon from "@mui/icons-material/LocationSearchingOutlined";
+import { KeyboardArrowDown } from "@mui/icons-material";
 
-const CitySelection = ({ onCitySelect }) => {
-  // List of cities (you can replace this with API data in the future)
+const CitySelectorMobile = ({ onCitySelect }) => {
   const cities = [
     {
       name: "Belgaum",
@@ -33,18 +30,15 @@ const CitySelection = ({ onCitySelect }) => {
     },
   ];
 
-  // State to handle modal visibility
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   // State to store the selected city
   const [selectedCity, setSelectedCity] = useState(cities[0].name);
 
-  // Toggle modal visibility
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Handle city selection
+  // Toggle modal visibility
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
+
+  // Handle city click
   const handleCityClick = (city) => {
     setSelectedCity(city.name);
     onCitySelect(city.imageUrl);
@@ -52,34 +46,25 @@ const CitySelection = ({ onCitySelect }) => {
   };
 
   return (
-    <div className="sm:relative mt-[-2rem] mb-[1rem]">
-      {/* City Selection Box */}
-      <Tilt className="hidden sm:block cursor-pointer">
-        <motion.div
-          variants={fadeIn("right", "spring", 0.5, 0.75)}
-          className="w-full green-pink-gradient p-[1px] rounded-[20px] shadow-card"
-        >
-          <div
-            options={{
-              max: 45,
-              scale: 1,
-              speed: 450,
-            }}
-            className="bg-tertiary rounded-[20px] py-5 px-6 flex  items-center"
-            onClick={toggleModal}
-          >
-            <FiMapPin className="text-white mr-4 text-xl" />
-            <span className="text-white sm:font-medium text-[-10px]">
-              {selectedCity}
-            </span>
-          </div>
-        </motion.div>
-      </Tilt>
+    <div>
+      {/* City Selector for mobile */}
+      <div
+        className=" flex justify-start items-center  rounded-md cursor-pointer"
+        onClick={toggleModal}
+      >
+        <div className="flex items-center justify-start mb-1 pb-4">
+          <LocationSearchingOutlinedIcon
+            style={{ fontSize: "16px", fontWeight: "bold" }}
+          />
+          <p className="ml-2 font-bold">{selectedCity}</p>
+          <KeyboardArrowDown style={{ fontSize: "18px", marginLeft: "5px" }} />
+        </div>
+      </div>
 
       {/* Modal */}
       {isModalOpen && (
-        <div className="fixed bg-white inset-0 bg-opacity-50 flex justify-center items-center z-20 p-6">
-          <div className="bg-white p-6 rounded-lg w-full lg:w-1/2">
+        <div className="fixed bg-white inset-0 bg-opacity-50 flex justify-center shadow-lg items-center z-20 p-6">
+          <div className="bg-white p-6 rounded-lg w-full lg:w-1/2 shadow-lg">
             <div className="flex justify-between items-center">
               <h3 className="text-lg text-black text-center mb-4">
                 Select your City
@@ -89,7 +74,7 @@ const CitySelection = ({ onCitySelect }) => {
                 onClick={toggleModal}
               />
             </div>
-            <ul className="flex gap-4 justify-evenly flex-wrap ">
+            <ul className="flex gap-4 justify-evenly flex-wrap">
               {cities.map((city, index) => (
                 <li
                   key={index}
@@ -131,4 +116,4 @@ const CitySelection = ({ onCitySelect }) => {
   );
 };
 
-export default CitySelection;
+export default CitySelectorMobile;

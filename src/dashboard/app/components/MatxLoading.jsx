@@ -1,4 +1,4 @@
-import { CircularProgress, Box, styled } from "@mui/material";
+import { LinearProgress, Box, styled } from "@mui/material";
 
 // STYLED COMPONENT
 const StyledLoading = styled("div")({
@@ -7,24 +7,24 @@ const StyledLoading = styled("div")({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  flexDirection: "column", // Ensures vertical stacking of image and progress bar
   "& img": {
     width: "auto",
-    height: "25px"
+    height: "auto",
+    objectFit: "contain",
   },
-  "& .circleProgress": {
-    position: "absolute",
-    left: -7,
-    right: 0,
-    top: "calc(50% - 25px)"
-  }
+  "& .linearProgress": {
+    width: "100%", // Full width progress bar
+    marginTop: "10px", // Add some space between the image and progress bar
+  },
 });
 
 export default function Loading() {
   return (
     <StyledLoading>
-      <Box position="relative">
-        <img src="/assets/images/logo-circle.svg" alt="" />
-        <CircularProgress className="circleProgress" />
+      <Box position="relative" width="200px">
+        <img src="/logo_new.png" alt="Logo" />
+        <LinearProgress className="linearProgress" />
       </Box>
     </StyledLoading>
   );

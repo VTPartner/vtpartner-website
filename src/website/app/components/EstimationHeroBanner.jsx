@@ -1,25 +1,58 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
+import {
+  TextField,
+  Button,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+  useMediaQuery,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { LocationForm } from "../components";
 
-const EstimationHeroBanner = ({ bgImage }) => {
+const EstimationHeroBanner = ({ bgImage, onCitySelect }) => {
+  const navigate = useNavigate(); // Initialize useNavigate hook
+
+  const handleRegisterClick = () => {
+    navigate("/agents"); // Navigate to /agents route on click
+  };
+
   return (
-    <section
-      className="relative w-full sm:h-[40rem] h-[20rem] flex items-center justify-center bg-cover bg-center bg-no-repeat  mb-[20rem]"
-      style={{ backgroundImage: `url(${bgImage})` }}
-    >
-      {/* Background Overlay */}
-      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+    <>
+      <section
+        className="relative w-full lg:h-[40rem] h-[30rem] flex items-center justify-center bg-cover bg-center bg-no-repeat  lg:mb-[2rem] mb-[14rem]"
+        style={{ backgroundImage: `url(${bgImage})` }}
+      >
+        {/* Background Overlay */}
+        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
 
-      {/* Text Block - Hidden on mobile screens */}
-      <div className="relative z-10 text-center hidden md:block">
-        <h1 className="text-white text-5xl font-bold">Welcome to VT Partner</h1>
-        <p className="text-white text-2xl mt-4">
-          Reliable Transport & Vendor Services
-        </p>
-        <p className="text-white text-lg mt-2">We get the job done!</p>
-      </div>
-    </section>
+        <div className="relative z-10 flex lg:flex-row flex-col lg:justify-between justify-center w-full lg:p-10 p-2 lg:mt-0 mt-[10rem] items-center lg:mb-0 mb-[-8rem]">
+          <div className="flex flex-col lg:items-start items-center w-full">
+            <h1 className="text-white lg:text-5xl text-lg font-bold">
+              Welcome to VT Partner
+            </h1>
+            <p className="text-white lg:text-2xl text-sm mt-4">
+              Reliable Transport & Vendor Services
+            </p>
+            <div className="flex w-fit justify-center mt-4">
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                size="medium"
+                onClick={handleRegisterClick}
+              >
+                Register Now
+              </Button>
+            </div>
+          </div>
+          <LocationForm onCitySelect={onCitySelect} />
+        </div>
+      </section>
+    </>
   );
 };
 

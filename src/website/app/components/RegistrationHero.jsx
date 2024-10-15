@@ -6,16 +6,18 @@ import {
   Select,
   FormControl,
   InputLabel,
+  useMediaQuery,
 } from "@mui/material";
 import { Box } from "@mui/system";
 
 const Registration = () => {
+  const isMobile = useMediaQuery("(max-width: 600px)");
   return (
-    <div className="relative w-full h-[70%] sm:mt-5 p-12">
+    <div className="relative w-full sm:h-[70%] h-[10%] mt-[55px] p-12">
       {/* Background Image */}
       <div className="absolute inset-0">
         <img
-          src="https://dom-website-prod-cdn-cms.porter.in/partner_hero_banner_e5e2c538a5.jpeg"
+          src="/assets/hero-images/registration_bg.jpg"
           alt="Background"
           className="object-cover w-full h-full"
         />
@@ -23,8 +25,8 @@ const Registration = () => {
 
       {/* Registration Form Card */}
       <div className="relative z-10 flex items-center justify-end h-full w-full sm:pr-10">
-        <Box className="bg-white p-8 shadow-lg rounded-sm w-full max-w-[30rem] max-h-[38rem]">
-          <h2 className="text-2xl font-bold mb-4">Registration</h2>
+        <Box className="bg-white p-8 shadow-lg rounded-sm w-full sm:max-w-[30rem] max-w-[40rem] max-h-[38rem]">
+          <h2 className="sm:text-2xl font-bold mb-4">Registration</h2>
 
           <form>
             {/* Full Name */}
@@ -34,6 +36,7 @@ const Registration = () => {
               label="Full Name"
               margin="dense"
               variant="outlined"
+              size={isMobile ? "small" : "medium"}
               className="mb-4"
             />
 
@@ -44,13 +47,14 @@ const Registration = () => {
               label="Mobile Number"
               type="tel"
               margin="dense"
+              size={isMobile ? "small" : "medium"}
               variant="outlined"
               className="mb-4"
             />
 
             {/* City and Vehicle Dropdowns */}
-            <div className="grid grid-cols-2 gap-4 mb-4 mt-4">
-              <FormControl fullWidth>
+            <div className="grid sm:grid-cols-2 gap-4 mb-4 mt-3">
+              <FormControl fullWidth size={isMobile ? "small" : "medium"}>
                 <InputLabel id="city-label">City</InputLabel>
                 <Select labelId="city-label" id="city" label="City">
                   <MenuItem value="bangalore">BELAGAVI</MenuItem>
@@ -58,7 +62,7 @@ const Registration = () => {
                 </Select>
               </FormControl>
 
-              <FormControl fullWidth>
+              <FormControl fullWidth size={isMobile ? "small" : "medium"}>
                 <InputLabel id="vehicle-label">Vehicle</InputLabel>
                 <Select labelId="vehicle-label" id="vehicle" label="Vehicle">
                   <MenuItem value="2-wheeler">
@@ -78,7 +82,7 @@ const Registration = () => {
 
             {/* Source Dropdown */}
             <div className="flex mb-4">
-              <FormControl fullWidth>
+              <FormControl fullWidth size={isMobile ? "small" : "medium"}>
                 <InputLabel id="register-label">Register As ?</InputLabel>
                 <Select labelId="register-label" id="register" label="Source">
                   <MenuItem value="customer_referral">Goods Driver</MenuItem>
@@ -90,7 +94,11 @@ const Registration = () => {
             </div>
 
             {/* Source Dropdown */}
-            <FormControl fullWidth className="mb-6">
+            <FormControl
+              fullWidth
+              className="mb-6"
+              size={isMobile ? "small" : "medium"}
+            >
               <InputLabel id="source-label">Source</InputLabel>
               <Select labelId="source-label" id="source" label="Source">
                 <MenuItem value="customer_referral">Customer Referral</MenuItem>
