@@ -69,7 +69,7 @@ const Home = () => {
         </div>
       ) : (
         <>
-          <div className="bg-gray-100 text-black! lg:mt-[4.5rem] mt-[3.5rem]">
+          <div className="bg-gray-100 text-black! lg:mt-[4.5rem] mt-[2.9rem]">
             <EstimationHeroBanner bgImage={bgImage} onCitySelect={handleCitySelect}/>
             {/* <LocationForm onCitySelect={handleCitySelect} /> */}
             {/* <FormSectionDemo /> */}

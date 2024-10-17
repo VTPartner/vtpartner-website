@@ -81,8 +81,9 @@ const BranchTable = () => {
     setPage(0);
   };
 
-  const handleBranchSelect = (branchId) => {
+  const handleBranchSelect = (branchId,city_id) => {
     Cookies.set("selectedBranchId", branchId, { expires: 1 }); // Save selected branch ID in cookies for 1 day
+    Cookies.set("city_id",city_id)
   };
 
   // Render loading spinner
@@ -146,7 +147,7 @@ const BranchTable = () => {
                 </TableCell>
                 <TableCell align="right">
                   <IconButton
-                    onClick={() => handleBranchSelect(branch.branch_id)} // Save branch ID before navigating
+                    onClick={() => handleBranchSelect(branch.branch_id,branch.city_id)} // Save branch ID before navigating
                   >
                     <NavLink to={`/dashboard/home/`}>
                       <Icon color="primary">arrow_forward</Icon>

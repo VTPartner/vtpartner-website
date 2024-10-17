@@ -16,6 +16,8 @@ import {
   CabDriverEnquiry,
   JCbDriverEnquiry,
   CraneDriverEnquiry,
+  AllowedCities,
+  AllAllowedPincodes,
 } from "./dashboard/app/views";
 import Branches from "./dashboard/app/views/branches/Branches";
 import Layout from "./website/app/components/Layout";
@@ -84,6 +86,11 @@ const routes = [
         element: <Dashboard />,
         auth: authRoles.sa,
       },
+      {
+        path: "all-allowed-pincodes/:city_id/:city_name", // This will resolve to /dashboard/add-pincodes/:cityId
+        element: <AllAllowedPincodes />,
+        auth: authRoles.sa, // Specify the required authentication role
+      },
 
       {
         path: "/customer/all-customers",
@@ -108,6 +115,10 @@ const routes = [
       {
         path: "/crane-driver/all-enquires",
         element: <CraneDriverEnquiry />,
+      },
+      {
+        path: "/location_configuration/all_allow_cities",
+        element: <AllowedCities />,
       },
 
       // e-chart route

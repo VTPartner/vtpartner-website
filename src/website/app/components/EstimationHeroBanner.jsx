@@ -45,7 +45,7 @@ const EstimationHeroBanner = ({ bgImage, onCitySelect }) => {
                 size="medium"
                 onClick={handleRegisterClick}
               >
-                Register Now
+                Register as a Partner
               </Button>
             </div>
           </div>

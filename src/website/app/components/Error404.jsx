@@ -11,13 +11,13 @@ const Error404 = () => {
     navigate(-1); // This goes back to the previous page in history
   };
   return (
-    <div className="w-screen h-screen bg-primary text-white mt-[-50px]">
+    <div className="w-screen h-screen bg-primary text-white ">
       <div className="flex items-center justify-center flex-col h-full w-full">
         <motion.div
           variants={textVariant()}
           className="flex flex-col justify-center items-center"
         >
-          <p className={`${styles.sectionHeadText} text-center mb-8`}>
+          <p className={`${styles.sectionHeadText} text-center mb-8 text-white`}>
             404 : (
           </p>
           <p className={`${styles.sectionSubText} text-center mb-8`}>

@@ -6,7 +6,7 @@ import { serverEndPoint } from "../constants";
 
 const token = Cookies.get("authToken");
 if (token) {
-  console.log("Authenticated user token:", token);
+  //console.log("Authenticated user token:", token);
 }
 
 // CUSTOM COMPONENT
@@ -80,6 +80,7 @@ export const AuthProvider = ({ children }) => {
 
       // Store the token in cookies
       Cookies.set("authToken", token, { expires: 1 }); // token stored for 1 day
+
       console.log(user);
 
       // Store user data in the state or context

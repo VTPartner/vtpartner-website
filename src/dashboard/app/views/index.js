@@ -5,6 +5,8 @@ import CabDriverEnquiry from "./enquires/CabDriverEnquiry";
 import JCbDriverEnquiry from "./enquires/JCbDriverEnquiry";
 import CraneDriverEnquiry from "./enquires/CraneDriverEnquiry";
 import AllCustomers from "./customers/AllCustomers";
+import AllowedCities from "./allowed_cities/AllowedCities";
+import AllAllowedPincodes from "./allowed_pincodes/AllAllowedPincodes";
 
 export {
   Login,
@@ -14,4 +16,6 @@ export {
   JCbDriverEnquiry,
   CraneDriverEnquiry,
   AllCustomers,
+  AllowedCities,
+  AllAllowedPincodes,
 };

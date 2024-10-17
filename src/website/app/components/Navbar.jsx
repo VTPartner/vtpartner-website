@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Menu, Close } from "@mui/icons-material";
 import { Drawer, IconButton, Button } from "@mui/material";
 import { NavLink } from "react-router-dom";
+
 import { DownloadApp } from "../components";
 
 const Navbar = () => {
@@ -85,7 +86,7 @@ const Navbar = () => {
               onClick={toggleDrawer}
               className="block lg:hidden" // Show only on small screens
             >
-              <Menu />
+              <img src="/assets/menu.svg" alt="menu"  />
             </IconButton>
           </div>
 
@@ -96,7 +97,8 @@ const Navbar = () => {
                 {/* Close Icon */}
                 <div className="flex justify-end">
                   <IconButton onClick={toggleDrawer}>
-                    <Close style={{ color: "white" }} />
+                  <img src="/assets/close.svg" alt="menu"  style={{ color: "white" }}/>
+                    
                   </IconButton>
                 </div>
 
