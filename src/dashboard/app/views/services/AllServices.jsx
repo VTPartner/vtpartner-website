@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { Box, styled } from "@mui/material";
 import { Breadcrumb, SimpleCard } from "/src/dashboard/app/components";
+import AllServicesTable from "./AllServicesTable";
 
 // STYLED COMPONENTS
 const Container = styled("div")(({ theme }) => ({
@@ -12,21 +13,22 @@ const Container = styled("div")(({ theme }) => ({
   },
 }));
 
-const GoodsDriverEnquiry = () => {
+const AllServices = () => {
   return (
     <Container>
       <Box className="breadcrumb">
         <Breadcrumb
           routeSegments={[
             { name: "Home", path: "/dashboard/home" },
-            { name: "Goods Driver Enquiries" },
+            { name: "All Services" },
           ]}
         />
       </Box>
 
-      <SimpleCard title="All Goods Drivers"></SimpleCard>
+      <SimpleCard title="Services">
+        <AllServicesTable />
+      </SimpleCard>
     </Container>
   );
 };
-
-export default GoodsDriverEnquiry;
+export default AllServices;

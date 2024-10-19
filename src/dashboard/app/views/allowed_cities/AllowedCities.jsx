@@ -25,7 +25,7 @@ const AllowedCities = () => {
         />
       </Box>
 
-      <SimpleCard title="All AllowedCities">
+      <SimpleCard title="All Cities">
         <AllowedCitiesTable />
       </SimpleCard>
     </Container>

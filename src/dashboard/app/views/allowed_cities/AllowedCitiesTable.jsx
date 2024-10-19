@@ -119,7 +119,7 @@ const AllowedCitiesTable = () => {
 
       if (imageFile) {
         const formData = new FormData();
-        formData.append("cityImage", imageFile);
+        formData.append("vtPartnerImage", imageFile);
 
         const uploadResponse = await axios.post(
           `${serverEndPointImage}/upload`,
@@ -342,6 +342,7 @@ const AllowedCitiesTable = () => {
         toast.success(
           editedCity.city_name + " City Details Updated Successfully"
         );
+        setImageFile(null);
       } else {
         console.error("Failed to update the city");
         toast.error("Failed to update the city");
@@ -405,129 +406,6 @@ const AllowedCitiesTable = () => {
     );
   }
 
-  if (error) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        height="auto"
-      >
-        {/* Check if the error is "No Data Found." */}
-        {error === "No Data Found" && (
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ mb: 2 }}
-            onClick={handleAddCity}
-          >
-            Add New City
-          </Button>
-        )}
-        <Typography variant="h6" color="error">
-          {error}
-        </Typography>
-        {/* Modal to add new City  */}
-        <Dialog
-          open={openNewCityDialog}
-          onClose={handleCloseDialog}
-          maxWidth="sm"
-          fullWidth
-        >
-          <Box p={3}>
-            <Typography variant="h6" gutterBottom>
-              {isAddingNewCity ? "Add New City" : "Edit City"}
-            </Typography>
-            {/* Form fields same as edit form */}
-            <TextField
-              label="City Name"
-              fullWidth
-              margin="normal"
-              name="city_name"
-              value={editedCity.city_name}
-              onChange={handleInputChange}
-              required
-              error={errorNewCity.city_name}
-              helperText={
-                errorNewCity.city_name ? "City name is required." : ""
-              }
-            />
-            <TextField
-              label="Pincode Start"
-              fullWidth
-              type="tel"
-              margin="normal"
-              name="pincode"
-              value={editedCity.pincode}
-              onChange={handleInputChange}
-              required
-              error={errorNewCity.pincode}
-              helperText={
-                errorNewCity.pincode ? "Pincode Start is required." : ""
-              }
-            />
-            <TextField
-              label="Pincode Until"
-              fullWidth
-              type="tel"
-              margin="normal"
-              name="pincode_until"
-              value={editedCity.pincode_until}
-              onChange={handleInputChange}
-              required
-              error={errorNewCity.pincode_until}
-              helperText={
-                errorNewCity.pincode_until ? "Pincode until is required." : ""
-              }
-            />
-            <TextField
-              label="Description"
-              fullWidth
-              margin="normal"
-              multiline
-              rows={3}
-              name="description"
-              value={editedCity.description}
-              onChange={handleInputChange}
-              required
-              error={errorNewCity.description}
-              helperText={
-                errorNewCity.description ? "Description is required." : ""
-              }
-            />
-
-            {/* Image Upload */}
-            <TextField
-              fullWidth
-              margin="normal"
-              type="file"
-              onChange={handleImageChange}
-              error={errorNewCity.bg_image} // Set error state for image
-              helperText={errorNewCity.bg_image ? "Image is required." : ""}
-              inputProps={{ accept: ".png, .jpg, .jpeg, .svg" }}
-            />
-
-            <Box mt={2} display="flex" justifyContent="flex-end">
-              <Button onClick={handleCloseDialog} sx={{ marginRight: 1 }}>
-                Cancel
-              </Button>
-              <LoadingButton
-                type="submit"
-                color="primary"
-                loading={btnLoading}
-                variant="contained"
-                sx={{ my: 2 }}
-                onClick={handleNewCity}
-              >
-                {isAddingNewCity ? "Create" : "Save"}
-              </LoadingButton>
-            </Box>
-          </Box>
-        </Dialog>
-      </Box>
-    );
-  }
-
   return (
     <Box width="100%" overflow="auto">
       {/* Add City Button */}
@@ -580,9 +458,11 @@ const AllowedCitiesTable = () => {
                   <IconButton onClick={() => showEditDialog(city)}>
                     <Icon color="primary">edit</Icon>
                   </IconButton>
-                  <IconButton onClick={() => goToAddPincodes(city)}>
-                    <Icon>arrow_forward</Icon>
-                  </IconButton>
+                  {city.status !== 0 ? ( // Check if the city is active
+                    <IconButton onClick={() => goToAddPincodes(city)}>
+                      <Icon>arrow_forward</Icon>
+                    </IconButton>
+                  ) : null}{" "}
                 </TableCell>
               </TableRow>
             ))}

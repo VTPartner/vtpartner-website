@@ -30,7 +30,7 @@ const AllAllowedPincodes = () => {
         />
       </Box>
 
-      <SimpleCard title="All AllAllowed PinCodes">
+      <SimpleCard title="All PinCodes">
         <AllAllowedPincodesTable cityId />
       </SimpleCard>
     </Container>

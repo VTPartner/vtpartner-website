@@ -6,4 +6,5 @@ const serverImageEndPoint = "https://vtpartner.org";
 // const serverEndPoint = "https://vtpartner.org/api/v1/dashboard";
 const mapKey = "";
 
+
 export { serverEndPoint, mapKey,serverEndPointImage,serverImageEndPoint };

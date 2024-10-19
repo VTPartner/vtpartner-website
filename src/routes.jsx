@@ -17,7 +17,10 @@ import {
   JCbDriverEnquiry,
   CraneDriverEnquiry,
   AllowedCities,
+  AllVehicles,
   AllAllowedPincodes,
+  AllServices,
+  VehiclePrices,
 } from "./dashboard/app/views";
 import Branches from "./dashboard/app/views/branches/Branches";
 import Layout from "./website/app/components/Layout";
@@ -119,6 +122,18 @@ const routes = [
       {
         path: "/location_configuration/all_allow_cities",
         element: <AllowedCities />,
+      },
+      {
+        path: "/all_vehicles/:category_id/:category_name",
+        element: <AllVehicles />,
+      },
+      {
+        path: "/vehicle-price/:vehicle_id/:vehicle_name",
+        element: <VehiclePrices />,
+      },
+      {
+        path: "/all_services",
+        element: <AllServices />,
       },
 
       // e-chart route

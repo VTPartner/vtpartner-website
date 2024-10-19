@@ -9,37 +9,42 @@ export const navigations = [
     children: [
       {
         name: "Goods Driver",
-        iconText: "SI",
+        iconText: "GD",
         path: "/goods-driver/all-enquires",
       },
       {
         name: "Cab Driver",
-        iconText: "SI",
+        iconText: "CD",
         path: "/cab-driver/all-enquires",
       },
       {
         name: "JCB Driver",
-        iconText: "SI",
+        iconText: "JCB",
         path: "/jcb-driver/all-enquires",
       },
       {
         name: "Crane Driver",
-        iconText: "SI",
+        iconText: "CRD",
         path: "/crane-driver/all-enquires",
       },
     ],
   },
 
-  { label: "Locations", type: "label" },
+  { label: "Configurations", type: "label" },
   {
-    name: "Location Configuration",
-    icon: "pin_drop",
+    name: "Main Configuration",
+    icon: "settings",
     // badge: { value: "30+", color: "secondary" },
     children: [
       {
         name: "Allowed Cities",
         iconText: "AC",
         path: "/location_configuration/all_allow_cities",
+      },
+      {
+        name: "All Services",
+        iconText: "AS",
+        path: "/all_services",
       },
     ],
   },
