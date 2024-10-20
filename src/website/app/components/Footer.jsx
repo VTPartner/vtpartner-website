@@ -4,22 +4,22 @@ const Footer = () => {
   return (
     <footer className="bg-primary text-white p-6 mt-10">
       <div className="container mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* VT Partner Links Section */}
           <div className="flex flex-col">
             <h4 className="text-lg font-bold mb-2">VT Partner</h4>
-            <a
+            {/* <a
               href=""
               className="hover:text-white text-gray-400"
               target="_self"
               aria-label="Visit VT Partner's Help Center"
             >
               Visit Help Center
-            </a>
+            </a> */}
           </div>
 
           {/* Company Links Section */}
-          <div className="flex flex-col">
+          {/* <div className="flex flex-col">
             <h4 className="text-lg font-bold mb-2">Company</h4>
             <a
               href=""
@@ -54,7 +54,7 @@ const Footer = () => {
             >
               Careers
             </a>
-          </div>
+          </div> */}
 
           {/* Products Links Section */}
           <div className="flex flex-col">
@@ -65,7 +65,7 @@ const Footer = () => {
               target="_self"
               aria-label="Ride with VT Partner"
             >
-              Ride
+              Cab Ride
             </a>
             <a
               href=""
@@ -73,7 +73,7 @@ const Footer = () => {
               target="_self"
               aria-label="Drive with VT Partner"
             >
-              Drive
+              Goods Delivery
             </a>
             <a
               href=""
@@ -81,7 +81,7 @@ const Footer = () => {
               target="_self"
               aria-label="Deliver with VT Partner"
             >
-              Deliver
+              Drivers
             </a>
 
             <a

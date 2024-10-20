@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { Box, styled } from "@mui/material";
 import { Breadcrumb, SimpleCard } from "/src/dashboard/app/components";
-import AllVehiclesTable from "./AllVehiclesTable";
+import OtherServicesTable from "./OtherServicesTable";
 import { useParams } from "react-router-dom";
 
 // STYLED COMPONENTS
@@ -14,24 +14,23 @@ const Container = styled("div")(({ theme }) => ({
   },
 }));
 
-const AllVehicles = () => {
-  const { category_id, category_name } = useParams();
+const OtherServices = () => {
+  const { sub_cat_name } = useParams();
   return (
     <Container>
       <Box className="breadcrumb">
         <Breadcrumb
           routeSegments={[
             { name: "Home", path: "/dashboard/home" },
-            { name: "All Vehicles" },
+            { name: "All Other Services" },
           ]}
         />
       </Box>
 
-      <SimpleCard title={`Vehicles for [ ${category_name} ] Service`}>
-        <AllVehiclesTable />
+      <SimpleCard title={`Other Services for [ ${sub_cat_name} ]`}>
+        <OtherServicesTable />
       </SimpleCard>
     </Container>
   );
 };
-
-export default AllVehicles;
+export default OtherServices;

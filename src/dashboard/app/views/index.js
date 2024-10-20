@@ -10,6 +10,8 @@ import AllAllowedPincodes from "./allowed_pincodes/AllAllowedPincodes";
 import AllVehicles from "./vehicles/AllVehicles";
 import AllServices from "./services/AllServices";
 import VehiclePrices from "./vehicles/all_vehicle_prices/VehiclePrices";
+import AllSubServices from "./services/sub_services/AllSubServices";
+import OtherServices from "./other_services/OtherServices";
 
 export {
   Login,
@@ -24,4 +26,6 @@ export {
   AllVehicles,
   AllServices,
   VehiclePrices,
+  AllSubServices,
+  OtherServices,
 };

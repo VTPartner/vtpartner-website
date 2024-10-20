@@ -6,7 +6,7 @@ import { CitySelectorMobile } from "../components";
 import { useLoadScript } from "@react-google-maps/api";
 import { Formik } from "formik";
 import * as Yup from "yup";
-
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {
   TextField,
@@ -17,7 +17,7 @@ import {
   useMediaQuery,
   FormHelperText,
 } from "@mui/material";
-import {  toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Box } from "@mui/system";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -29,12 +29,16 @@ import {
 } from "@mui/icons-material";
 import InputAdornment from "@mui/material/InputAdornment";
 import { LoadingButton } from "@mui/lab";
+import {
+  mapKey,
+  serverWebsiteEndPoint,
+} from "../../../dashboard/app/constants";
 const libraries = ["places"]; // Load the places library
 
 // eslint-disable-next-line react/prop-types
 const LocationForm = ({ onCitySelect }) => {
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyAAlmEtjJOpSaJ7YVkMKwdSuMTbTx39l_o", // Replace with your API key
+    googleMapsApiKey: mapKey, // Replace with your API key
     libraries,
   });
 
@@ -49,6 +53,26 @@ const LocationForm = ({ onCitySelect }) => {
 
   const pickupInputRef = useRef(null); // Reference for pickup input
   const dropInputRef = useRef(null); // Reference for drop input
+  const [pickupPlaceId, setPickupPlaceId] = useState(null);
+  const [dropPlaceId, setDropPlaceId] = useState(null);
+
+  // Handle when a pickup location is selected
+  const handlePickupSelect = (placeId) => {
+    setPickupPlaceId(placeId); // Save the selected placeId for pickup
+  };
+
+  // Handle when a drop location is selected
+  const handleDropSelect = (placeId) => {
+    setDropPlaceId(placeId); // Save the selected placeId for drop
+  };
+  // Function to calculate the distance between the two locations
+  const fetchDistance = async (pickupPlaceId, dropPlaceId) => {
+    const response = await fetch(
+      `${serverWebsiteEndPoint}/distance?origins=${pickupPlaceId}&destinations=${dropPlaceId}`
+    );
+    const data = await response.json();
+    console.log("distance_Details::", data);
+  };
 
   useEffect(() => {
     if (isLoaded) {
@@ -112,13 +136,16 @@ const LocationForm = ({ onCitySelect }) => {
   }, [isLoaded]);
 
   const handlePickupSuggestionClick = (suggestion) => {
+    handlePickupSelect(suggestion.place_id);
     setPickupLocation(suggestion.description);
     setPickupSuggestions([]); // Hide suggestions after selection
   };
 
   const handleDropSuggestionClick = (suggestion) => {
+    handleDropSelect(suggestion.place_id);
     setDropLocation(suggestion.description);
     setDropSuggestions([]); // Hide suggestions after selection
+    fetchDistance(); //doing async to get the distance
   };
   // Handle city selection (This will be passed to CitySelection)
   const handleCitySelect = (imageUrl) => {
@@ -142,15 +169,15 @@ const LocationForm = ({ onCitySelect }) => {
   const [purpose, setPurpose] = useState("");
   const handleFormSubmit = async (values, { resetForm }) => {
     setLoading(true);
+
     toast.warning("This Feature is still under development");
 
-    
     // Clear form fields after submission
-    setPickupLocation('');
-    setDropLocation('');
-    setContactName('');
-    setContactNumber('');
-    setPurpose('');
+    setPickupLocation("");
+    setDropLocation("");
+    setContactName("");
+    setContactNumber("");
+    setPurpose("");
     setLoading(false);
   };
 
@@ -169,11 +196,10 @@ const LocationForm = ({ onCitySelect }) => {
 
   return (
     <>
-    
       <div className=" relative flex items-center justify-center h-full w-full lg:mt-0 mt-[0rem]">
         <Box className="bg-white p-8 shadow-lg rounded-sm w-full lg:max-w-[30rem] max-w-[30rem] max-h-[38rem] lg:mt-0 mt-5">
           <CitySelectorMobile onCitySelect={handleCitySelect} />
-          
+
           <Formik
             onSubmit={handleFormSubmit}
             validationSchema={validationSchema}
@@ -321,9 +347,7 @@ const LocationForm = ({ onCitySelect }) => {
                   helperText={touched.contactName && errors.contactName}
                   error={Boolean(errors.contactName && touched.contactName)}
                 />
-                {
-                  /* Customer Contact Number */
-                }
+                {/* Customer Contact Number */}
                 <div className="block mb-2">
                   <TextField
                     fullWidth
@@ -359,32 +383,32 @@ const LocationForm = ({ onCitySelect }) => {
                 </div>
                 {/* Purpose Dropdown */}
                 <FormControl
-        fullWidth
-        className="mb-6"
-        size={isMobile ? "small" : "medium"}
-        error={Boolean(errors.purpose && touched.purpose)} // Set error prop
-      >
-        <InputLabel id="purpose-label">Purpose</InputLabel>
-        <Select
-          labelId="purpose-label"
-          id="purpose"
-          label="Purpose"
-          value={purpose} // Bind to Formik value
-          onChange={(e) => {
-            const selectedValue = e.target.value;
-            console.log("selectedPurpose::",selectedValue)
-            values.purpose = selectedValue;
-            setPurpose(selectedValue); // Update local state
-          }}
-          onBlur={handleBlur}
-        >
-          <MenuItem value="personal">Personal</MenuItem>
-          <MenuItem value="business">Business</MenuItem>
-        </Select>
-        {touched.purpose && errors.purpose && (
-          <FormHelperText>{errors.purpose}</FormHelperText> // Show helper text
-        )}
-      </FormControl>
+                  fullWidth
+                  className="mb-6"
+                  size={isMobile ? "small" : "medium"}
+                  error={Boolean(errors.purpose && touched.purpose)} // Set error prop
+                >
+                  <InputLabel id="purpose-label">Purpose</InputLabel>
+                  <Select
+                    labelId="purpose-label"
+                    id="purpose"
+                    label="Purpose"
+                    value={purpose} // Bind to Formik value
+                    onChange={(e) => {
+                      const selectedValue = e.target.value;
+                      console.log("selectedPurpose::", selectedValue);
+                      values.purpose = selectedValue;
+                      setPurpose(selectedValue); // Update local state
+                    }}
+                    onBlur={handleBlur}
+                  >
+                    <MenuItem value="personal">Personal</MenuItem>
+                    <MenuItem value="business">Business</MenuItem>
+                  </Select>
+                  {touched.purpose && errors.purpose && (
+                    <FormHelperText>{errors.purpose}</FormHelperText> // Show helper text
+                  )}
+                </FormControl>
 
                 {/* Register Button */}
                 <div className="flex items-center justify-center mt-4">

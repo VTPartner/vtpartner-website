@@ -3,7 +3,7 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Tilt } from "react-tilt";
 import { motion } from "framer-motion";
 
@@ -13,10 +13,68 @@ import { SectionWrapper } from "../hoc";
 import { projects } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
 import { Link, NavLink } from "react-router-dom";
-import { useMediaQuery } from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { serverWebsiteEndPoint } from "../../../dashboard/app/constants";
 
 const AllServices = () => {
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const isSmUp = useMediaQuery("(min-width: 640px)");
+  const fetchAllServices = async () => {
+    // Check if the user is online
+    if (!navigator.onLine) {
+      toast.error("No internet connection. Please check your connection.");
+      setLoading(false);
+      return; // Exit if no internet connection
+    }
+
+    try {
+      const response = await axios.post(
+        `${serverWebsiteEndPoint}/all_services`,
+        {} // Send an empty object as the body if needed
+      );
+
+      // Update state with vehicle details
+      setServices(response.data.services_details);
+    } catch (error) {
+      handleError(error); // Handle errors using your existing error handling function
+    } finally {
+      setLoading(false); // Ensure loading state is reset
+    }
+  };
+
+  // Handle error responses
+  const handleError = (error) => {
+    if (error.response) {
+      if (error.response.status === 404) {
+        toast.error("No Data Found.");
+        setError("No Data Found");
+      } else if (error.response.status === 409) {
+        // Handle case where pincode already exists
+        toast.error("Service Name already exists.");
+      } else if (error.response.status === 500) {
+        toast.error("Internal server error. Please try again later.");
+        setError("Internal Server Error");
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+        setError("Unexpected Error");
+      }
+    } else {
+      toast.error(
+        "Failed to fetch all allowed cities. Please check your connection."
+      );
+      setError("Network Error");
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchAllServices();
+  }, []);
   return (
     <>
       <motion.div
@@ -24,8 +82,18 @@ const AllServices = () => {
         whileInView="show"
         variants={isSmUp ? textVariant() : {}}
       >
-        <p className={`${styles.sectionSubText} `}>We Offer various</p>
-        <h2 className={`${styles.sectionHeadText}`}>Our Services</h2>
+        <Typography
+          variant="h2"
+          sx={{
+            color: "text.primary",
+            fontSize: { xs: "16px", md: "36px" },
+            fontWeight: "bold",
+
+            mb: 4,
+          }}
+        >
+          Our <span style={{ color: "#4087e1" }}>Services</span>
+        </Typography>
       </motion.div>
 
       {/* sm:flex */}
@@ -47,8 +115,8 @@ const AllServices = () => {
       </div>
 
       <div className="sm:mt-1 flex flex-wrap justify-evenly">
-        {projects.map((project, index) => (
-          <ServiceCard key={`project-${index}`} index={index} {...project} />
+        {services.map((service, index) => (
+          <ServiceCard key={`service-${index}`} index={index} {...service} />
         ))}
       </div>
     </>
@@ -57,39 +125,50 @@ const AllServices = () => {
 
 const ServiceCard = ({
   index,
-  name,
-  description,
-  tags,
-  image,
-  weight,
-  price,
-  source_code_link,
+  category_id,
+  category_type,
+  category_name,
+  category_image,
 }) => {
   return (
-    <Tilt className="max-w-[30rem] mt-4">
-      <motion.div
-        variants={fadeIn("right", "spring", 0.5 * index, 0.75)}
-        className="w-full  p-[1px] rounded-[20px]"
-      >
-        <div
-          options={{
-            max: 45,
-            scale: 1,
-            speed: 450,
-          }}
-          className="bg-white rounded-[20px] py-5 px-6 min-h-[70px] flex justify-evenly items-center flex-col"
+    <Box
+      textAlign="center"
+      sx={{
+        backgroundColor: "#EEF2FF", // Light gray background
+        borderRadius: 2,
+        p: 5,
+        marginTop: 2,
+        transition: "transform 0.3s ease, box-shadow 0.3s ease",
+        "&:hover": {
+          transform: "scale(1.05)", // Slight scale-up on hover
+          boxShadow: 3, // Add a soft shadow on hover
+        },
+      }}
+    >
+      <Tilt className="max-w-[30rem]">
+        <img
+          src={category_image}
+          alt={category_name}
+          className="sm:w-[10rem] sm:h-[5rem] w-20 h-10 object-contain cursor-pointer"
+        />
+        <motion.div
+          variants={fadeIn("right", "spring", 0.5 * index, 0.75)}
+          className="  p-[1px] rounded-[20px]"
         >
-          <img
-            src={image}
-            alt={name}
-            className="sm:w-20 sm:h-20 w-8 h-8 object-contain"
-          />
-        </div>
-      </motion.div>
-      <h3 className="text-gray sm:mt-4 mt-2 sm:text-[12px] text-[8px] font-bold text-center overflow-clip">
-        {name}
-      </h3>
-    </Tilt>
+          <div
+            options={{
+              max: 45,
+              scale: 1,
+              speed: 450,
+            }}
+            className="bg-white rounded-[20px]  flex justify-evenly items-center flex-col"
+          ></div>
+        </motion.div>
+        <h1 className="text-gray sm:mt-4 mt-2 sm:text-[20px] text-[10px] font-bold text-center overflow-clip">
+          {category_name}
+        </h1>
+      </Tilt>
+    </Box>
   );
 };
 

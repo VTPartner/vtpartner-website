@@ -21,6 +21,8 @@ import {
   AllAllowedPincodes,
   AllServices,
   VehiclePrices,
+  AllSubServices,
+  OtherServices,
 } from "./dashboard/app/views";
 import Branches from "./dashboard/app/views/branches/Branches";
 import Layout from "./website/app/components/Layout";
@@ -126,6 +128,14 @@ const routes = [
       {
         path: "/all_vehicles/:category_id/:category_name",
         element: <AllVehicles />,
+      },
+      {
+        path: "/all_sub_categories/:category_id/:category_name",
+        element: <AllSubServices />,
+      },
+      {
+        path: "/all_other_services/:sub_cat_id/:sub_cat_name",
+        element: <OtherServices />,
       },
       {
         path: "/vehicle-price/:vehicle_id/:vehicle_name",

@@ -16,35 +16,69 @@ import {
   LocationForm,
   FormSectionDemo,
   CitySelectorMobile,
+  GrowingNetwork,
+  VTPartnerAdvantages,
+  Gallery,
+  LeftSideImage,
+  RightSideImage,
+  BannerMoreDetails,
 } from "../components";
 
 import { MatxLoading } from "../../../dashboard/app/components";
+import { toast } from "react-toastify";
+import { serverWebsiteEndPoint } from "../../../dashboard/app/constants";
+import axios from "axios";
 const Home = () => {
-  const cities = [
-    {
-      name: "Belgaum",
-      imageUrl:
-        "https://dom-website-prod-cdn-cms.porter.in/bangalore_city_14a3725848.webp",
-    },
-    {
-      name: "Pune",
-      imageUrl:
-        "https://dom-website-prod-cdn-cms.porter.in/Pune_22fe0b6cdf.webp",
-    },
-    {
-      name: "Hubli",
-      imageUrl:
-        "https://dom-website-prod-cdn-cms.porter.in/Ludhiana_51e085bbd8.webp",
-    },
-    {
-      name: "Dharwad",
-      imageUrl:
-        "https://dom-website-prod-cdn-cms.porter.in/hyderabad_city_banner_052a24d2d6.webp",
-    },
-  ];
-  // State to store the selected city background image
-  const [bgImage, setBgImage] = useState(cities[0].imageUrl);
+  const [cities, setCities] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [btnLoading, setBtnLoading] = useState(false);
+  const [error, setError] = useState(null);
 
+  // State to store the selected city background image
+  const [bgImage, setBgImage] = useState();
+
+  const fetchCities = async () => {
+    if (!navigator.onLine) {
+      toast.error("No internet connection. Please check your connection.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const endPoint = `${serverWebsiteEndPoint}/all_allowed_cities`;
+
+      const response = await axios.post(endPoint);
+      setBgImage(response.data.cities[0].bg_image);
+      setCities(response.data.cities);
+    } catch (error) {
+      setLoading(false);
+      handleError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle error responses
+  const handleError = (error) => {
+    if (error.response) {
+      if (error.response.status === 404) {
+        toast.error("No Data Found.");
+        setError("No Data Found");
+      } else if (error.response.status === 500) {
+        toast.error("Internal server error. Please try again later.");
+        setError("Internal Server Error");
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+        setError("Unexpected Error");
+      }
+    } else {
+      console.log(error);
+      toast.error(
+        "Failed to fetch all allowed cities. Please check your connection."
+      );
+      setError("Network Error");
+    }
+  };
   // Function to handle city selection and update background image
   const handleCitySelect = (imageUrl) => {
     setBgImage(imageUrl);
@@ -52,6 +86,7 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    fetchCities();
     // Simulate a loading time for all components
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -69,11 +104,18 @@ const Home = () => {
         </div>
       ) : (
         <>
-          <div className="bg-gray-100 text-black! lg:mt-[4.5rem] mt-[2.9rem]">
-            <EstimationHeroBanner bgImage={bgImage} onCitySelect={handleCitySelect}/>
+          <div className="bg-white text-black! lg:mt-[4.5rem] mt-[2.9rem]">
+            <EstimationHeroBanner
+              bgImage={bgImage}
+              onCitySelect={handleCitySelect}
+            />
+
             {/* <LocationForm onCitySelect={handleCitySelect} /> */}
             {/* <FormSectionDemo /> */}
             <AllServices />
+
+            <OurLocations />
+            <WhyChooseUs />
             <FrequentlyAskedQuestions />
             <div className="relative z-0 bg-primary">
               <Contact />

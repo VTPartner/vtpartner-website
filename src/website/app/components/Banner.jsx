@@ -4,7 +4,7 @@
 const Banner = ({ backgroundImage, heading }) => {
   return (
     <section
-      className="relative w-full sm:h-[25rem] h-[10rem] mt-14 flex items-center justify-center text-center"
+      className="relative w-full sm:h-[25rem] h-[10rem] mt-12 flex items-center justify-center text-center"
       style={{
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: "cover",

@@ -13,7 +13,7 @@ import { Box } from "@mui/system";
 const Registration = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   return (
-    <div className="relative w-full sm:h-[70%] h-[10%] mt-[55px] p-12">
+    <div className="relative w-full sm:h-[70%] h-[10%] mt-[45px] sm:p-12 p-2">
       {/* Background Image */}
       <div className="absolute inset-0">
         <img

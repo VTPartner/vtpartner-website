@@ -6,7 +6,7 @@ const GrowingNetwork = () => {
   const data = [
     { count: "20+", label: "CITIES" },
     { count: "100+", label: "INTEGRATED CLIENTS" },
-    { count: "500,000+", label: "DRIVER PARTNERS" },
+    { count: "500,000+", label: "PARTNERS" },
     { count: "50,000+", label: "MONTHLY DELIVERED ORDERS" },
   ];
 
@@ -36,8 +36,8 @@ const GrowingNetwork = () => {
   };
 
   return (
-    <div className="p-8 bg-black text-white shadow-md">
-      <div className="m-20">
+    <div className="p-2 bg-primary text-white shadow-md">
+      <div className="m-[10rem]">
         <div className="text-center mb-10">
           <h2 className="text-2xl font-bold text-white">OUR GROWING NETWORK</h2>
         </div>

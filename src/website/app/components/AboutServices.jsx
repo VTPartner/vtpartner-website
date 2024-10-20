@@ -1,37 +1,49 @@
 // import React from 'react';
 
 const AboutServices = () => {
+  // const servicesData = [
+  //   {
+  //     imgSrc: "https://www.olacabs.com/mediaimage/wysiwyg/book-ride.svg",
+  //     title: "1 bn+",
+  //     description: "Rides served every year",
+  //   },
+  //   {
+  //     imgSrc: "https://www.olacabs.com/mediaimage/wysiwyg/city.svg",
+  //     title: "250+",
+  //     description:
+  //       "Cities serviced by VT Partner to get you to your destination on time, every time",
+  //   },
+  //   {
+  //     imgSrc: "https://www.olacabs.com/mediaimage/wysiwyg/partner.svg",
+  //     title: "1.5 mn",
+  //     description: "Empowered entrepreneurs as driver-partners on the platform",
+  //   },
+  //   {
+  //     imgSrc: "https://www.olacabs.com/mediaimage/wysiwyg/employee.svg",
+  //     title: "7,000+",
+  //     description:
+  //       "Employees work tirelessly to provide you with the best in technology and service",
+  //   },
+  // ];
+
   const servicesData = [
     {
-      imgSrc: "https://www.olacabs.com/mediaimage/wysiwyg/book-ride.svg",
-      title: "1 bn+",
-      description: "Rides served every year",
+      imgSrc: "/assets/tie.svg",
+      title: "Ms. Tejaswi",
+      description: "Chief executive officer",
     },
     {
-      imgSrc: "https://www.olacabs.com/mediaimage/wysiwyg/city.svg",
-      title: "250+",
-      description:
-        "Cities serviced by VT Partner to get you to your destination on time, every time",
-    },
-    {
-      imgSrc: "https://www.olacabs.com/mediaimage/wysiwyg/partner.svg",
-      title: "1.5 mn",
-      description: "Empowered entrepreneurs as driver-partners on the platform",
-    },
-    {
-      imgSrc: "https://www.olacabs.com/mediaimage/wysiwyg/employee.svg",
-      title: "7,000+",
-      description:
-        "Employees work tirelessly to provide you with the best in technology and service",
+      imgSrc: "/assets/tie.svg",
+      title: "Mr. Satappa",
+      description: "Chief Operating Officer",
     },
   ];
-
   return (
     <div className="bg-white py-20">
       <div className="container mx-auto px-4">
         <div className="mb-8">
           <h2 className="sm:text-3xl text-lg font-bold text-gray-800">
-            Our Journey So Far
+            Our Board Members
           </h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

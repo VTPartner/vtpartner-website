@@ -1,3 +1,5 @@
+// import React from "react";
+
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import {
@@ -28,7 +30,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { styled } from "@mui/system";
 import { serverEndPoint, serverEndPointImage } from "../../constants";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { format } from "date-fns";
 
 const StyledTable = styled(Table)(() => ({
@@ -41,32 +43,30 @@ const StyledTable = styled(Table)(() => ({
   },
 }));
 
-const AllServicesTable = () => {
-  const [services, setServices] = useState([]);
-  const [servicesTypes, setServicesType] = useState([]);
+const OtherServicesTable = () => {
+  const { sub_cat_id } = useParams();
+  const [otherServices, setOtherServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [openServicesDialog, setOpenServicesDialog] = useState(false);
+  const [openOtherServicesDialog, setOpenOtherServicesDialog] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [imageError, setImageError] = useState(false);
 
-  const [selectedService, setSelectedService] = useState({
-    category_id: "",
-    category_name: "",
-    category_type_id: "",
-    category_image: "",
-    category_type: "",
-    epoch: "",
+  const [selectedOtherService, setSelectedOtherServices] = useState({
+    service_id: "",
+    service_name: "",
+    sub_cat_id: "",
+    service_image: "",
+    time_updated: "",
   });
 
   const [errorService, setServiceErrors] = useState({
-    category_id: false,
-    category_name: false,
-    category_type_id: false,
-    category_image: false,
-    category_type: false,
-    epoch: false,
+    service_id: false,
+    service_name: false,
+    sub_cat_id: false,
+    service_image: false,
+    time_updated: false,
   });
 
   const [btnLoading, setBtnLoading] = useState(false);
@@ -86,8 +86,10 @@ const AllServicesTable = () => {
 
     try {
       const response = await axios.post(
-        `${serverEndPoint}/all_services`,
-        {}, // Send an empty object as the body if needed
+        `${serverEndPoint}/all_other_services`,
+        {
+          sub_cat_id: sub_cat_id,
+        }, // Send an empty object as the body if needed
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -96,37 +98,7 @@ const AllServicesTable = () => {
       );
 
       // Update state with vehicle details
-      setServices(response.data.services_details);
-    } catch (error) {
-      handleError(error); // Handle errors using your existing error handling function
-    } finally {
-      setLoading(false); // Ensure loading state is reset
-    }
-  };
-
-  const fetchServiceType = async () => {
-    // Check if the user is online
-    if (!navigator.onLine) {
-      toast.error("No internet connection. Please check your connection.");
-      setLoading(false);
-      return; // Exit if no internet connection
-    }
-
-    const token = Cookies.get("authToken");
-
-    try {
-      const response = await axios.post(
-        `${serverEndPoint}/service_types`,
-        {}, // Send an empty object as the body if needed
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      // Update state with vehicle type details
-      setServicesType(response.data.services_type_details);
+      setOtherServices(response.data.other_services_details);
     } catch (error) {
       handleError(error); // Handle errors using your existing error handling function
     } finally {
@@ -136,7 +108,6 @@ const AllServicesTable = () => {
 
   useEffect(() => {
     fetchAllServices();
-    fetchServiceType();
   }, []);
 
   // Handle error responses
@@ -146,8 +117,7 @@ const AllServicesTable = () => {
         toast.error("No Data Found.");
         setError("No Data Found");
       } else if (error.response.status === 409) {
-        // Handle case where pincode already exists
-        toast.error("Service Name already exists.");
+        toast.error("Other Service Name already assigned.");
       } else if (error.response.status === 500) {
         toast.error("Internal server error. Please try again later.");
         setError("Internal Server Error");
@@ -157,7 +127,7 @@ const AllServicesTable = () => {
       }
     } else {
       toast.error(
-        "Failed to fetch all allowed cities. Please check your connection."
+        "Failed to fetch all Sub Services. Please check your connection."
       );
       setError("Network Error");
     }
@@ -165,59 +135,43 @@ const AllServicesTable = () => {
   };
 
   const handleOpenDialog = () => {
-    setSelectedService({
-      category_id: "",
-      category_name: "",
-      category_type_id: "",
-      category_image: "",
-      category_type: "",
-      epoch: "",
+    setSelectedOtherServices({
+      service_id: "",
+      service_name: "",
+      sub_cat_id: "",
+      service_image: "",
+      time_updated: "",
     });
     setIsEditMode(false);
-    setOpenServicesDialog(true);
+    setOpenOtherServicesDialog(true);
   };
 
   const navigate = useNavigate();
-  const goToAddPricePage = (category) => {
-    navigate(
-      `/all_vehicles/${category.category_id}/${category.category_name}`,
-      {}
-    );
-  };
-
-  const goToSubCategory = (category) => {
-    navigate(
-      `/all_sub_categories/${category.category_id}/${category.category_name}`,
-      {}
-    );
-  };
 
   const handleEditClick = (service) => {
-    setSelectedService(service);
+    setSelectedOtherServices(service);
     setIsEditMode(true);
-    setOpenServicesDialog(true);
+    setOpenOtherServicesDialog(true);
   };
 
   const handleCloseDialog = () => {
-    setOpenServicesDialog(false);
+    setOpenOtherServicesDialog(false);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
-    setSelectedService((prevState) => ({
+    setSelectedOtherServices((prevState) => ({
       ...prevState,
       [name]: value, // Dynamically update the selected field
     }));
   };
 
-  const saveCategoryDetails = async () => {
+  const saveServiceDetails = async () => {
     setBtnLoading(true);
-    console.log("selectedService::", selectedService);
+
     const newErrors = {
-      category_name: !selectedService.category_name,
-      category_type_id: !selectedService.category_type_id,
-      category_image: !imageFile && !selectedService.category_image,
+      service_name: !selectedOtherService.service_name,
+      service_image: !imageFile && !selectedOtherService.service_image,
     };
     setServiceErrors(newErrors);
 
@@ -225,7 +179,7 @@ const AllServicesTable = () => {
       setBtnLoading(false);
       return;
     }
-    let serviceImageUrl = selectedService.category_image;
+    let serviceImageUrl = selectedOtherService.service_image;
 
     //CATEGORY IMAGE UPLOAD
     try {
@@ -250,23 +204,23 @@ const AllServicesTable = () => {
         serviceImageUrl = uploadResponse.data.imageUrl;
       }
     } catch (error) {
-      console.error("Error uploading Vehicle Image:", error);
-      toast.error("Error uploading Vehicle Image");
+      console.error("Error uploading Other Service Image:", error);
+      toast.error("Error uploading Other Service Image");
       setBtnLoading(false);
       return;
     }
 
     const token = Cookies.get("authToken");
     const endpoint = isEditMode
-      ? `${serverEndPoint}/edit_service`
-      : `${serverEndPoint}/add_service`;
+      ? `${serverEndPoint}/edit_other_service`
+      : `${serverEndPoint}/add_other_service`;
 
     try {
       const formData = new FormData();
 
       // Append vehicle details to formData
-      for (const key in selectedService) {
-        formData.append(key, selectedService[key]);
+      for (const key in selectedOtherService) {
+        formData.append(key, selectedOtherService[key]);
       }
 
       // Append image file if it exists
@@ -277,10 +231,10 @@ const AllServicesTable = () => {
       const response = await axios.post(
         endpoint,
         {
-          category_id: isEditMode ? selectedService.category_id : "0",
-          category_name: selectedService.category_name,
-          category_type_id: selectedService.category_type_id,
-          category_image: serviceImageUrl,
+          service_id: isEditMode ? selectedOtherService.service_id : "0",
+          sub_cat_id: sub_cat_id,
+          service_name: selectedOtherService.service_name,
+          service_image: serviceImageUrl,
         },
         {
           headers: {
@@ -292,14 +246,17 @@ const AllServicesTable = () => {
       if (response.status === 200) {
         toast.success(
           isEditMode
-            ? "Service updated successfully!"
-            : "Service added successfully!"
+            ? selectedOtherService.service_name +
+                " Service updated successfully!"
+            : selectedOtherService.service_name + " Service added successfully!"
         );
         fetchAllServices();
         handleCloseDialog();
         setImageFile(null);
       } else {
-        toast.error("Failed to save Category.");
+        toast.error(
+          "Failed to save service " + selectedOtherService.service_name
+        );
       }
     } catch (error) {
       handleError(error);
@@ -313,8 +270,8 @@ const AllServicesTable = () => {
     if (file) {
       const validImageTypes = [
         "image/png",
-        // "image/jpeg",
-        // "image/jpg",
+        "image/jpeg",
+        "image/jpg",
         "image/svg+xml",
       ];
 
@@ -323,7 +280,9 @@ const AllServicesTable = () => {
           ...prevErrors,
           image: true,
         }));
-        toast.warning("Only .png and .svg file formats are allowed.");
+        toast.warning(
+          "Only .png .jpeg .jpg and .svg file formats are allowed."
+        );
         e.target.value = ""; // Clear the selected file input
         return; // Return early without setting the image file
       } else {
@@ -358,62 +317,46 @@ const AllServicesTable = () => {
           sx={{ mb: 2 }}
           onClick={handleOpenDialog}
         >
-          Add New Service
+          Add New Other Service
         </Button>
 
         <StyledTable>
           <TableHead>
             <TableRow>
-              <TableCell align="left">Category Name</TableCell>
-              <TableCell align="left">Category Type</TableCell>
+              <TableCell align="left">Service Name</TableCell>
               <TableCell align="left">Last Updated</TableCell>
               <TableCell align="right">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {services
+            {otherServices
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((service) => (
                 <TableRow key={service.vehicle_id}>
                   <TableCell align="left">
                     <Box display="flex" alignItems="center">
                       <Avatar
-                        src={`${service.category_image}`}
-                        alt={service.category_name}
+                        src={`${service.service_image}`}
+                        alt={service.service_name}
                         sx={{ width: 40, height: 40, marginRight: 1 }}
                       />
-                      {service.category_name}
+                      {service.service_name}
                     </Box>
                   </TableCell>
 
-                  <TableCell align="left">{service.category_type}</TableCell>
                   <TableCell align="left">
                     {format(
-                      new Date(service.epoch * 1000),
+                      new Date(service.time_updated * 1000),
                       "dd/MM/yyyy, hh:mm:ss a"
                     )}
                   </TableCell>
 
                   <TableCell align="right">
-                    <Tooltip title="Edit Vehicle Details" arrow>
+                    <Tooltip title="Edit Details" arrow>
                       <IconButton onClick={() => handleEditClick(service)}>
                         <Icon color="primary">edit</Icon>
                       </IconButton>
                     </Tooltip>
-                    {service.category_type !== "Service" && (
-                      <Tooltip title="Add Vehicles" arrow>
-                        <IconButton onClick={() => goToAddPricePage(service)}>
-                          <Icon color="gray">arrow_forward</Icon>
-                        </IconButton>
-                      </Tooltip>
-                    )}
-                    {service.category_type === "Service" && (
-                      <Tooltip title="Add Sub Category" arrow>
-                        <IconButton onClick={() => goToSubCategory(service)}>
-                          <Icon color="gray">arrow_forward</Icon>
-                        </IconButton>
-                      </Tooltip>
-                    )}
                   </TableCell>
                 </TableRow>
               ))}
@@ -425,7 +368,7 @@ const AllServicesTable = () => {
           page={page}
           component="div"
           rowsPerPage={rowsPerPage}
-          count={services.length}
+          count={otherServices.length}
           onPageChange={(_, newPage) => setPage(newPage)}
           rowsPerPageOptions={[5, 10, 25]}
           onRowsPerPageChange={(event) => {
@@ -437,7 +380,7 @@ const AllServicesTable = () => {
 
       {/* Modal for Adding or Editing Vehicle */}
       <Dialog
-        open={openServicesDialog}
+        open={openOtherServicesDialog}
         onClose={handleCloseDialog}
         maxWidth="sm"
         fullWidth
@@ -449,10 +392,10 @@ const AllServicesTable = () => {
 
           {isEditMode ? (
             <Box display="flex" alignItems="center" mb={2} width="100%">
-              {selectedService.category_image ? (
+              {selectedOtherService.service_image ? (
                 <img
-                  src={selectedService.category_image}
-                  alt={selectedService.category_name}
+                  src={selectedOtherService.service_image}
+                  alt={selectedOtherService.service_name}
                   style={{
                     width: "100%",
                     height: "auto",
@@ -463,7 +406,7 @@ const AllServicesTable = () => {
                 />
               ) : (
                 <Typography variant="body2">
-                  No Category image selected
+                  No Service image selected
                 </Typography>
               )}
             </Box>
@@ -472,47 +415,29 @@ const AllServicesTable = () => {
           )}
 
           <TextField
-            label="Category Name"
+            label="Service Name"
             fullWidth
             margin="normal"
-            name="category_name"
-            value={selectedService.category_name}
+            name="service_name"
+            value={selectedOtherService.service_name}
             onChange={handleInputChange}
             required
-            error={errorService.category_name}
+            error={errorService.service_name}
             helperText={
-              errorService.category_name ? "Category name is required." : ""
+              errorService.service_name ? "Service name is required." : ""
             }
           />
 
-          <FormControl fullWidth margin="normal" variant="outlined">
-            <InputLabel>Category Type</InputLabel>
-            <Select
-              name="category_type_id"
-              value={selectedService.category_type_id}
-              onChange={handleInputChange}
-              required
-              label="Category Type"
-              error={errorService.category_type_id}
-            >
-              {servicesTypes.map((type) => (
-                <MenuItem key={type.cat_type_id} value={type.cat_type_id}>
-                  {type.category_type}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <Typography variant="subtitle2">Category Image</Typography>
+          <Typography variant="subtitle2">Service Image</Typography>
           <TextField
             fullWidth
             margin="normal"
             type="file"
             onChange={handleImageChangeCategory}
             required
-            error={errorService.category_image} // Set error state for image
+            error={errorService.service_image} // Set error state for image
             helperText={
-              errorService.category_image ? "Category Image is required." : ""
+              errorService.service_image ? "Service Image is required." : ""
             }
           />
 
@@ -525,7 +450,7 @@ const AllServicesTable = () => {
               color="primary"
               loading={btnLoading}
               variant="contained"
-              onClick={saveCategoryDetails}
+              onClick={saveServiceDetails}
             >
               {isEditMode ? "Update" : "Create"}
             </LoadingButton>
@@ -536,4 +461,4 @@ const AllServicesTable = () => {
   );
 };
 
-export default AllServicesTable;
+export default OtherServicesTable;

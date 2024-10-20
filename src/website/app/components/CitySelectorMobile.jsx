@@ -1,38 +1,66 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiX } from "react-icons/fi";
 import { Tilt } from "react-tilt";
 import { motion } from "framer-motion";
 import LocationSearchingOutlinedIcon from "@mui/icons-material/LocationSearchingOutlined";
 import { KeyboardArrowDown } from "@mui/icons-material";
+import { toast } from "react-toastify";
+import { serverWebsiteEndPoint } from "../../../dashboard/app/constants";
+import axios from "axios";
 
 const CitySelectorMobile = ({ onCitySelect }) => {
-  const cities = [
-    {
-      name: "Belgaum",
-      imageUrl:
-        "https://dom-website-prod-cdn-cms.porter.in/bangalore_city_14a3725848.webp",
-    },
-    {
-      name: "Pune",
-      imageUrl:
-        "https://dom-website-prod-cdn-cms.porter.in/Pune_22fe0b6cdf.webp",
-    },
-    {
-      name: "Hubli",
-      imageUrl:
-        "https://dom-website-prod-cdn-cms.porter.in/Ludhiana_51e085bbd8.webp",
-    },
-    {
-      name: "Dharwad",
-      imageUrl:
-        "https://dom-website-prod-cdn-cms.porter.in/hyderabad_city_banner_052a24d2d6.webp",
-    },
-  ];
-
   // State to store the selected city
-  const [selectedCity, setSelectedCity] = useState(cities[0].name);
+  const [selectedCity, setSelectedCity] = useState();
+  const [cities, setCities] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [btnLoading, setBtnLoading] = useState(false);
+  const [error, setError] = useState(null);
 
+  const fetchCities = async () => {
+    if (!navigator.onLine) {
+      toast.error("No internet connection. Please check your connection.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const endPoint = `${serverWebsiteEndPoint}/all_allowed_cities`;
+
+      const response = await axios.post(endPoint);
+
+      setCities(response.data.cities);
+      setSelectedCity(response.data.cities[0].city_name);
+    } catch (error) {
+      setLoading(false);
+      handleError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle error responses
+  const handleError = (error) => {
+    if (error.response) {
+      if (error.response.status === 404) {
+        toast.error("No Data Found.");
+        setError("No Data Found");
+      } else if (error.response.status === 500) {
+        toast.error("Internal server error. Please try again later.");
+        setError("Internal Server Error");
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+        setError("Unexpected Error");
+      }
+    } else {
+      console.log(error);
+      toast.error(
+        "Failed to fetch all allowed cities. Please check your connection."
+      );
+      setError("Network Error");
+    }
+  };
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Toggle modal visibility
@@ -40,10 +68,13 @@ const CitySelectorMobile = ({ onCitySelect }) => {
 
   // Handle city click
   const handleCityClick = (city) => {
-    setSelectedCity(city.name);
-    onCitySelect(city.imageUrl);
+    setSelectedCity(city.city_name);
+    onCitySelect(city.bg_image);
     toggleModal(); // Close modal after selection
   };
+  useEffect(() => {
+    fetchCities();
+  }, []);
 
   return (
     <div>
@@ -96,15 +127,15 @@ const CitySelectorMobile = ({ onCitySelect }) => {
                     >
                       <div className="bg-white rounded-[20px] p-1 flex justify-evenly items-center flex-col">
                         <img
-                          src={city.imageUrl}
-                          alt={city.name}
+                          src={city.bg_image}
+                          alt={city.city_name}
                           className="sm:w-14 sm:h-14 w-10 h-10 rounded-md m-1"
                         />
                       </div>
                     </motion.div>
                   </Tilt>
                   <span className="text-gray mt-2 text-[12px]">
-                    {city.name}
+                    {city.city_name}
                   </span>
                 </li>
               ))}

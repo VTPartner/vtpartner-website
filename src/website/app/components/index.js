@@ -41,6 +41,8 @@ import KeepInTouch from "./KeepInTouch";
 import CitySelectorMobile from "./CitySelectorMobile";
 import DownloadApp from "./DownloadApp";
 import Shimmer from "./Shimmer";
+import GrowingNetwork from "./GrowNetwork";
+import Gallery from "./Gallery";
 
 export {
   Navbar,
@@ -83,4 +85,6 @@ export {
   KeepInTouch,
   DownloadApp,
   Shimmer,
+  GrowingNetwork,
+  Gallery,
 };

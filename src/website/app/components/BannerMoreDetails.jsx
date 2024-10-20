@@ -23,7 +23,7 @@ const BannerMoreDetails = () => {
             </div>
             <div className="flex justify-center">
               <NavLink
-                to="/"
+                to="/agents"
                 aria-label="Dara's letter"
                 className="bg-blue-600 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 transition duration-200"
               >

@@ -7,6 +7,7 @@ import { SectionWrapper } from "../hoc";
 import { textVariant } from "../utils/motion";
 import { styles } from "../../../styles";
 import { motion } from "framer-motion";
+import { Typography } from "@mui/material";
 
 const FrequentlyAskedQuestions = () => {
   const [expandedIndex, setExpandedIndex] = useState(null);
@@ -17,15 +18,24 @@ const FrequentlyAskedQuestions = () => {
 
   return (
     <div className="sm:p-8 p-2">
-      <div className="text-center mb-6">
+      <div className="text-center mb-6 ">
         <motion.div
           initial="hidden"
           whileInView="show"
           variants={textVariant()}
         >
-          <h3 className={`${styles.sectionSubText}  font-semibold`}>
-            Frequently Asked Questions
-          </h3>
+          <Typography
+            variant="h6"
+            sx={{
+              color: "text.primary",
+              fontSize: { xs: "16px", md: "24px" },
+              fontWeight: "bold",
+              textAlign: "center",
+              mb: 4,
+            }}
+          >
+            Frequently Ask <span style={{ color: "#4087e1" }}>Questions</span>
+          </Typography>
         </motion.div>
       </div>
       <div className="space-y-4 sm:ml-10 sm:mr-10">

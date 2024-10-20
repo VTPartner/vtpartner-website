@@ -11,7 +11,7 @@ const DownloadApp = () => {
   if (!isVisible) return null;
 
   return (
-    <div className="  fixed bottom-0 left-0 right-0 bg-white p-4 shadow-lg z-50">
+    <div className="sm:hidden  fixed bottom-0 left-0 right-0 bg-white p-2 shadow-lg z-50">
       <div className="flex justify-between items-center">
         {/* Logo Section */}
         <div className="flex items-center space-x-4">
