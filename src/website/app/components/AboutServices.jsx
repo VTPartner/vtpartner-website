@@ -29,13 +29,8 @@ const AboutServices = () => {
   const servicesData = [
     {
       imgSrc: "/assets/tie.svg",
-      title: "Ms. Tejaswi",
-      description: "Chief executive officer",
-    },
-    {
-      imgSrc: "/assets/tie.svg",
-      title: "Mr. Satappa",
-      description: "Chief Operating Officer",
+      title: "Ms. Tejaswi V Gundewade",
+      description: "Founder & CEO",
     },
   ];
   return (

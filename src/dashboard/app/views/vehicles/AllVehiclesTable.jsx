@@ -259,7 +259,9 @@ const AllVehiclesTable = () => {
       }
     } catch (error) {
       console.error("Error uploading Vehicle Image:", error);
-      toast.error("Error uploading Vehicle Image");
+      toast.error(
+        "Error uploading Vehicle Image or file size too large then 2 Mb"
+      );
       setBtnLoading(false);
       return;
     }
@@ -284,7 +286,9 @@ const AllVehiclesTable = () => {
       }
     } catch (error) {
       console.error("Error uploading Vehicle Size Image:", error);
-      toast.error("Error uploading Vehicle Size Image");
+      toast.error(
+        "Error uploading Vehicle Size Image or file size too large then 2 Mb"
+      );
       setBtnLoading(false);
       return;
     }
@@ -470,7 +474,7 @@ const AllVehiclesTable = () => {
               <TableCell align="left">Vehicle Name</TableCell>
               <TableCell align="left">Weight (kg)</TableCell>
               <TableCell align="left">Vehicle Type</TableCell>
-              <TableCell align="left">Description</TableCell>
+              {/* <TableCell align="left">Description</TableCell> */}
               <TableCell align="right">Action</TableCell>
             </TableRow>
           </TableHead>
@@ -494,7 +498,7 @@ const AllVehiclesTable = () => {
                   <TableCell align="left">
                     {vehicle.vehicle_type_name}
                   </TableCell>
-                  <TableCell align="left">{vehicle.description}</TableCell>
+                  {/* <TableCell align="left">{vehicle.description}</TableCell> */}
                   <TableCell align="right">
                     <Tooltip title="Edit Vehicle Details" arrow>
                       <IconButton onClick={() => handleEditClick(vehicle)}>

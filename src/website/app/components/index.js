@@ -43,6 +43,15 @@ import DownloadApp from "./DownloadApp";
 import Shimmer from "./Shimmer";
 import GrowingNetwork from "./GrowNetwork";
 import Gallery from "./Gallery";
+import ResponsiveSlider from "./ResponsiveSlider";
+import VideoHeroBanner from "./VideoHeroBanner";
+import HeroNew from "../components/hero-section/Hero";
+import SliderCarousal from "./hero-section/SliderCarousal";
+import HowItWorks from "./hero-section/HowItWorks";
+import DownloadSection from "./hero-section/DownloadSection";
+import ShowcaseNumbers from "./hero-section/ShowcaseNumbers";
+import RegionShowcase from "./hero-section/RegionShowcase";
+import OurServices from "./hero-section/OurServices";
 
 export {
   Navbar,
@@ -87,4 +96,13 @@ export {
   Shimmer,
   GrowingNetwork,
   Gallery,
+  ResponsiveSlider,
+  VideoHeroBanner,
+  HeroNew,
+  SliderCarousal,
+  HowItWorks,
+  DownloadSection,
+  ShowcaseNumbers,
+  RegionShowcase,
+  OurServices,
 };

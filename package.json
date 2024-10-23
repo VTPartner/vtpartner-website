@@ -18,7 +18,7 @@
     "@heroicons/react": "^2.1.5",
     "@mui/icons-material": "^6.1.2",
     "@mui/lab": "^6.0.0-beta.10",
-    "@mui/material": "^6.1.2",
+    "@mui/material": "^6.1.4",
     "@mui/x-date-pickers": "^7.19.0",
     "@react-google-maps/api": "^2.20.1",
     "@react-three/drei": "^9.114.3",
@@ -50,6 +50,7 @@
     "react-vertical-timeline-component": "^3.6.0",
     "shortid": "^2.2.16",
     "slick-carousel": "^1.8.1",
+    "swiper": "^11.1.14",
     "three": "^0.169.0",
     "yup": "^1.4.0"
   },

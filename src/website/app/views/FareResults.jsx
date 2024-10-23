@@ -4,9 +4,9 @@ import { FareEstimateResults } from "../components";
 
 const FareResults = () => {
   return (
-    <>
+    <div className="bg-white">
       <FareEstimateResults />
-    </>
+    </div>
   );
 };
 

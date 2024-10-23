@@ -58,6 +58,7 @@ const AllServicesTable = () => {
     category_image: "",
     category_type: "",
     epoch: "",
+    description: "",
   });
 
   const [errorService, setServiceErrors] = useState({
@@ -67,6 +68,7 @@ const AllServicesTable = () => {
     category_image: false,
     category_type: false,
     epoch: false,
+    description: false,
   });
 
   const [btnLoading, setBtnLoading] = useState(false);
@@ -172,6 +174,7 @@ const AllServicesTable = () => {
       category_image: "",
       category_type: "",
       epoch: "",
+      description: "",
     });
     setIsEditMode(false);
     setOpenServicesDialog(true);
@@ -188,6 +191,13 @@ const AllServicesTable = () => {
   const goToSubCategory = (category) => {
     navigate(
       `/all_sub_categories/${category.category_id}/${category.category_name}`,
+      {}
+    );
+  };
+
+  const goToEnquiry = (category) => {
+    navigate(
+      `/all_enquiries/${category.category_id}/${category.category_name}`,
       {}
     );
   };
@@ -251,7 +261,7 @@ const AllServicesTable = () => {
       }
     } catch (error) {
       console.error("Error uploading Vehicle Image:", error);
-      toast.error("Error uploading Vehicle Image");
+      toast.error("Error uploading Vehicle Image or file size too large then 2 Mb");
       setBtnLoading(false);
       return;
     }
@@ -281,6 +291,7 @@ const AllServicesTable = () => {
           category_name: selectedService.category_name,
           category_type_id: selectedService.category_type_id,
           category_image: serviceImageUrl,
+          description: selectedService.description,
         },
         {
           headers: {
@@ -400,6 +411,11 @@ const AllServicesTable = () => {
                         <Icon color="primary">edit</Icon>
                       </IconButton>
                     </Tooltip>
+                    <Tooltip title="Enquiries" arrow>
+                      <IconButton onClick={() => goToEnquiry(service)}>
+                        <Icon color="gray">person_pin_icon</Icon>
+                      </IconButton>
+                    </Tooltip>
                     {service.category_type !== "Service" && (
                       <Tooltip title="Add Vehicles" arrow>
                         <IconButton onClick={() => goToAddPricePage(service)}>
@@ -407,6 +423,7 @@ const AllServicesTable = () => {
                         </IconButton>
                       </Tooltip>
                     )}
+
                     {service.category_type === "Service" && (
                       <Tooltip title="Add Sub Category" arrow>
                         <IconButton onClick={() => goToSubCategory(service)}>
@@ -472,7 +489,7 @@ const AllServicesTable = () => {
           )}
 
           <TextField
-            label="Category Name"
+            label="Service Category Name"
             fullWidth
             margin="normal"
             name="category_name"
@@ -482,6 +499,22 @@ const AllServicesTable = () => {
             error={errorService.category_name}
             helperText={
               errorService.category_name ? "Category name is required." : ""
+            }
+          />
+
+          <TextField
+            label="Description"
+            fullWidth
+            margin="normal"
+            multiline
+            rows={4} // You can change the number of rows based on your preference
+            name="description"
+            value={selectedService.description}
+            onChange={handleInputChange}
+            required
+            error={errorService.description}
+            helperText={
+              errorService.description ? "Description is required." : ""
             }
           />
 

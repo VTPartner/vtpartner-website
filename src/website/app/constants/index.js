@@ -70,16 +70,7 @@ const areas = [
     name: "Belgaum",
   },
   {
-    name: "Hubli",
-  },
-  {
-    name: "Dharwad",
-  },
-  {
-    name: "Panjim",
-  },
-  {
-    name: "Madgao",
+    name: "Pune",
   },
 ];
 

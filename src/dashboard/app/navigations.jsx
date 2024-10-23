@@ -1,34 +1,34 @@
 export const navigations = [
   { name: "Dashboard", path: "/dashboard/home", icon: "dashboard" },
 
-  { label: "Enquiry", type: "label" },
-  {
-    name: "All Enquiry",
-    icon: "outlined_flag",
-    // badge: { value: "30+", color: "secondary" },
-    children: [
-      {
-        name: "Goods Driver",
-        iconText: "GD",
-        path: "/goods-driver/all-enquires",
-      },
-      {
-        name: "Cab Driver",
-        iconText: "CD",
-        path: "/cab-driver/all-enquires",
-      },
-      {
-        name: "JCB Driver",
-        iconText: "JCB",
-        path: "/jcb-driver/all-enquires",
-      },
-      {
-        name: "Crane Driver",
-        iconText: "CRD",
-        path: "/crane-driver/all-enquires",
-      },
-    ],
-  },
+  // { label: "Enquiry", type: "label" },
+  // {
+  //   name: "All Enquiry",
+  //   icon: "outlined_flag",
+  //   // badge: { value: "30+", color: "secondary" },
+  //   children: [
+  //     {
+  //       name: "Goods Driver",
+  //       iconText: "GD",
+  //       path: "/goods-driver/all-enquires",
+  //     },
+  //     {
+  //       name: "Cab Driver",
+  //       iconText: "CD",
+  //       path: "/cab-driver/all-enquires",
+  //     },
+  //     {
+  //       name: "JCB Driver",
+  //       iconText: "JCB",
+  //       path: "/jcb-driver/all-enquires",
+  //     },
+  //     {
+  //       name: "Crane Driver",
+  //       iconText: "CRD",
+  //       path: "/crane-driver/all-enquires",
+  //     },
+  //   ],
+  // },
 
   { label: "Configurations", type: "label" },
   {

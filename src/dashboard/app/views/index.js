@@ -12,6 +12,7 @@ import AllServices from "./services/AllServices";
 import VehiclePrices from "./vehicles/all_vehicle_prices/VehiclePrices";
 import AllSubServices from "./services/sub_services/AllSubServices";
 import OtherServices from "./other_services/OtherServices";
+import AllEnquiries from "./enquires/AllEnquiries";
 
 export {
   Login,
@@ -28,4 +29,5 @@ export {
   VehiclePrices,
   AllSubServices,
   OtherServices,
+  AllEnquiries,
 };

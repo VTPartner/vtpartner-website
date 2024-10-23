@@ -23,6 +23,7 @@ import {
   VehiclePrices,
   AllSubServices,
   OtherServices,
+  AllEnquiries,
 } from "./dashboard/app/views";
 import Branches from "./dashboard/app/views/branches/Branches";
 import Layout from "./website/app/components/Layout";
@@ -61,7 +62,7 @@ const routes = [
         element: <Estimation />,
       },
       {
-        path: "/fare_estimation_result",
+        path: "/fare_estimation_result/:city_id/:category_id/:distance",
         element: <FareResults />,
       },
     ],
@@ -90,6 +91,10 @@ const routes = [
         path: "/dashboard/home",
         element: <Dashboard />,
         auth: authRoles.sa,
+      },
+      {
+        path: "/all_enquiries/:category_id/:category_name",
+        element: <AllEnquiries />,
       },
       {
         path: "all-allowed-pincodes/:city_id/:city_name", // This will resolve to /dashboard/add-pincodes/:cityId

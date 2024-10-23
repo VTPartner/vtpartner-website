@@ -31,7 +31,12 @@ const CitySelectorMobile = ({ onCitySelect }) => {
       const response = await axios.post(endPoint);
 
       setCities(response.data.cities);
-      setSelectedCity(response.data.cities[0].city_name);
+      const city_name = response.data.cities[0].city_name;
+      const city_id = response.data.cities[0].city_id;
+      const bg_image = response.data.cities[0].bg_image;
+      const covered_distance = response.data.cities[0].covered_distance;
+      //setSelectedCity(city_name);
+      //onCitySelect(bg_image, covered_distance, city_id);
     } catch (error) {
       setLoading(false);
       handleError(error);
@@ -69,12 +74,20 @@ const CitySelectorMobile = ({ onCitySelect }) => {
   // Handle city click
   const handleCityClick = (city) => {
     setSelectedCity(city.city_name);
-    onCitySelect(city.bg_image);
+    onCitySelect(city.bg_image, city.covered_distance, city.city_id);
     toggleModal(); // Close modal after selection
   };
   useEffect(() => {
     fetchCities();
   }, []);
+
+  useEffect(() => {
+    if (cities.length > 0) {
+      const { bg_image, covered_distance, city_id } = cities[0]; // Destructure to get values
+      setSelectedCity(cities[0].city_name);
+      onCitySelect(bg_image, covered_distance, city_id); // Trigger the onCitySelect callback
+    }
+  }, [cities]); // Run this after cities are fetched
 
   return (
     <div>

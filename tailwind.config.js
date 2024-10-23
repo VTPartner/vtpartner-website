@@ -4,6 +4,19 @@ export default {
   mode: "jit",
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["Poppins", "sans-serif"],
+      },
+      container: {
+        center: true,
+        padding: {
+          DEFAULT: "1 rem",
+          sm: "2 rem",
+          lg: "4 rem",
+          xl: "5 rem",
+          "2xl": "6 rem",
+        },
+      },
       gridTemplateColumns: {
         custom: "1fr 0.1fr 1fr",
       },
@@ -30,7 +43,7 @@ export default {
       },
 
       backgroundImage: {
-        "hero-pattern": "url('/src/assets/herobg.png')",
+        "hero-pattern": "url('public/logo_new.png')",
       },
     },
   },
@@ -38,6 +51,4 @@ export default {
   plugins: [],
 };
 
-               
-               
-              "";
+("");

@@ -2,12 +2,16 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useRef, useState } from "react";
 import { CitySelectorMobile } from "../components";
-
+import { Tilt } from "react-tilt";
+import LocationSearchingOutlinedIcon from "@mui/icons-material/LocationSearchingOutlined";
+import { KeyboardArrowDown } from "@mui/icons-material";
+import { motion } from "framer-motion";
+import { FiX } from "react-icons/fi";
 import { useLoadScript } from "@react-google-maps/api";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   TextField,
   MenuItem,
@@ -37,6 +41,9 @@ const libraries = ["places"]; // Load the places library
 
 // eslint-disable-next-line react/prop-types
 const LocationForm = ({ onCitySelect }) => {
+  const location = useLocation();
+  const { service } = location.state || {};
+
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: mapKey, // Replace with your API key
     libraries,
@@ -47,7 +54,11 @@ const LocationForm = ({ onCitySelect }) => {
   const [dropLocation, setDropLocation] = useState("");
   const [contactName, setContactName] = useState("");
   const [contactNumber, setContactNumber] = useState("");
+  const [cities, setCities] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Toggle modal visibility
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
   const [pickupSuggestions, setPickupSuggestions] = useState([]);
   const [dropSuggestions, setDropSuggestions] = useState([]);
 
@@ -56,6 +67,54 @@ const LocationForm = ({ onCitySelect }) => {
   const [pickupPlaceId, setPickupPlaceId] = useState(null);
   const [dropPlaceId, setDropPlaceId] = useState(null);
 
+  // State to store the selected city's data
+  // const [selectedCity, setSelectedCity] = useState({
+  //   bgImage: null,
+  //   coveredDistance: null,
+  //   city_id: -1,
+  // });
+  const [selectedCity, setSelectedCity] = useState();
+  const [selectedCityId, setSelectedCityId] = useState();
+  const [selectedCityCoveredDistance, setSelectedCityCoveredDistance] =
+    useState();
+
+  const fetchCities = async () => {
+    if (!navigator.onLine) {
+      toast.error("No internet connection. Please check your connection.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const endPoint = `${serverWebsiteEndPoint}/all_allowed_cities`;
+
+      const response = await axios.post(endPoint);
+
+      setCities(response.data.cities);
+      const city_name = response.data.cities[0].city_name;
+      const city_id = response.data.cities[0].city_id;
+      const bg_image = response.data.cities[0].bg_image;
+      const covered_distance = response.data.cities[0].covered_distance;
+      //setSelectedCity(city_name);
+      //onCitySelect(bg_image, covered_distance, city_id);
+    } catch (error) {
+      setLoading(false);
+      handleError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle city selection (This will be passed to CitySelection)
+  const handleCitySelect = (imageUrl, coveredDistance, city_id) => {
+    onCitySelect(imageUrl, coveredDistance, city_id);
+    console.log("selectedCity Details", imageUrl, coveredDistance, city_id);
+    setSelectedCity({
+      bgImage: imageUrl,
+      coveredDistance: coveredDistance,
+      city_id: city_id,
+    });
+  };
   // Handle when a pickup location is selected
   const handlePickupSelect = (placeId) => {
     setPickupPlaceId(placeId); // Save the selected placeId for pickup
@@ -65,13 +124,54 @@ const LocationForm = ({ onCitySelect }) => {
   const handleDropSelect = (placeId) => {
     setDropPlaceId(placeId); // Save the selected placeId for drop
   };
+  const navigate = useNavigate();
   // Function to calculate the distance between the two locations
   const fetchDistance = async (pickupPlaceId, dropPlaceId) => {
-    const response = await fetch(
-      `${serverWebsiteEndPoint}/distance?origins=${pickupPlaceId}&destinations=${dropPlaceId}`
-    );
-    const data = await response.json();
-    console.log("distance_Details::", data);
+    try {
+      const response = await fetch(
+        `${serverWebsiteEndPoint}/distance?origins=${pickupPlaceId}&destinations=${dropPlaceId}`
+      );
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} - ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      if (data && data.rows && data.rows.length > 0) {
+        const distance = data.rows[0].elements[0].distance.text;
+        console.log("distance_Details::", distance);
+
+        console.log("City ID:", selectedCityId);
+        console.log("City Distance:", selectedCityCoveredDistance);
+
+        // Remove "Km" from the distance and convert it to a number
+        const numericDistance = parseFloat(distance.replace(" km", ""));
+        // Compare the numeric distance with the city's covered distance
+        if (numericDistance > selectedCityCoveredDistance) {
+          toast.warning(
+            `The distance (${numericDistance} km) exceeds the covered distance (${selectedCityCoveredDistance} km) for this city.`
+          );
+        } else {
+          toast.success(`Distance is ${numericDistance} km`);
+          navigate(
+            "/fare_estimation_result/" +
+              selectedCityId +
+              "/" +
+              service.category_id +
+              "/" +
+              numericDistance
+          );
+        }
+      } else {
+        toast.error("Unable to calculate the distance.");
+      }
+    } catch (error) {
+      console.error("Error fetching distance:", error);
+      toast.error("Error fetching distance data.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -135,6 +235,20 @@ const LocationForm = ({ onCitySelect }) => {
     }
   }, [isLoaded]);
 
+  useEffect(() => {
+    fetchCities();
+  }, []);
+
+  useEffect(() => {
+    if (cities.length > 0) {
+      const { bg_image, covered_distance, city_id } = cities[0]; // Destructure to get values
+      setSelectedCity(cities[0].city_name);
+      setSelectedCityId(cities[0].city_id);
+      setSelectedCityCoveredDistance(cities[0].covered_distance);
+      onCitySelect(bg_image, covered_distance, city_id); // Trigger the onCitySelect callback
+    }
+  }, [cities]);
+
   const handlePickupSuggestionClick = (suggestion) => {
     handlePickupSelect(suggestion.place_id);
     setPickupLocation(suggestion.description);
@@ -145,11 +259,6 @@ const LocationForm = ({ onCitySelect }) => {
     handleDropSelect(suggestion.place_id);
     setDropLocation(suggestion.description);
     setDropSuggestions([]); // Hide suggestions after selection
-    fetchDistance(); //doing async to get the distance
-  };
-  // Handle city selection (This will be passed to CitySelection)
-  const handleCitySelect = (imageUrl) => {
-    onCitySelect(imageUrl);
   };
 
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -169,16 +278,16 @@ const LocationForm = ({ onCitySelect }) => {
   const [purpose, setPurpose] = useState("");
   const handleFormSubmit = async (values, { resetForm }) => {
     setLoading(true);
-
-    toast.warning("This Feature is still under development");
+    fetchDistance(pickupPlaceId, dropPlaceId); //doing async to get the distance
+    // toast.warning("This Feature is still under development");
 
     // Clear form fields after submission
-    setPickupLocation("");
-    setDropLocation("");
-    setContactName("");
-    setContactNumber("");
-    setPurpose("");
-    setLoading(false);
+    // setPickupLocation("");
+    // setDropLocation("");
+    // setContactName("");
+    // setContactNumber("");
+    // setPurpose("");
+    //setLoading(false);
   };
 
   // form field validation schema
@@ -194,11 +303,94 @@ const LocationForm = ({ onCitySelect }) => {
     purpose: Yup.string().required("Please select the Purpose ?"),
   });
 
+  // Handle city click
+  const handleCityClick = (city) => {
+    setSelectedCity(city.city_name);
+    onCitySelect(city.bg_image, city.covered_distance, city.city_id);
+    setSelectedCityId(city.city_id);
+    setSelectedCityCoveredDistance(city.covered_distance);
+    toggleModal(); // Close modal after selection
+  };
+
+  useEffect(() => {
+    console.log("selectedCityId:", selectedCityId);
+    console.log("selectedCityId:", selectedCityCoveredDistance);
+  }, [selectedCityId, selectedCityCoveredDistance]);
+
   return (
     <>
       <div className=" relative flex items-center justify-center h-full w-full lg:mt-0 mt-[0rem]">
         <Box className="bg-white p-8 shadow-lg rounded-sm w-full lg:max-w-[30rem] max-w-[30rem] max-h-[38rem] lg:mt-0 mt-5">
-          <CitySelectorMobile onCitySelect={handleCitySelect} />
+          {/* <CitySelectorMobile onCitySelect={handleCitySelect} /> */}
+          <div>
+            {/* City Selector for mobile */}
+            <div
+              className=" flex justify-start items-center  rounded-md cursor-pointer"
+              onClick={toggleModal}
+            >
+              <div className="flex items-center justify-start mb-1 pb-4">
+                <LocationSearchingOutlinedIcon
+                  style={{ fontSize: "16px", fontWeight: "bold" }}
+                />
+                <p className="ml-2 font-bold">{selectedCity}</p>
+                <KeyboardArrowDown
+                  style={{ fontSize: "18px", marginLeft: "5px" }}
+                />
+              </div>
+            </div>
+
+            {/* Modal */}
+            {isModalOpen && (
+              <div className="fixed bg-white inset-0 bg-opacity-50 flex justify-center shadow-lg items-center z-20 p-6">
+                <div className="bg-white p-6 rounded-lg w-full lg:w-1/2 shadow-lg">
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-lg text-black text-center mb-4">
+                      Select your City
+                    </h3>
+                    <FiX
+                      className="text-2xl text-black cursor-pointer"
+                      onClick={toggleModal}
+                    />
+                  </div>
+                  <ul className="flex gap-4 justify-evenly flex-wrap">
+                    {cities.map((city, index) => (
+                      <li
+                        key={index}
+                        className="flex flex-col justify-center w-fit items-center mb-3 p-2 rounded-md cursor-pointer"
+                        onClick={() => handleCityClick(city)}
+                      >
+                        <Tilt className=" w-full">
+                          <motion.div
+                            variants={{
+                              hidden: { opacity: 0 },
+                              visible: {
+                                opacity: 1,
+                                transition: { delay: index * 0.1 },
+                              },
+                            }}
+                            initial="hidden"
+                            animate="visible"
+                            className="w-full  p-[1px] rounded-[20px] "
+                          >
+                            <div className="bg-white rounded-[20px] p-1 flex justify-evenly items-center flex-col">
+                              <img
+                                src={city.bg_image}
+                                alt={city.city_name}
+                                className="sm:w-14 sm:h-14 w-10 h-10 rounded-md m-1"
+                              />
+                            </div>
+                          </motion.div>
+                        </Tilt>
+                        <span className="text-gray mt-2 text-[12px]">
+                          {city.city_name}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+          </div>
 
           <Formik
             onSubmit={handleFormSubmit}

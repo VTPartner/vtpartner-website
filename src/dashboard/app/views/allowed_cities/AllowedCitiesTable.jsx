@@ -2,11 +2,7 @@
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import { format } from "date-fns";
-import {
-  serverEndPoint,
-  serverEndPointImage,
-  serverImageEndPoint,
-} from "../../constants";
+import { serverEndPoint, serverEndPointImage } from "../../constants";
 import {
   Box,
   Icon,

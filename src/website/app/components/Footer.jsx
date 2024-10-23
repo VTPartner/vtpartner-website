@@ -7,7 +7,12 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* VT Partner Links Section */}
           <div className="flex flex-col">
-            <h4 className="text-lg font-bold mb-2">VT Partner</h4>
+            {/* <h4 className="text-lg font-bold mb-2">VT Partner</h4> */}
+            <img
+              src="/logo_new.png"
+              alt="logo"
+              className="sm:w-[12rem] mt-[-1rem]  w-[8rem] sm:ml-0 ml-[-15px]"
+            />
             {/* <a
               href=""
               className="hover:text-white text-gray-400"

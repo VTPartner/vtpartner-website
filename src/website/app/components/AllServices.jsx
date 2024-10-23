@@ -114,7 +114,7 @@ const AllServices = () => {
         </motion.p>
       </div>
 
-      <div className="sm:mt-1 flex flex-wrap justify-evenly">
+      <div className="sm:mt-1 flex flex-wrap justify-evenly items-start gap-2">
         {services.map((service, index) => (
           <ServiceCard key={`service-${index}`} index={index} {...service} />
         ))}

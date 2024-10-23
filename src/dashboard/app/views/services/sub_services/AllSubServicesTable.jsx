@@ -216,7 +216,9 @@ const AllSubServicesTable = () => {
       }
     } catch (error) {
       console.error("Error uploading Sub category Image:", error);
-      toast.error("Error uploading Sub category Image");
+      toast.error(
+        "Error uploading Sub category Image or file size too large then 2 Mb"
+      );
       setBtnLoading(false);
       return;
     }

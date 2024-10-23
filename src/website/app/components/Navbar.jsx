@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Menu, Close } from "@mui/icons-material";
 import { Drawer, IconButton, Button } from "@mui/material";
 import { NavLink } from "react-router-dom";
-
+import { motion } from "framer-motion";
 import { DownloadApp } from "../components";
 
 const Navbar = () => {
@@ -17,8 +17,26 @@ const Navbar = () => {
     <>
       <DownloadApp />
       <div className="bg-primary text-white fixed w-full z-50 top-0">
-        <nav className="flex justify-between items-center gap-4 lg:p-5 p-2">
-          <img src="/vite.svg" alt="logo" className="sm:col-span-2 ml-4" />
+        <motion.nav
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0 }}
+          className="flex justify-between items-center gap-4 lg:p-5 p-2"
+        >
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? "text-white font-bold"
+                : "hover:text-white text-secondary"
+            }
+            to="/"
+          >
+            <img
+              src="/logo_new.png"
+              alt="logo"
+              className="sm:col-span-2 ml-4 sm:w-20 sm:h-10 w-14"
+            />
+          </NavLink>
 
           {/* Desktop Menu */}
           <ul className="hidden lg:flex gap-9 justify-between items-center text-sm">
@@ -67,7 +85,7 @@ const Navbar = () => {
                 }
                 to="/agents"
               >
-                Registrations
+                Join Us
               </NavLink>
             </li>
           </ul>
@@ -86,7 +104,7 @@ const Navbar = () => {
               onClick={toggleDrawer}
               className="block lg:hidden" // Show only on small screens
             >
-              <img src="/assets/menu.svg" alt="menu"  />
+              <img src="/assets/menu.svg" alt="menu" />
             </IconButton>
           </div>
 
@@ -97,8 +115,11 @@ const Navbar = () => {
                 {/* Close Icon */}
                 <div className="flex justify-end">
                   <IconButton onClick={toggleDrawer}>
-                  <img src="/assets/close.svg" alt="menu"  style={{ color: "white" }}/>
-                    
+                    <img
+                      src="/assets/close.svg"
+                      alt="menu"
+                      style={{ color: "white" }}
+                    />
                   </IconButton>
                 </div>
 
@@ -145,7 +166,7 @@ const Navbar = () => {
                       }
                       to="/agents"
                     >
-                      Registrations
+                      Join Us
                     </NavLink>
                   </li>
                 </ul>
@@ -159,7 +180,7 @@ const Navbar = () => {
             </div> */}
             </div>
           </Drawer>
-        </nav>
+        </motion.nav>
       </div>
     </>
   );

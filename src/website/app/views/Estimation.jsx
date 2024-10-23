@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable no-unused-vars */
 // import React from 'react'
 import {
   EstimationHeroBanner,
@@ -8,47 +10,93 @@ import {
   QRCode,
   FrequentlyAskedQuestions,
 } from "../components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { serverWebsiteEndPoint } from "../../../dashboard/app/constants";
+import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 const Estimation = () => {
-  const cities = [
-    {
-      name: "Belgaum",
-      imageUrl:
-        "https://dom-website-prod-cdn-cms.porter.in/bangalore_city_14a3725848.webp",
-    },
-    {
-      name: "Pune",
-      imageUrl:
-        "https://dom-website-prod-cdn-cms.porter.in/Pune_22fe0b6cdf.webp",
-    },
-    {
-      name: "Hubli",
-      imageUrl:
-        "https://dom-website-prod-cdn-cms.porter.in/Ludhiana_51e085bbd8.webp",
-    },
-    {
-      name: "Dharwad",
-      imageUrl:
-        "https://dom-website-prod-cdn-cms.porter.in/hyderabad_city_banner_052a24d2d6.webp",
-    },
-  ];
-  // State to store the selected city background image
-  const [bgImage, setBgImage] = useState(cities[0].imageUrl);
+  const location = useLocation(); // Access location state
+  const { service } = location.state || {}; // Destructure the service object
 
+  if (!service) {
+    return <p>No service details available.</p>;
+  }
+
+  const [cities, setCities] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [error, setError] = useState(null);
+
+  // State to store the selected city background image
+  const [bgImage, setBgImage] = useState();
+
+  const fetchCities = async () => {
+    if (!navigator.onLine) {
+      toast.error("No internet connection. Please check your connection.");
+      // setIsLoading(false);
+      return;
+    }
+
+    try {
+      const endPoint = `${serverWebsiteEndPoint}/all_allowed_cities`;
+
+      const response = await axios.post(endPoint);
+      setBgImage(response.data.cities[0].bg_image);
+      setCities(response.data.cities);
+      // console.log(response.data.cities);
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Handle error responses
+  const handleError = (error) => {
+    if (error.response) {
+      if (error.response.status === 404) {
+        toast.error("No Data Found.");
+        setError("No Data Found");
+      } else if (error.response.status === 500) {
+        toast.error("Internal server error. Please try again later.");
+        setError("Internal Server Error");
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+        setError("Unexpected Error");
+      }
+    } else {
+      console.log(error);
+      toast.error(
+        "Failed to fetch all allowed cities. Please check your connection."
+      );
+      setError("Network Error");
+    }
+  };
   // Function to handle city selection and update background image
   const handleCitySelect = (imageUrl) => {
     setBgImage(imageUrl);
   };
+
+  useEffect(() => {
+    fetchCities();
+  }, []);
+
   return (
     <>
-      <EstimationHeroBanner bgImage={bgImage} />
-      <LocationForm onCitySelect={handleCitySelect} />
-      <ServiceDetails />
-      <WhyChooseUs />
-      <OurLocations />
-      <QRCode />
-      <FrequentlyAskedQuestions />
+      <div className="bg-white text-black! lg:mt-[4.5rem] mt-[2.8rem]">
+        <EstimationHeroBanner
+          bgImage={bgImage}
+          onCitySelect={handleCitySelect}
+        />
+        {/* <LocationForm onCitySelect={handleCitySelect} /> */}
+        <ServiceDetails />
+        <WhyChooseUs />
+        <OurLocations />
+        {/* <QRCode /> */}
+        <FrequentlyAskedQuestions />
+      </div>
     </>
   );
 };

@@ -205,7 +205,9 @@ const OtherServicesTable = () => {
       }
     } catch (error) {
       console.error("Error uploading Other Service Image:", error);
-      toast.error("Error uploading Other Service Image");
+      toast.error(
+        "Error uploading Other Service Image or file size too large then 2 Mb"
+      );
       setBtnLoading(false);
       return;
     }

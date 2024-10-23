@@ -28,7 +28,7 @@ const FrequentlyAskedQuestions = () => {
             variant="h6"
             sx={{
               color: "text.primary",
-              fontSize: { xs: "16px", md: "24px" },
+              fontSize: { xs: "26px", md: "34px" },
               fontWeight: "bold",
               textAlign: "center",
               mb: 4,
@@ -38,14 +38,14 @@ const FrequentlyAskedQuestions = () => {
           </Typography>
         </motion.div>
       </div>
-      <div className="space-y-4 sm:ml-10 sm:mr-10">
+      <div className="space-y-4 ">
         {faqData.map((item, index) => (
           <div key={index} className=" border-0">
             <button
               className="w-full text-left sm:p-2 p-2 focus:outline-none flex justify-between items-center text-gray"
               onClick={() => togglePanel(index)}
             >
-              <span className=" sm:text-[14px] text-[12px] flex items-center">
+              <span className=" sm:text-[16px] text-[14px] flex items-center">
                 <FaArrowsToDot className="w-3 h-3  m-2 text-gray" />
                 {item.question}
               </span>
@@ -83,7 +83,7 @@ const FrequentlyAskedQuestions = () => {
             </button>
             {expandedIndex === index && (
               <div className="sm:p-4 p-2">
-                <p className="text-gray sm:text-[12px] text-[10px] ml-7">
+                <p className="text-gray sm:text-[16px] text-[12px] ml-7">
                   {item.answer}
                 </p>
               </div>
