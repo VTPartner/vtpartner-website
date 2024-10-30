@@ -93,6 +93,7 @@ const OtherServicesTable = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );
@@ -185,7 +186,7 @@ const OtherServicesTable = () => {
     try {
       if (imageFile) {
         const formData = new FormData();
-        formData.append("vtPartnerImage", imageFile);
+        formData.append("image", imageFile);
         // Log form data content
         for (const [key, value] of formData.entries()) {
           console.log(`${key}: ${value.name}`); // Will log 'vehicleImage: lal-mahal.jpg'
@@ -201,7 +202,7 @@ const OtherServicesTable = () => {
           }
         );
 
-        serviceImageUrl = uploadResponse.data.imageUrl;
+        serviceImageUrl = uploadResponse.data.image_url;
       }
     } catch (error) {
       console.error("Error uploading Other Service Image:", error);
@@ -241,6 +242,7 @@ const OtherServicesTable = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );

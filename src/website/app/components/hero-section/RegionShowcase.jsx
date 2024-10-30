@@ -19,13 +19,13 @@ const RegionShowcase = () => {
         <div className="flex flex-col lg:flex-row lg:items-center">
           {/* Left Image Section */}
           <motion.div
-            className="lg:w-6/12 flex justify-center lg:justify-start mb-8 lg:mb-0"
+            className="lg:w-6/12 w-full flex justify-center lg:justify-start mb-8 lg:mb-0"
             variants={fadeInUpVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <div className="flex flex-col items-center lg:items-start space-y-4">
+            <div className="flex flex-col items-center lg:items-start sm:space-y-4">
               <motion.div
                 className="gallery-1"
                 variants={fadeInUpVariants}
@@ -44,14 +44,14 @@ const RegionShowcase = () => {
 
           {/* Right Text Section */}
           <motion.div
-            className="lg:w-6/12 ml-20"
+            className="lg:w-6/12 w-full sm:ml-20"
             variants={fadeInUpVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
           >
             <div className="text-center lg:text-left">
-              <h2 className="text-4xl font-medium text-white mb-6">
+              <h2 className="sm:text-4xl font-medium text-white mb-6">
                 From the region, for the region
               </h2>
               <p className="text-lg text-secondary mb-6">

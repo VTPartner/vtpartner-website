@@ -11,7 +11,7 @@ const FareEstimateQr = () => {
           {/* Image Placeholder */}
           <img
             alt="Download Porter QR Image"
-            src="https://dom-website-prod-cdn-web.porter.in/public/images/fare-estimate-result/download-qr-code.png"
+            src="/assets/website_qr.png"
             className="absolute inset-0 w-full h-full object-cover"
           />
         </div>

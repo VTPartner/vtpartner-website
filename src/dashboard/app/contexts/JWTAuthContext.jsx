@@ -68,18 +68,13 @@ export const AuthProvider = ({ children }) => {
           email,
           password,
         },
-        // {
-        //   headers: {
-        //     Authorization: `Bearer ${token}`, // Add the token to the Authorization header
-        //   },
-        // },
         { timeout: 5000 } // 5 seconds timeout
       );
 
       const { token, user } = response.data; // assuming your backend sends a token and user info
 
       // Store the token in cookies
-      Cookies.set("authToken", token, { expires: 1 }); // token stored for 1 day
+      Cookies.set("authToken", token, { expires: 20 }); // token stored for 20 day
 
       console.log(user);
 

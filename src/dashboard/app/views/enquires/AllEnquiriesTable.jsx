@@ -70,6 +70,7 @@ const AllEnquiriesTable = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );
@@ -110,6 +111,14 @@ const AllEnquiriesTable = () => {
     }
     setLoading(false);
   };
+  const navigate = useNavigate();
+
+  const goToRegistrationPage = (category) => {
+    navigate(
+      `/new_registration/${category.enquiry_id}/${category.category_id}/${category.category_name}`,
+      { state: { category } }
+    );
+  };
 
   if (loading) {
     return (
@@ -138,6 +147,7 @@ const AllEnquiriesTable = () => {
               <TableCell align="left">Registration Done</TableCell>
               <TableCell align="left">Source Type</TableCell>
               <TableCell align="left">Status</TableCell>
+              <TableCell align="center">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -170,6 +180,13 @@ const AllEnquiriesTable = () => {
                   <TableCell align="left">{service.source_type}</TableCell>
                   <TableCell align="left">
                     {service.status === 0 ? "Not Assigned" : "Assigned"}
+                  </TableCell>
+                  <TableCell align="center">
+                    <Tooltip title="Add New Entry" arrow>
+                      <IconButton onClick={() => goToRegistrationPage(service)}>
+                        <Icon>arrow_forward</Icon>
+                      </IconButton>
+                    </Tooltip>
                   </TableCell>
                 </TableRow>
               ))}

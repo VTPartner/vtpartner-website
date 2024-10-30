@@ -95,6 +95,7 @@ const AllVehiclesTable = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );
@@ -125,6 +126,7 @@ const AllVehiclesTable = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );
@@ -239,7 +241,7 @@ const AllVehiclesTable = () => {
       if (imageFile) {
         console.log("imageFile::", imageFile);
         const formData = new FormData();
-        formData.append("vtPartnerImage", imageFile);
+        formData.append("image", imageFile);
         // Log form data content
         for (const [key, value] of formData.entries()) {
           console.log(`${key}: ${value.name}`); // Will log 'vehicleImage: lal-mahal.jpg'
@@ -255,7 +257,7 @@ const AllVehiclesTable = () => {
           }
         );
 
-        vehicleImageUrl = uploadResponse.data.imageUrl;
+        vehicleImageUrl = uploadResponse.data.image_url;
       }
     } catch (error) {
       console.error("Error uploading Vehicle Image:", error);
@@ -270,7 +272,7 @@ const AllVehiclesTable = () => {
     try {
       if (imageFileSizeImage) {
         const formData2 = new FormData();
-        formData2.append("vtPartnerImage", imageFileSizeImage);
+        formData2.append("image", imageFileSizeImage);
 
         const uploadResponse = await axios.post(
           `${serverEndPointImage}/upload`,
@@ -282,7 +284,7 @@ const AllVehiclesTable = () => {
           }
         );
 
-        vehicleSizeImageUrl = uploadResponse.data.imageUrl;
+        vehicleSizeImageUrl = uploadResponse.data.image_url;
       }
     } catch (error) {
       console.error("Error uploading Vehicle Size Image:", error);
@@ -326,6 +328,7 @@ const AllVehiclesTable = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );

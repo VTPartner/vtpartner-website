@@ -1,12 +1,71 @@
+/* eslint-disable no-unused-vars */
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { serverWebsiteEndPoint } from "../../../../dashboard/app/constants";
+import axios from "axios";
 
 const tickAnimation = {
   hidden: { opacity: 0, x: -20 },
   visible: { opacity: 1, x: 0 },
 };
+
 const OurServices = () => {
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchAllServices = async () => {
+    if (!navigator.onLine) {
+      toast.error("No internet connection. Please check your connection.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${serverWebsiteEndPoint}/all_services`,
+        {},
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json; charset=UTF-8",
+          },
+        }
+      );
+      setServices(response.data.services_details);
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleError = (error) => {
+    if (error.response) {
+      if (error.response.status === 404) {
+        toast.error("No Data Found.");
+        setError("No Data Found");
+      } else if (error.response.status === 500) {
+        toast.error("Internal server error. Please try again later.");
+        setError("Internal Server Error");
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+        setError("Unexpected Error");
+      }
+    } else {
+      toast.error("error:", error.response);
+      setError(error);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchAllServices();
+  }, []);
+
   return (
-    <section className="section pt-28 pb-28">
+    <section className="section pt-28 pb-28 sm:px-0 px-10">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left side content */}
@@ -20,7 +79,7 @@ const OurServices = () => {
               Our Services
             </h2>
             <p className="text-lg text-gray-600 mb-6">
-              We offer variety of services
+              We offer a variety of services
             </p>
             <motion.ul
               initial="hidden"
@@ -34,13 +93,7 @@ const OurServices = () => {
               }}
               className="space-y-4"
             >
-              {[
-                "Goods Delivery",
-                "Cab Booking",
-                "JCB & Crane Service",
-                "Drivers",
-                "HandMans",
-              ].map((service, index) => (
+              {services.map((service, index) => (
                 <motion.li
                   key={index}
                   variants={tickAnimation}
@@ -49,7 +102,7 @@ const OurServices = () => {
                   <div className="absolute left-0 top-1/2 transform -translate-y-1/2 h-6 w-6 bg-white shadow shadow-lg rounded-full flex items-center justify-center">
                     <img src="assets/tick.svg" alt="tick" className="h-2 w-2" />
                   </div>
-                  {service}
+                  {service.category_name}
                 </motion.li>
               ))}
             </motion.ul>
@@ -91,7 +144,7 @@ const OurServices = () => {
                 <img
                   src="https://creativelayers.net/themes/luxride-html/assets/imgs/page/homepage4/img1.png"
                   alt="vtpartner"
-                  className="w-[25rem] h-[15rem] rounded-lg shadow-lg"
+                  className="w-full h-[15rem] rounded-lg shadow-lg"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -100,12 +153,12 @@ const OurServices = () => {
                   <img
                     src="https://creativelayers.net/themes/luxride-html/assets/imgs/page/homepage4/img4.png"
                     alt="vtpartner"
-                    className="w-[25rem] h-[15rem] rounded-lg shadow-lg"
+                    className="w-full h-[15rem] rounded-lg shadow-lg"
                   />
                   <img
                     src="https://creativelayers.net/themes/luxride-html/assets/imgs/page/homepage4/img2.png"
                     alt="vtpartner"
-                    className="w-[25rem] h-auto rounded-lg shadow-lg"
+                    className="w-full h-auto rounded-lg shadow-lg"
                   />
                 </div>
                 {/* One large image on the right */}

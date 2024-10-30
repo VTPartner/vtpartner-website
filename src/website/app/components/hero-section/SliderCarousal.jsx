@@ -1,60 +1,137 @@
 /* eslint-disable react/jsx-key */
 /* eslint-disable no-unused-vars */
-import React from "react";
-import { styled, keyframes, css } from "@mui/system";
+import React, { useEffect, useState } from "react";
+import { styled, keyframes, css, useMediaQuery } from "@mui/system";
+import { toast } from "react-toastify";
+import { serverWebsiteEndPoint } from "../../../../dashboard/app/constants";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const SliderCarousal = () => {
-  const row1 = [
-    "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/7ae42bac3b34999c0db3.png",
-    "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/b2bd91d7b87b2181ca45.png",
-    "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/6591cdc0702b32310306.png",
-    "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/3b7d9f4b073deb6a9b74.png",
-    "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/3cd767dea94a85078ca4.png",
-    "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/a2b3c3709ffedce2a22a.png",
-  ];
+  const [deliveryImages, setDeliveryGalleryImages] = useState([]);
+  const [serviceImages, setServiceGalleryImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const row2 = [
-    "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/6c585c33ca6c71c79bb7.png",
-    "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/9dd55e54b5a28658bf4e.png",
-    "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/0384060dcbf73b6a707c.png",
-    "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/35e044b3354aaa0caed5.png",
-    "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/f50ae7cbf6cc805bdadc.png",
-    "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/6c585c33ca6c71c79bb7.png",
-  ];
+  const fetchDeliveryGalleryImages = async () => {
+    if (!navigator.onLine) {
+      toast.error("No internet connection. Please check your connection.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${serverWebsiteEndPoint}/all_delivery_gallery_images`,
+        {}
+      );
+      setDeliveryGalleryImages(response.data.gallery_data_delivery);
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const fetchServiceGalleryImages = async () => {
+    if (!navigator.onLine) {
+      toast.error("No internet connection. Please check your connection.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${serverWebsiteEndPoint}/all_services_gallery_images`,
+        {}
+      );
+      setServiceGalleryImages(response.data.gallery_data_services);
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleError = (error) => {
+    if (error.response) {
+      if (error.response.status === 404) {
+        toast.error("No Data Found.");
+        setError("No Data Found");
+      } else if (error.response.status === 500) {
+        toast.error("Internal server error. Please try again later.");
+        setError("Internal Server Error");
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+        setError("Unexpected Error");
+      }
+    } else {
+      toast.error(
+        "Failed to fetch all allowed cities. Please check your connection."
+      );
+      setError("Network Error");
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchDeliveryGalleryImages();
+    fetchServiceGalleryImages();
+  }, []);
+
+  const navigate = useNavigate();
+
+  const handleImageClick = (el) => {
+    //toast.success("Send to Estimation Screen");
+    navigate("/agents");
+  };
 
   return (
     <AppContainer>
       <Wrapper>
-        <Text>What We Offer</Text>
-        <Note>Reliable Services, Anytime, Anywhere.</Note>
+        <Text>Join Us</Text>
+        <Note>Reliable delivery, Anytime, Anywhere.</Note>
         <Marquee>
           <MarqueeGroup>
-            {row1.map((el) => (
-              <ImageGroup>
-                <Image src={el} />
+            {deliveryImages.map((el) => (
+              <ImageGroup key={el.gallery_id}>
+                <Image
+                  src={el.image_url}
+                  onClick={() => handleImageClick(el)}
+                />
               </ImageGroup>
             ))}
           </MarqueeGroup>
           <MarqueeGroup>
-            {row1.map((el) => (
-              <ImageGroup>
-                <Image src={el} />
+            {deliveryImages.map((el) => (
+              <ImageGroup key={el.gallery_id}>
+                <Image
+                  src={el.image_url}
+                  onClick={() => handleImageClick(el)}
+                />
               </ImageGroup>
             ))}
           </MarqueeGroup>
         </Marquee>
         <Marquee>
           <MarqueeGroup2>
-            {row2.map((el) => (
-              <ImageGroup>
-                <Image src={el} />
+            {serviceImages.map((el, index) => (
+              <ImageGroup key={index}>
+                <Image
+                  src={el.image_url}
+                  onClick={() => handleImageClick(el)}
+                  alt={`Service ${index}`}
+                />
               </ImageGroup>
             ))}
           </MarqueeGroup2>
           <MarqueeGroup2>
-            {row2.map((el) => (
-              <ImageGroup>
-                <Image src={el} />
+            {serviceImages.map((el, index) => (
+              <ImageGroup key={index}>
+                <Image
+                  src={el.image_url}
+                  onClick={() => handleImageClick(el)}
+                />
               </ImageGroup>
             ))}
           </MarqueeGroup2>
@@ -162,9 +239,14 @@ const Image = styled("img")`
   border-radius: 0.5rem;
   aspect-ratio: 16/9;
   padding: 5px 20px;
+  transition: transform 0.3s ease-in-out;
   max-width: 100%; // Prevents image from exceeding container size
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   @media (max-width: 600px) {
     max-width: 100%; // Ensure image width doesn't shrink too much
+  }
+
+  &:hover {
+    transform: scale(1.1); // Scale image on hover
   }
 `;

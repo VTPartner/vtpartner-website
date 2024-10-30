@@ -85,11 +85,11 @@ const ServiceDetails = () => {
   };
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto mt-10">
       {/* Section Heading */}
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-semibold text-black">
-          {service.category_name} from VT Partner
+        <h2 className="sm:text-2xl text-lg font-semibold text-black">
+          {service.category_name} Service from VT Partner
         </h2>
       </div>
 

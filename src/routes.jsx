@@ -24,6 +24,13 @@ import {
   AllSubServices,
   OtherServices,
   AllEnquiries,
+  Gallery,
+  NewRegistration,
+  FullAllEnquiries,
+  AllGoodsDrivers,
+  AllCabAgents,
+  AllCraneDrivers,
+  AllVendors,
 } from "./dashboard/app/views";
 import Branches from "./dashboard/app/views/branches/Branches";
 import Layout from "./website/app/components/Layout";
@@ -62,7 +69,7 @@ const routes = [
         element: <Estimation />,
       },
       {
-        path: "/fare_estimation_result/:city_id/:category_id/:distance",
+        path: "/fare_estimation_result/:city_id/:category_id/:distance/:category_name",
         element: <FareResults />,
       },
     ],
@@ -94,6 +101,10 @@ const routes = [
       },
       {
         path: "/all_enquiries/:category_id/:category_name",
+        element: <AllEnquiries />,
+      },
+      {
+        path: "/new_registration/:enquiry_id/:category_id",
         element: <AllEnquiries />,
       },
       {
@@ -150,7 +161,34 @@ const routes = [
         path: "/all_services",
         element: <AllServices />,
       },
-
+      {
+        path: "/all_full_enquiries",
+        element: <FullAllEnquiries />,
+      },
+      {
+        path: "/new_registration/:enquiry_id/:category_id/:category_name",
+        element: <NewRegistration />,
+      },
+      {
+        path: "/gallery/:category_id/:category_name/:category_type_id",
+        element: <Gallery />,
+      },
+      {
+        path: "/all_goods_drivers",
+        element: <AllGoodsDrivers />,
+      },
+      {
+        path: "/all_cab_drivers",
+        element: <AllCabAgents />,
+      },
+      {
+        path: "/all_jcb_crane_drivers",
+        element: <AllCraneDrivers />,
+      },
+      {
+        path: "/all_vendors",
+        element: <AllVendors />,
+      },
       // e-chart route
       // { path: "/charts/echarts", element: <AppEchart />, auth: authRoles.editor }
     ],

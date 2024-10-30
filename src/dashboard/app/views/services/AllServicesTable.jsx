@@ -1,4 +1,6 @@
 /* eslint-disable no-unused-vars */
+import { FcGallery } from "react-icons/fc";
+import { MdOutlineFileOpen } from "react-icons/md";
 import { useState, useEffect } from "react";
 import {
   Box,
@@ -93,6 +95,7 @@ const AllServicesTable = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );
@@ -123,6 +126,7 @@ const AllServicesTable = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );
@@ -202,6 +206,13 @@ const AllServicesTable = () => {
     );
   };
 
+  const goToGallery = (category) => {
+    navigate(
+      `/gallery/${category.category_id}/${category.category_name}/${category.category_type_id}`,
+      {}
+    );
+  };
+
   const handleEditClick = (service) => {
     setSelectedService(service);
     setIsEditMode(true);
@@ -240,16 +251,18 @@ const AllServicesTable = () => {
     //CATEGORY IMAGE UPLOAD
     try {
       if (imageFile) {
+        console.log("Image File:", imageFile); // Log the image file for debugging
         const formData = new FormData();
-        formData.append("vtPartnerImage", imageFile);
+        formData.append("image", imageFile);
+
         // Log form data content
         for (const [key, value] of formData.entries()) {
-          console.log(`${key}: ${value.name}`); // Will log 'vehicleImage: lal-mahal.jpg'
+          console.log(`${key}: ${value.name}`); // Will log the file name
         }
-        console.log(formData);
+        console.log("formData:", formData);
         const uploadResponse = await axios.post(
           `${serverEndPointImage}/upload`,
-          formData,
+          formData, // No headers,
           {
             headers: {
               "Content-Type": "multipart/form-data",
@@ -257,11 +270,13 @@ const AllServicesTable = () => {
           }
         );
 
-        serviceImageUrl = uploadResponse.data.imageUrl;
+        serviceImageUrl = uploadResponse.data.image_url; // Ensure correct key
       }
     } catch (error) {
       console.error("Error uploading Vehicle Image:", error);
-      toast.error("Error uploading Vehicle Image or file size too large then 2 Mb");
+      toast.error(
+        "Error uploading Vehicle Image or file size too large than 2 MB"
+      );
       setBtnLoading(false);
       return;
     }
@@ -296,6 +311,7 @@ const AllServicesTable = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );
@@ -321,30 +337,45 @@ const AllServicesTable = () => {
 
   const handleImageChangeCategory = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const validImageTypes = [
-        "image/png",
-        // "image/jpeg",
-        // "image/jpg",
-        "image/svg+xml",
-      ];
+    setImageFile(file);
+    // const reader = new FileReader();
+    // reader.onload = () => {
+    //   setImageFile(reader.result);
+    //   // this.setState({file : reader.result})
+    //   setImageError((prevErrors) => ({
+    //     ...prevErrors,
+    //     image: false,
+    //   }));
+    // };
 
-      if (!validImageTypes.includes(file.type)) {
-        setImageError((prevErrors) => ({
-          ...prevErrors,
-          image: true,
-        }));
-        toast.warning("Only .png and .svg file formats are allowed.");
-        e.target.value = ""; // Clear the selected file input
-        return; // Return early without setting the image file
-      } else {
-        setImageFile(file); // Set the valid image file
-        setImageError((prevErrors) => ({
-          ...prevErrors,
-          image: false,
-        }));
-      }
-    }
+    // if (file) {
+    //   reader.readAsDataURL(file);
+    // }
+    // const file = e.target.files[0];
+    // if (file) {
+    //   const validImageTypes = [
+    //     "image/png",
+    //     // "image/jpeg",
+    //     // "image/jpg",
+    //     "image/svg+xml",
+    //   ];
+
+    //   if (!validImageTypes.includes(file.type)) {
+    //     setImageError((prevErrors) => ({
+    //       ...prevErrors,
+    //       image: true,
+    //     }));
+    //     toast.warning("Only .png and .svg file formats are allowed.");
+    //     e.target.value = ""; // Clear the selected file input
+    //     return; // Return early without setting the image file
+    //   } else {
+    //     setImageFile(file); // Set the valid image file
+    //     setImageError((prevErrors) => ({
+    //       ...prevErrors,
+    //       image: false,
+    //     }));
+    //   }
+    // }
   };
 
   if (loading) {
@@ -378,7 +409,7 @@ const AllServicesTable = () => {
               <TableCell align="left">Category Name</TableCell>
               <TableCell align="left">Category Type</TableCell>
               <TableCell align="left">Last Updated</TableCell>
-              <TableCell align="right">Action</TableCell>
+              <TableCell align="center">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -405,15 +436,24 @@ const AllServicesTable = () => {
                     )}
                   </TableCell>
 
-                  <TableCell align="right">
+                  <TableCell align="center">
                     <Tooltip title="Edit Vehicle Details" arrow>
                       <IconButton onClick={() => handleEditClick(service)}>
                         <Icon color="primary">edit</Icon>
                       </IconButton>
                     </Tooltip>
+                    <Tooltip title="Gallery" arrow>
+                      <IconButton onClick={() => goToGallery(service)}>
+                        <Icon color="primary">
+                          <FcGallery />
+                        </Icon>
+                      </IconButton>
+                    </Tooltip>
                     <Tooltip title="Enquiries" arrow>
                       <IconButton onClick={() => goToEnquiry(service)}>
-                        <Icon color="gray">person_pin_icon</Icon>
+                        <Icon color="gray">
+                          <MdOutlineFileOpen />
+                        </Icon>
                       </IconButton>
                     </Tooltip>
                     {service.category_type !== "Service" && (
@@ -541,7 +581,7 @@ const AllServicesTable = () => {
             fullWidth
             margin="normal"
             type="file"
-            onChange={handleImageChangeCategory}
+            onChange={(e) => setImageFile(e.target.files[0])}
             required
             error={errorService.category_image} // Set error state for image
             helperText={

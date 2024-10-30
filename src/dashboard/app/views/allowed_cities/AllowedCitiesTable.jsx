@@ -115,7 +115,7 @@ const AllowedCitiesTable = () => {
 
       if (imageFile) {
         const formData = new FormData();
-        formData.append("vtPartnerImage", imageFile);
+        formData.append("image", imageFile);
 
         const uploadResponse = await axios.post(
           `${serverEndPointImage}/upload`,
@@ -127,7 +127,7 @@ const AllowedCitiesTable = () => {
           }
         );
 
-        imageUrl = uploadResponse.data.imageUrl;
+        imageUrl = uploadResponse.data.image_url;
       }
 
       const token = Cookies.get("authToken");
@@ -145,6 +145,7 @@ const AllowedCitiesTable = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );
@@ -186,6 +187,7 @@ const AllowedCitiesTable = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );
@@ -291,7 +293,7 @@ const AllowedCitiesTable = () => {
       if (imageFile) {
         // Only upload the new image if one is selected
         const formData = new FormData();
-        formData.append("cityImage", imageFile);
+        formData.append("image", imageFile);
 
         const uploadResponse = await axios.post(
           `${serverEndPointImage}/upload`,
@@ -303,7 +305,7 @@ const AllowedCitiesTable = () => {
           }
         );
 
-        imageUrl = uploadResponse.data.imageUrl; // Get the uploaded image URL
+        imageUrl = uploadResponse.data.image_url; // Get the uploaded image URL
         console.log("imageUrl::", imageUrl);
       }
 
@@ -325,6 +327,7 @@ const AllowedCitiesTable = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );
@@ -366,6 +369,7 @@ const AllowedCitiesTable = () => {
         "image/png",
         "image/jpeg",
         "image/jpg",
+        "image/webp",
         "image/svg+xml",
       ];
 

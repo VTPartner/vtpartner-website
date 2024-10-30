@@ -1,8 +1,74 @@
+/* eslint-disable no-unused-vars */
 // import React from "react";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { serverWebsiteEndPoint } from "../../../dashboard/app/constants";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchAllServices = async () => {
+    if (!navigator.onLine) {
+      toast.error("No internet connection. Please check your connection.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${serverWebsiteEndPoint}/all_services`,
+        {}
+      );
+      setServices(response.data.services_details);
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleError = (error) => {
+    if (error.response) {
+      if (error.response.status === 404) {
+        toast.error("No Data Found.");
+        setError("No Data Found");
+      } else if (error.response.status === 500) {
+        toast.error("Internal server error. Please try again later.");
+        setError("Internal Server Error");
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+        setError("Unexpected Error");
+      }
+    } else {
+      toast.error(
+        "Failed to fetch all allowed cities. Please check your connection."
+      );
+      setError("Network Error");
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchAllServices();
+  }, []);
+
+  const navigate = useNavigate(); // Initialize useNavigate hook
+
+  // Handle click to navigate to the estimation page with the selected service data
+  const handleEstimationClick = (service) => {
+    if (service.category_type === "Delivery") {
+      navigate("/get_estimation", { state: { service } }); // Send the full service object\
+    } else {
+      navigate("/agents"); // Send to Home Page
+    }
+  };
+
   return (
-    <footer className="bg-primary text-white p-6 mt-10">
+    <footer className="bg-white text-black p-6 mt-10">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* VT Partner Links Section */}
@@ -15,7 +81,7 @@ const Footer = () => {
             />
             {/* <a
               href=""
-              className="hover:text-white text-gray-400"
+              className="hover:text-black text-gray-400"
               target="_self"
               aria-label="Visit VT Partner's Help Center"
             >
@@ -28,7 +94,7 @@ const Footer = () => {
             <h4 className="text-lg font-bold mb-2">Company</h4>
             <a
               href=""
-              className="mb-2 hover:text-white text-gray-400"
+              className="mb-2 hover:text-black text-gray-400"
               target="_self"
               aria-label="Visit About us"
             >
@@ -37,7 +103,7 @@ const Footer = () => {
 
             <a
               href=""
-              className="mb-2 hover:text-white text-gray-400"
+              className="mb-2 hover:text-black text-gray-400"
               target="_self"
               aria-label="Visit Investors"
             >
@@ -45,7 +111,7 @@ const Footer = () => {
             </a>
             <a
               href=""
-              className="mb-2 hover:text-white text-gray-400"
+              className="mb-2 hover:text-black text-gray-400"
               target="_self"
               aria-label="Visit Blog"
             >
@@ -53,7 +119,7 @@ const Footer = () => {
             </a>
             <a
               href=""
-              className="hover:text-white text-gray-400"
+              className="hover:text-black text-gray-400"
               target="_self"
               aria-label="Vist Careers"
             >
@@ -62,41 +128,28 @@ const Footer = () => {
           </div> */}
 
           {/* Products Links Section */}
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-2">
             <h4 className="text-lg font-bold mb-2">Products</h4>
-            <a
-              href=""
-              className="mb-2 hover:text-white text-gray-400"
-              target="_self"
-              aria-label="Ride with VT Partner"
-            >
-              Cab Ride
-            </a>
-            <a
-              href=""
-              className="mb-2 hover:text-white text-gray-400"
-              target="_self"
-              aria-label="Drive with VT Partner"
-            >
-              Goods Delivery
-            </a>
-            <a
-              href=""
-              className="mb-2 hover:text-white text-gray-400"
-              target="_self"
-              aria-label="Deliver with VT Partner"
-            >
-              Drivers
-            </a>
-
-            <a
-              href=""
-              className="mb-2 hover:text-white text-gray-400"
-              target="_self"
-              aria-label="Visit VT Partner for Business"
-            >
-              VT Partner for Business
-            </a>
+            {loading ? (
+              <p>Loading...</p>
+            ) : error ? (
+              <p>{error}</p>
+            ) : services.length === 0 ? (
+              <p>No Products available.</p>
+            ) : (
+              services.map((service) => (
+                <div key={service.category_id}>
+                  <a
+                    href=""
+                    className="mb-2 hover:text-black text-gray-400"
+                    onClick={() => handleEstimationClick(service)} // Pass the service on click
+                    aria-label={`Get Estimation for ${service.category_name}`}
+                  >
+                    {service.category_name}
+                  </a>
+                </div>
+              ))
+            )}
           </div>
 
           {/* Social Links Section */}
@@ -105,7 +158,7 @@ const Footer = () => {
             <div className="flex space-x-4">
               <a
                 href="https://www.facebook.com/VT Partner"
-                className="hover:text-white text-gray-400"
+                className="hover:text-black text-gray-400"
                 target="_blank"
                 aria-label="Visit VT Partner's Facebook"
               >
@@ -118,7 +171,7 @@ const Footer = () => {
               </a>
               <a
                 href="https://twitter.com/VT Partner"
-                className="hover:text-white text-gray-400"
+                className="hover:text-black text-gray-400"
                 target="_blank"
                 aria-label="Visit VT Partner's Twitter"
               >
@@ -131,7 +184,7 @@ const Footer = () => {
               </a>
               <a
                 href="https://www.youtube.com/"
-                className="hover:text-white text-gray-400"
+                className="hover:text-black text-gray-400"
                 target="_blank"
                 aria-label="Visit VT Partner's YouTube"
               >
@@ -144,7 +197,7 @@ const Footer = () => {
               </a>
               <a
                 href="https://www.linkedin.com/company/1815218"
-                className="hover:text-white text-gray-400"
+                className="hover:text-black text-gray-400"
                 target="_blank"
                 aria-label="Visit VT Partner's LinkedIn"
               >
@@ -172,7 +225,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="text-center sm:flex justify-between items-center m-10">
+      <div className="text-center sm:flex justify-between items-center m-10 text-secondary">
         <p className="sm:text-sm text-xs font-semibold">
           © {new Date().getFullYear()} VT Partner Trans Pvt Ltd, Inc. All rights
           reserved.
@@ -180,7 +233,7 @@ const Footer = () => {
         <div className="flex items-center sm:text-sm text-xs justify-center gap-4 sm:mt-0 mt-4 sm:mb-0 mb-4">
           <a
             href=""
-            className="hover:text-white text-gray-400"
+            className="hover:text-black text-gray-400"
             target="_self"
             aria-label="Learn more about VT Partner gift cards"
           >
@@ -188,7 +241,7 @@ const Footer = () => {
           </a>
           <a
             href=""
-            className="hover:text-white text-gray-400"
+            className="hover:text-black text-gray-400"
             target="_self"
             aria-label="Learn more about VT Partner gift cards"
           >
@@ -196,7 +249,7 @@ const Footer = () => {
           </a>
           <a
             href=""
-            className="hover:text-white text-gray-400"
+            className="hover:text-black text-gray-400"
             target="_self"
             aria-label="Learn more about VT Partner gift cards"
           >

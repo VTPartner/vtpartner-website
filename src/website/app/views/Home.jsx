@@ -32,6 +32,11 @@ import {
   ShowcaseNumbers,
   RegionShowcase,
   OurServices,
+  LandingPage,
+  NavbarNew,
+  HeroBanner,
+  FareEstimationForm,
+  WhatWeOffer,
 } from "../components";
 
 import { MatxLoading } from "../../../dashboard/app/components";
@@ -42,13 +47,35 @@ import { useNavigate } from "react-router-dom";
 const Home = () => {
   return (
     <>
-      <div className="bg-white text-black! lg:mt-[4.5rem] mt-[2.8rem]">
-        <HeroNew />
+      <div className="bg-white text-black! lg:mt-[4.5rem] mt-[2.5rem]">
+        {/* <NavbarNew /> */}
+        <HeroBanner />
+        <ShowcaseNumbers />
+        <SliderCarousal />
+        <HowItWorks />
+        <OurLocations />
+        <OurServices />
+        <div className="relative z-0 bg-primary">
+          <Contact />
+          <StarsCanvas />
+        </div>
+        {/* <WhatWeOffer /> */}
+        {/* <FareEstimationForm /> */}
+
+        {/* <div className="bg-white-100"> */}
+        {/* <LandingPage /> */}
+        {/* <HeroNew />
+        <HowItWorks />
         <DownloadSection />
         <SliderCarousal />
         <ShowcaseNumbers />
         <OurServices />
-        <HowItWorks />
+        <RegionShowcase />
+        <FrequentlyAskedQuestions />
+        <div className="relative z-0 bg-primary">
+          <Contact />
+          <StarsCanvas />
+        </div> */}
 
         {/* <EstimationHeroBanner
               bgImage={bgImage}
@@ -62,12 +89,7 @@ const Home = () => {
         {/* <WhyChooseUs /> */}
 
         {/* <OurLocations /> */}
-        <RegionShowcase />
-        <FrequentlyAskedQuestions />
-        <div className="relative z-0 bg-primary">
-          <Contact />
-          <StarsCanvas />
-        </div>
+
         {/* <div className="bg-hero-pattern bg-cover bg-no-repeat bg-center min-h-screen">
         <Hero />
       </div>

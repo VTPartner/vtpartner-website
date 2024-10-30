@@ -160,7 +160,9 @@ const LocationForm = ({ onCitySelect }) => {
               "/" +
               service.category_id +
               "/" +
-              numericDistance
+              numericDistance +
+              "/" +
+              service.category_name
           );
         }
       } else {
@@ -619,7 +621,10 @@ const LocationForm = ({ onCitySelect }) => {
                       transition: "transform 0.2s ease", // Smooth scaling transition
                     }}
                   >
-                    Get An Estimation
+                    Get An Estimation For {service.category_name}
+                    {/* {service.category_type === "Delivery"
+                      ? `${service.category_name} Driver `
+                      : `Service ${service.category_name}`} */}
                     <ArrowForward
                       style={{
                         fontSize: hover ? "28px" : "20px", // Scale the icon on hover

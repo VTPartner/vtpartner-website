@@ -333,7 +333,7 @@ const Registration = () => {
                       value={service.category_id} // Use category_id as value
                     >
                       {service.category_type === "Delivery"
-                        ? `${service.category_name} Driver `
+                        ? `${service.category_name}`
                         : service.category_name}
                     </MenuItem>
                   ))}

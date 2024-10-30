@@ -33,7 +33,7 @@ const DownloadSection = () => {
             </p>
           </motion.div>
           <motion.div
-            className="lg:w-5/12 flex justify-center space-x-4"
+            className="lg:w-5/12 flex sm:flex-row flex-col sm:gap-2 gap-4 sm:justify-center items-center sm:space-x-4"
             variants={fadeInUpVariants}
             initial="hidden"
             whileInView="visible"
@@ -43,7 +43,7 @@ const DownloadSection = () => {
               className="btn-download bg-white text-black rounded-lg flex items-center p-4 hover:bg-gray-200 transition"
               href="#"
             >
-              <div className="icon-download mr-3">
+              <div className="icon-download sm:mr-3">
                 <img
                   src="assets/apple-icon-black.svg"
                   alt="Apple Store"
@@ -59,7 +59,7 @@ const DownloadSection = () => {
               className="btn-download bg-white text-black rounded-lg flex items-center p-4 hover:bg-gray-200 transition"
               href="#"
             >
-              <div className="icon-download mr-3">
+              <div className="icon-download sm:mr-3">
                 <img
                   src="assets/google-icon-black.svg"
                   alt="Google Play"

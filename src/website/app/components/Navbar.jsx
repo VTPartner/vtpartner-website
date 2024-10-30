@@ -16,25 +16,25 @@ const Navbar = () => {
   return (
     <>
       <DownloadApp />
-      <div className="bg-primary text-white fixed w-full z-50 top-0">
+      <div className="bg-white text-black fixed w-full z-50 top-0 ">
         <motion.nav
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0 }}
-          className="flex justify-between items-center gap-4 lg:p-5 p-2"
+          className="flex justify-between items-center gap-4 lg:p-4 p-2"
         >
           <NavLink
             className={({ isActive }) =>
               isActive
-                ? "text-white font-bold"
-                : "hover:text-white text-secondary"
+                ? "text-black font-bold"
+                : "hover:text-black text-secondary"
             }
             to="/"
           >
             <img
               src="/logo_new.png"
               alt="logo"
-              className="sm:col-span-2 ml-4 sm:w-20 sm:h-10 w-14"
+              className="sm:col-span-2 ml-4 sm:w-[5rem] sm:h-auto h-10 w-15 object-contain"
             />
           </NavLink>
 
@@ -44,8 +44,8 @@ const Navbar = () => {
               <NavLink
                 className={({ isActive }) =>
                   isActive
-                    ? "text-white font-bold"
-                    : "hover:text-white text-secondary"
+                    ? "text-black font-bold"
+                    : "hover:text-black text-secondary font-bold"
                 }
                 to="/"
               >
@@ -56,8 +56,8 @@ const Navbar = () => {
               <NavLink
                 className={({ isActive }) =>
                   isActive
-                    ? "text-white font-bold"
-                    : "hover:text-white text-secondary"
+                    ? "text-black font-bold"
+                    : "hover:text-black text-secondary font-bold"
                 }
                 to="/about"
               >
@@ -80,8 +80,8 @@ const Navbar = () => {
               <NavLink
                 className={({ isActive }) =>
                   isActive
-                    ? "text-white font-bold"
-                    : "hover:text-white text-secondary"
+                    ? "text-black font-bold"
+                    : "hover:text-black text-secondary font-bold"
                 }
                 to="/agents"
               >
@@ -91,7 +91,10 @@ const Navbar = () => {
           </ul>
 
           {/* Desktop Contact Button */}
-          <a href="#contact" className="lg:block mr-4 hidden">
+          <a
+            href="#contact"
+            className="lg:block mr-4 hidden text-white bg-blue-500 rounded-md px-4 py-2 cursor-pointer"
+          >
             Contact
           </a>
 
@@ -104,13 +107,13 @@ const Navbar = () => {
               onClick={toggleDrawer}
               className="block lg:hidden" // Show only on small screens
             >
-              <img src="/assets/menu.svg" alt="menu" />
+              <img src="/assets/menu.svg" alt="menu" className="invert" />
             </IconButton>
           </div>
 
           {/* Drawer for Mobile Menu */}
           <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer}>
-            <div className="p-4 w-64 bg-primary text-white h-screen flex flex-col justify-between">
+            <div className="p-4 w-64 bg-white text-black h-screen flex flex-col justify-between">
               <div>
                 {/* Close Icon */}
                 <div className="flex justify-end">
@@ -118,7 +121,7 @@ const Navbar = () => {
                     <img
                       src="/assets/close.svg"
                       alt="menu"
-                      style={{ color: "white" }}
+                      className="invert"
                     />
                   </IconButton>
                 </div>
@@ -129,7 +132,7 @@ const Navbar = () => {
                     <NavLink
                       onClick={toggleDrawer}
                       className={({ isActive }) =>
-                        isActive ? "text-white font-bold" : "text-secondary"
+                        isActive ? "text-black font-bold" : "text-secondary"
                       }
                       to="/"
                     >
@@ -140,7 +143,7 @@ const Navbar = () => {
                     <NavLink
                       onClick={toggleDrawer}
                       className={({ isActive }) =>
-                        isActive ? "text-white font-bold" : "text-secondary"
+                        isActive ? "text-black font-bold" : "text-secondary"
                       }
                       to="/about"
                     >
@@ -162,7 +165,7 @@ const Navbar = () => {
                     <NavLink
                       onClick={toggleDrawer}
                       className={({ isActive }) =>
-                        isActive ? "text-white font-bold" : "text-secondary"
+                        isActive ? "text-black font-bold" : "text-secondary"
                       }
                       to="/agents"
                     >

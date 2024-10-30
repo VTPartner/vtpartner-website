@@ -13,6 +13,13 @@ import VehiclePrices from "./vehicles/all_vehicle_prices/VehiclePrices";
 import AllSubServices from "./services/sub_services/AllSubServices";
 import OtherServices from "./other_services/OtherServices";
 import AllEnquiries from "./enquires/AllEnquiries";
+import Gallery from "./gallery/Gallery";
+import NewRegistration from "./enquires/new_registration/NewRegistration";
+import FullAllEnquiries from "./enquires/full_enquiries/FullAllEnquiries";
+import AllGoodsDrivers from "./agents/AllGoodsDrivers";
+import AllCabAgents from "./cab_agents/AllCabAgents";
+import AllCraneDrivers from "./jcb_crane_agents/AllCraneDrivers";
+import AllVendors from "./vendor_agents/AllVendors";
 
 export {
   Login,
@@ -30,4 +37,11 @@ export {
   AllSubServices,
   OtherServices,
   AllEnquiries,
+  Gallery,
+  NewRegistration,
+  FullAllEnquiries,
+  AllGoodsDrivers,
+  AllCabAgents,
+  AllCraneDrivers,
+  AllVendors,
 };

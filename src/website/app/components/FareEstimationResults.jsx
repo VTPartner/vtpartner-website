@@ -95,7 +95,7 @@ const FareEstimateResults = () => {
   const [loading, setLoading] = useState(true);
   const [btnLoading, setBtnLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { category_id, city_id, distance } = useParams();
+  const { category_id, city_id, distance, category_name } = useParams();
   const fetchFareResults = async () => {
     if (!navigator.onLine) {
       toast.error("No internet connection. Please check your connection.");
@@ -155,9 +155,9 @@ const FareEstimateResults = () => {
   return (
     <div className="max-w-6xl mx-auto p-6 bg-white">
       <h1 className="text-2xl font-bold mb-6 mt-20 text-center text-black">
-        Results
+        Results for {category_name}
       </h1>
-      <div className="max-w-[120rem] bg-white shadow-lg rounded-md min-h-[70vh]">
+      <div className="max-w-[120rem] bg-white shadow-lg rounded-md mt-2">
         <div className="grid sm:grid-cols-custom grid-cols-1 gap-4">
           <div className="flex flex-col h-fit bg-gray">
             {/* Pickup Location card  */}
@@ -184,14 +184,14 @@ const FareEstimateResults = () => {
             <FareEstimateQr />
           </div>
 
-          <div className="sm:h-[96%] border-l border-gray-300 mx-4 my-4 sm:block hidden"></div>
+          <div className="sm:h-[94%] border-l border-gray-300 mx-4 my-4 sm:block hidden"></div>
           <div className="block">
             {results.map((vehicle, index) => (
               <FareEstimateResultCard
                 key={index}
                 vehicleImage={vehicle.size_image}
                 vehicleName={vehicle.vehicle_name}
-                fare={vehicle.starting_price_per_km * distance}
+                fare={Math.round(vehicle.starting_price_per_km * distance)}
                 capacity={vehicle.weight}
               />
             ))}

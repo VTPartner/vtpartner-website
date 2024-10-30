@@ -10,7 +10,7 @@ import {
   InputLabel,
   useMediaQuery,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { LocationForm } from "../components";
 import { toast } from "react-toastify";
 import { serverWebsiteEndPoint } from "../../../dashboard/app/constants";
@@ -23,6 +23,8 @@ const EstimationHeroBanner = ({ bgImage, onCitySelect }) => {
     navigate("/agents"); // Navigate to /agents route on click
   };
 
+  const location = useLocation();
+  const { service } = location.state || {};
   return (
     <>
       <section
@@ -48,7 +50,10 @@ const EstimationHeroBanner = ({ bgImage, onCitySelect }) => {
                 size="medium"
                 onClick={handleRegisterClick}
               >
-                Register as a Partner
+                Register as a{" "}
+                {service.category_type === "Delivery"
+                  ? `${service.category_name} Driver `
+                  : `Service ${service.category_name}`}
               </Button>
             </div>
           </div>

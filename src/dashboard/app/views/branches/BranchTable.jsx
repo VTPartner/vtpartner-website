@@ -61,7 +61,9 @@ const BranchTable = () => {
             },
           }
         );
-        setBranches(response.data.branches); // Store branches data
+        const data = response.data.branches;
+        console.log("data::", data[0]);
+        setBranches(data); // Store branches data
         setLoading(false); // Stop loading when data is fetched
       } catch (error) {
         setError("Failed to fetch branches");

@@ -52,6 +52,12 @@ import DownloadSection from "./hero-section/DownloadSection";
 import ShowcaseNumbers from "./hero-section/ShowcaseNumbers";
 import RegionShowcase from "./hero-section/RegionShowcase";
 import OurServices from "./hero-section/OurServices";
+import LandingPage from "./hero-section/LandingPage";
+import TransparentNavBar from "./hero-section/TransparentNavBar";
+import NavbarNew from "./new-components/Navbar";
+import HeroBanner from "./new-components/HeroBanner";
+import FareEstimationForm from "./new-components/FareEstimationForm";
+import WhatWeOffer from "./new-components/WhatWeOffer";
 
 export {
   Navbar,
@@ -105,4 +111,10 @@ export {
   ShowcaseNumbers,
   RegionShowcase,
   OurServices,
+  LandingPage,
+  TransparentNavBar,
+  NavbarNew,
+  HeroBanner,
+  FareEstimationForm,
+  WhatWeOffer,
 };

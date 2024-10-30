@@ -30,6 +30,19 @@ export const navigations = [
   //   ],
   // },
 
+  { label: "Enquiries", type: "label" },
+  {
+    name: "All Enquiries",
+    icon: "person",
+    // badge: { value: "30+", color: "secondary" },
+    children: [
+      {
+        name: "Enquiries",
+        iconText: "AC",
+        path: "/all_full_enquiries",
+      },
+    ],
+  },
   { label: "Configurations", type: "label" },
   {
     name: "Main Configuration",
@@ -49,53 +62,44 @@ export const navigations = [
     ],
   },
 
-  { label: "CUSTOMER", type: "label" },
+  // { label: "CUSTOMER", type: "label" },
+  // {
+  //   name: "Customer Settings",
+  //   icon: "person_pin",
+  //   children: [
+  //     {
+  //       name: "All Customers",
+  //       iconText: "SI",
+  //       path: "/customer/all-customers",
+  //     },
+  //   ],
+  // },
+  { label: "Partners", type: "label" },
   {
-    name: "Customer Settings",
-    icon: "person_pin",
-    children: [
-      {
-        name: "All Customers",
-        iconText: "SI",
-        path: "/customer/all-customers",
-      },
-    ],
-  },
-  { label: "Delivery Partners", type: "label" },
-  {
-    name: "Delivery Agents Settings",
+    name: "Delivery Agents",
     icon: "local_shipping",
     children: [
       {
-        name: "All Delivery Agents",
+        name: "Goods Drivers",
+        iconText: "GD",
+        path: "/all_goods_drivers",
+      },
+      { name: "Cab Drivers", iconText: "SI", path: "/all_cab_drivers" },
+      {
+        name: "JCB Crane Drivers",
         iconText: "SI",
-        path: "/delivery-agents/all",
+        path: "/all_jcb_crane_drivers",
       },
     ],
   },
-  { label: "Cab Drivers", type: "label" },
+
+  { label: "Service Agents", type: "label" },
   {
-    name: "Cab Drivers Settings",
-    icon: "local_taxi",
-    children: [
-      { name: "All Cab Drivers", iconText: "SI", path: "/cab-driver/all" },
-    ],
-  },
-  { label: "JCB Drivers", type: "label" },
-  {
-    name: "JCB Drivers Settings",
-    icon: "rowing",
-    children: [
-      { name: "All JCB Drivers", iconText: "SI", path: "/jcb-driver/all" },
-    ],
-  },
-  { label: "Service Vendors", type: "label" },
-  {
-    name: "Service Vendors",
+    name: "Agents",
     icon: "build",
     // badge: { value: "30+", color: "secondary" },
     children: [
-      { name: "All Vendors", iconText: "SI", path: "/service-vendor/all" },
+      { name: "HandyMan Agents", iconText: "SI", path: "/all_vendors" },
     ],
   },
 ];

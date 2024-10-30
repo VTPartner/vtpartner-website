@@ -25,7 +25,7 @@ const ShowcaseNumbers = () => {
               whileInView="visible"
               viewport={{ once: true }}
             >
-              <h2 className="text-4xl text-white font-medium">
+              <h2 className="sm:text-4xl text-xl text-white font-medium">
                 Showcase some impressive numbers.
               </h2>
             </motion.div>
@@ -44,8 +44,10 @@ const ShowcaseNumbers = () => {
                 viewport={{ once: true }}
               >
                 <div className="box-number">
-                  <h2 className="text-4xl text-white font-medium">285</h2>
-                  <p className="text-xl text-white">Vehicles</p>
+                  <h2 className="sm:text-4xl text-xl text-white font-medium">
+                    285
+                  </h2>
+                  <p className="sm:text-xl text-white">Vehicles</p>
                 </div>
               </motion.div>
               <motion.div
@@ -56,8 +58,10 @@ const ShowcaseNumbers = () => {
                 viewport={{ once: true }}
               >
                 <div className="box-number">
-                  <h2 className="text-4xl text-white font-medium">97</h2>
-                  <p className="text-xl text-white">Awards</p>
+                  <h2 className="sm:text-4xl text-xl text-white font-medium">
+                    97
+                  </h2>
+                  <p className="sm:text-xl text-white">Awards</p>
                 </div>
               </motion.div>
               <motion.div
@@ -68,8 +72,10 @@ const ShowcaseNumbers = () => {
                 viewport={{ once: true }}
               >
                 <div className="box-number">
-                  <h2 className="text-4xl text-white font-medium">13K</h2>
-                  <p className="text-xl text-white">Happy Customers</p>
+                  <h2 className="sm:text-4xl text-xl text-white font-medium">
+                    13K
+                  </h2>
+                  <p className="sm:text-xl text-white">Happy Customers</p>
                 </div>
               </motion.div>
             </motion.div>
