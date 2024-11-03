@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { serverWebsiteEndPoint } from "../../../dashboard/app/constants";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { FaWeightScale } from "react-icons/fa6";
 
 const FareEstimateResultCard = ({
   vehicleImage,
@@ -36,11 +37,7 @@ const FareEstimateResultCard = ({
         <div className="mt-2">
           {capacity > 0 && ( // Only render if capacity is greater than 0
             <div className="flex items-center">
-              <img
-                src="/assets/weight.svg"
-                alt="Capacity Icon"
-                className="w-4 h-4 text-black bg-white rounded-full"
-              />
+              <FaWeightScale />
               <p className="ml-2 text-sm text-black">{capacity} Kg</p>
             </div>
           )}
@@ -154,7 +151,7 @@ const FareEstimateResults = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-6 bg-white">
-      <h1 className="text-2xl font-bold mb-6 mt-20 text-center text-black">
+      <h1 className="text-2xl font-titillium mb-6 mt-20 text-center text-black">
         Results for {category_name}
       </h1>
       <div className="max-w-[120rem] bg-white shadow-lg rounded-md mt-2">
@@ -207,7 +204,7 @@ export default FareEstimateResults;
 /*
 return (
     <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6 mt-20 text-center text-black">
+      <h1 className="text-2xl font-titillium mb-6 mt-20 text-center text-black">
         Results - Trucks
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

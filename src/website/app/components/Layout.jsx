@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Layout = () => {
   return (
-    <div className="relative z-0 bg-white">
+    <div>
       <ScrollToTop />
 
       <Navbar />

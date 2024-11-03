@@ -1,35 +1,28 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react-refresh/only-export-components */
-// import React from "react";
-
-import { GoDotFill } from "react-icons/go";
+/* eslint-disable no-unused-vars */
 import { SectionWrapper } from "../hoc";
-import { areas } from "../constants";
 import { textVariant } from "../utils/motion";
-// import { styles } from "../../../styles";
 import { motion } from "framer-motion";
-import { Typography } from "@mui/material";
+import { Typography, Box, Card, CardMedia, CardContent } from "@mui/material";
 import { serverWebsiteEndPoint } from "../../../dashboard/app/constants";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
+import Carousel from "react-material-ui-carousel";
 
 const OurLocations = () => {
   const [cities, setCities] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
   const [error, setError] = useState(null);
 
   const fetchCities = async () => {
     if (!navigator.onLine) {
       toast.error("No internet connection. Please check your connection.");
-      // setIsLoading(false);
       return;
     }
 
     try {
       const endPoint = `${serverWebsiteEndPoint}/all_allowed_cities`;
-
       const response = await axios.post(endPoint);
       setCities(response.data.cities);
     } catch (error) {
@@ -39,7 +32,6 @@ const OurLocations = () => {
     }
   };
 
-  // Handle error responses
   const handleError = (error) => {
     if (error.response) {
       if (error.response.status === 404) {
@@ -53,7 +45,6 @@ const OurLocations = () => {
         setError("Unexpected Error");
       }
     } else {
-      console.log(error);
       toast.error(
         "Failed to fetch all allowed cities. Please check your connection."
       );
@@ -66,39 +57,79 @@ const OurLocations = () => {
   }, []);
 
   return (
-    <>
+    <div className=" mb-20">
       <motion.div
         initial="hidden"
         whileInView="show"
         variants={textVariant()}
-        className="mt-10"
+        className="mt-10 mb-10"
       >
         <Typography
           variant="h6"
           sx={{
             color: "text.primary",
-            fontSize: { xs: "16px", md: "24px" },
+            fontSize: { xs: "26px", md: "35px" },
             fontWeight: "bold",
             textAlign: "center",
+            fontFamily: "titillium",
             mb: 4,
           }}
         >
           We proudly extend our services across the{" "}
-          <span style={{ color: "#4087e1" }}>following areas</span>
+          <span
+            style={{
+              color: "#4087e1",
+              fontFamily: "titillium",
+              fontWeight: "bold",
+            }}
+          >
+            following areas
+          </span>
         </Typography>
       </motion.div>
 
-      <div className="flex flex-row flex-wrap justify-center gap-1">
-        {cities.map((area) => (
-          <div className="h-8" key={area.city_id}>
-            <span className="flex items-center justify-center text-black flex-wrap">
-              <GoDotFill className="w-2 h-2  m-1 text-black" />
-              {`${area.city_name}`}
-            </span>
-          </div>
+      <Carousel
+        indicators={false}
+        autoPlay={true}
+        animation="slide"
+        interval={3000}
+        navButtonsAlwaysVisible={true}
+      >
+        {cities.map((area, index) => (
+          <Box key={index} sx={{ width: "100%" }}>
+            <Card sx={{ height: "100%", position: "relative" }}>
+              <CardMedia
+                component="div"
+                sx={{
+                  height: "200px",
+                  backgroundImage: `url(${area.bg_image})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  filter: "brightness(0.5)", // Darken entire image
+                }}
+              />
+              <CardContent
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  color: "#fff",
+                  textAlign: "center",
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  sx={{ fontWeight: "bold", fontFamily: "titillium" }}
+                >
+                  {area.city_name}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Box>
         ))}
-      </div>
-    </>
+      </Carousel>
+    </div>
   );
 };
 

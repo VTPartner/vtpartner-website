@@ -125,7 +125,7 @@ const LandingPage = () => {
                   good to go. Just make sure you enable them first via
                   JavaScript.
                 </p>
-                <Link to="/" className="font-bold text-blueGray-700 mt-8">
+                <Link to="/" className="font-titillium text-blueGray-700 mt-8">
                   Check Notus React!
                 </Link>
               </div>
@@ -149,7 +149,7 @@ const LandingPage = () => {
                         className="text-lightBlue-500 fill-current"
                       ></polygon>
                     </svg>
-                    <h4 className="text-xl font-bold text-white">
+                    <h4 className="text-xl font-titillium text-white">
                       Top Notch Services
                     </h4>
                     <p className="text-md font-light mt-2 text-white">
@@ -276,7 +276,7 @@ const LandingPage = () => {
                     className="shadow-lg rounded-full mx-auto max-w-120-px"
                   />
                   <div className="pt-6 text-center">
-                    <h5 className="text-xl font-bold">Ryan Tompson</h5>
+                    <h5 className="text-xl font-titillium">Ryan Tompson</h5>
                     <p className="mt-1 text-sm text-blueGray-400 uppercase font-semibold">
                       Web Developer
                     </p>
@@ -311,7 +311,7 @@ const LandingPage = () => {
                     className="shadow-lg rounded-full mx-auto max-w-120-px"
                   />
                   <div className="pt-6 text-center">
-                    <h5 className="text-xl font-bold">Romina Hadid</h5>
+                    <h5 className="text-xl font-titillium">Romina Hadid</h5>
                     <p className="mt-1 text-sm text-blueGray-400 uppercase font-semibold">
                       Marketing Specialist
                     </p>
@@ -340,7 +340,7 @@ const LandingPage = () => {
                     className="shadow-lg rounded-full mx-auto max-w-120-px"
                   />
                   <div className="pt-6 text-center">
-                    <h5 className="text-xl font-bold">Alexa Smith</h5>
+                    <h5 className="text-xl font-titillium">Alexa Smith</h5>
                     <p className="mt-1 text-sm text-blueGray-400 uppercase font-semibold">
                       UI/UX Designer
                     </p>
@@ -375,7 +375,7 @@ const LandingPage = () => {
                     className="shadow-lg rounded-full mx-auto max-w-120-px"
                   />
                   <div className="pt-6 text-center">
-                    <h5 className="text-xl font-bold">Jenna Kardi</h5>
+                    <h5 className="text-xl font-titillium">Jenna Kardi</h5>
                     <p className="mt-1 text-sm text-blueGray-400 uppercase font-semibold">
                       Founder and CEO
                     </p>
@@ -501,7 +501,7 @@ const LandingPage = () => {
                     </p>
                     <div className="relative w-full mb-3 mt-8">
                       <label
-                        className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                        className="block uppercase text-blueGray-600 text-xs font-titillium mb-2"
                         htmlFor="full-name"
                       >
                         Full Name
@@ -515,7 +515,7 @@ const LandingPage = () => {
 
                     <div className="relative w-full mb-3">
                       <label
-                        className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                        className="block uppercase text-blueGray-600 text-xs font-titillium mb-2"
                         htmlFor="email"
                       >
                         Email
@@ -529,7 +529,7 @@ const LandingPage = () => {
 
                     <div className="relative w-full mb-3">
                       <label
-                        className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                        className="block uppercase text-blueGray-600 text-xs font-titillium mb-2"
                         htmlFor="message"
                       >
                         Message
@@ -543,7 +543,7 @@ const LandingPage = () => {
                     </div>
                     <div className="text-center mt-6">
                       <button
-                        className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                        className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-titillium uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                         type="button"
                       >
                         Send Message

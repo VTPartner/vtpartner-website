@@ -12,7 +12,7 @@ const FAQ = () => {
   return (
     <div className="p-8">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold">Frequently Asked Questions</h2>
+        <h2 className="text-2xl font-titillium">Frequently Asked Questions</h2>
         <p className="text-sm mt-2 mb-4">
           Your questions matter to us—reach out anytime, and let’s make your
           experience exceptional!

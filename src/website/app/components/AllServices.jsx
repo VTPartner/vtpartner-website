@@ -164,7 +164,7 @@ const ServiceCard = ({
             className="bg-white rounded-[20px]  flex justify-evenly items-center flex-col"
           ></div>
         </motion.div>
-        <h1 className="text-gray sm:mt-4 mt-2 sm:text-[20px] text-[10px] font-bold text-center overflow-clip">
+        <h1 className="text-gray sm:mt-4 mt-2 sm:text-[20px] text-[10px] font-titillium text-center overflow-clip">
           {category_name}
         </h1>
       </Tilt>
@@ -209,7 +209,7 @@ const AllServicesCard = ({
                 onClick={() => window.open(source_code_link, "_blank")}
                 className="black-gradient w-10 h-10 rounded-full flex justify-center items-center cursor-pointer"
               >
-                <p className="text-white font-bold text-[8px] text-center">
+                <p className="text-white font-titillium text-[8px] text-center">
                   {weight}
                 </p>
               </div>
@@ -220,7 +220,7 @@ const AllServicesCard = ({
         </div>
 
         <div className="mt-5">
-          <h3 className="text-black font-bold text-[24px]">{name}</h3>
+          <h3 className="text-black font-titillium text-[24px]">{name}</h3>
           <p className="mt-2 text-gray-500 text-[14px]">{description}</p>
         </div>
 

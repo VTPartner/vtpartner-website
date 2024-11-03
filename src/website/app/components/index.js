@@ -58,6 +58,13 @@ import NavbarNew from "./new-components/Navbar";
 import HeroBanner from "./new-components/HeroBanner";
 import FareEstimationForm from "./new-components/FareEstimationForm";
 import WhatWeOffer from "./new-components/WhatWeOffer";
+import TimeEstimationBanner from "./time-estimation-components/TimeEstimationBanner";
+import HandyManEstimationForm from "./time-estimation-components/HandyManEstimationForm";
+import DriversEstimationForm from "./time-estimation-components/DriversEstimationForm";
+import JcbCraneRegistrationHeroBanner from "./registration-components/JcbCraneRegistration";
+import DriversRegistrationHeroBanner from "./registration-components/DriversRegistration";
+import HandyManRegistrationHeroBanner from "./registration-components/HandyManRegistration";
+import GoodsAndCabRegistrationHeroBanner from "./registration-components/GoodsAndCabRegistrationHeroBanner";
 
 export {
   Navbar,
@@ -117,4 +124,11 @@ export {
   HeroBanner,
   FareEstimationForm,
   WhatWeOffer,
+  TimeEstimationBanner,
+  HandyManEstimationForm,
+  DriversEstimationForm,
+  JcbCraneRegistrationHeroBanner,
+  DriversRegistrationHeroBanner,
+  HandyManRegistrationHeroBanner,
+  GoodsAndCabRegistrationHeroBanner,
 };

@@ -30,9 +30,9 @@ export const navigations = [
   //   ],
   // },
 
-  { label: "Enquiries", type: "label" },
+  { label: "Requests", type: "label" },
   {
-    name: "All Enquiries",
+    name: "All Requests",
     icon: "person",
     // badge: { value: "30+", color: "secondary" },
     children: [
@@ -40,6 +40,11 @@ export const navigations = [
         name: "Enquiries",
         iconText: "AC",
         path: "/all_full_enquiries",
+      },
+      {
+        name: "Estimations",
+        iconText: "AC",
+        path: "/all_estimations",
       },
     ],
   },

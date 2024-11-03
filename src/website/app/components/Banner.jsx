@@ -13,7 +13,9 @@ const Banner = ({ backgroundImage, heading }) => {
       }}
     >
       <div className="absolute inset-0 bg-black opacity-50"></div>
-      <h1 className="relative text-white text-3xl font-bold z-10">{heading}</h1>
+      <h1 className="relative text-white text-3xl font-titillium z-10">
+        {heading}
+      </h1>
     </section>
   );
 };

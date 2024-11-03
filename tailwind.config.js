@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Poppins", "sans-serif"],
+        titillium: ["Titillium Web", "sans-serif"],
       },
       container: {
         center: true,

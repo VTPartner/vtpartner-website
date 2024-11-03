@@ -66,10 +66,14 @@ const Contact = () => {
         variants={slideIn("left", "tween", 0.2, 1)}
         className="flex-[0.75] bg-black-100 p-8 rounded-2xl"
       >
-        <p className={`${styles.sectionSubText} text-secondary`}>
+        <p
+          className={`${styles.sectionSubText} text-secondary  font-titillium`}
+        >
           Get in touch
         </p>
-        <h3 className={`${styles.sectionHeadText} text-white`}>Contact.</h3>
+        <h3 className={`${styles.sectionHeadText} text-white font-titillium`}>
+          Contact.
+        </h3>
 
         <form
           ref={formRef}
@@ -77,41 +81,50 @@ const Contact = () => {
           className="mt-12 flex flex-col gap-8"
         >
           <label className="flex flex-col">
-            <span className="text-white font-medium mb-4">Your Name</span>
+            <span className="text-white font-medium mb-4 font-titillium">
+              Your Name
+            </span>
             <input
               type="text"
               name="name"
+              required
               value={form.name}
               onChange={handleChange}
               placeholder="What's your name?"
-              className="bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium"
+              className="bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium font-titillium"
             />
           </label>
           <label className="flex flex-col">
-            <span className="text-white font-medium mb-4">Your Email</span>
+            <span className="text-white font-medium mb-4 font-titillium">
+              Your Email
+            </span>
             <input
               type="email"
               name="email"
+              required
               value={form.email}
               onChange={handleChange}
               placeholder="What's your email?"
-              className="bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium"
+              className="bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium  font-titillium"
             />
           </label>
           <label className="flex flex-col">
-            <span className="text-white font-medium mb-4">Your Message</span>
+            <span className="text-white font-medium mb-4 font-titillium">
+              Your Message
+            </span>
             <textarea
               rows={7}
+              required
               name="message"
               value={form.message}
               onChange={handleChange}
               placeholder="What do you what to say"
-              className="bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium"
+              className="bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium  font-titillium"
             />
           </label>
           <button
             type="submit"
-            className="bg-tertiary py-3 px-8 outline-none w-fit text-white font-bold shadow-md shadow-primary rounded-xl"
+            className="bg-tertiary py-3 px-8 outline-none w-fit text-white font-titillium shadow-md shadow-primary rounded-xl"
           >
             {loading ? "Sending..." : "Send"}
           </button>

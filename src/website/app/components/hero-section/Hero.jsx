@@ -187,7 +187,7 @@ const HeroNew = () => {
                   initial="hidden"
                   animate="show"
                   exit="exit"
-                  className="text-3xl lg:text-4xl xl:text-5xl font-bold"
+                  className="text-3xl lg:text-4xl xl:text-5xl font-titillium"
                 >
                   {currentService.category_name}
                 </motion.h1>
@@ -210,7 +210,7 @@ const HeroNew = () => {
                 initial="hidden"
                 animate="show"
                 exit="exit"
-                className="text-xl lg:text-4xl xl:text-5xl font-bold flex gap-10 sm:items-start items-center m-2"
+                className="text-xl lg:text-4xl xl:text-5xl font-titillium flex gap-10 sm:items-start items-center m-2"
               >
                 {currentService.category_type === "Delivery" && (
                   <Button

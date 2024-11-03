@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-key */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { styled, keyframes, css, useMediaQuery } from "@mui/system";
+import { styled, keyframes, css } from "@mui/system";
 import { toast } from "react-toastify";
 import { serverWebsiteEndPoint } from "../../../../dashboard/app/constants";
 import axios from "axios";
@@ -12,7 +12,6 @@ const SliderCarousal = () => {
   const [serviceImages, setServiceGalleryImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
 
   const fetchDeliveryGalleryImages = async () => {
     if (!navigator.onLine) {
@@ -33,6 +32,7 @@ const SliderCarousal = () => {
       setLoading(false);
     }
   };
+
   const fetchServiceGalleryImages = async () => {
     if (!navigator.onLine) {
       toast.error("No internet connection. Please check your connection.");
@@ -82,15 +82,18 @@ const SliderCarousal = () => {
   const navigate = useNavigate();
 
   const handleImageClick = (el) => {
-    //toast.success("Send to Estimation Screen");
-    navigate("/agents");
+    //navigate("/agents");
   };
 
   return (
     <AppContainer>
       <Wrapper>
-        <Text>Join Us</Text>
-        <Note>Reliable delivery, Anytime, Anywhere.</Note>
+        <Text sx={{ fontFamily: "titillium", fontWeight: "bold" }}>
+          Join Us
+        </Text>
+        <Note sx={{ fontFamily: "titillium" }}>
+          Reliable delivery, Anytime, Anywhere.
+        </Note>
         <Marquee>
           <MarqueeGroup>
             {deliveryImages.map((el) => (
@@ -98,6 +101,8 @@ const SliderCarousal = () => {
                 <Image
                   src={el.image_url}
                   onClick={() => handleImageClick(el)}
+                  loading="lazy"
+                  alt="Delivery Image"
                 />
               </ImageGroup>
             ))}
@@ -108,6 +113,8 @@ const SliderCarousal = () => {
                 <Image
                   src={el.image_url}
                   onClick={() => handleImageClick(el)}
+                  loading="lazy"
+                  alt="Delivery Image"
                 />
               </ImageGroup>
             ))}
@@ -120,6 +127,7 @@ const SliderCarousal = () => {
                 <Image
                   src={el.image_url}
                   onClick={() => handleImageClick(el)}
+                  loading="lazy"
                   alt={`Service ${index}`}
                 />
               </ImageGroup>
@@ -131,6 +139,8 @@ const SliderCarousal = () => {
                 <Image
                   src={el.image_url}
                   onClick={() => handleImageClick(el)}
+                  loading="lazy"
+                  alt={`Service ${index}`}
                 />
               </ImageGroup>
             ))}

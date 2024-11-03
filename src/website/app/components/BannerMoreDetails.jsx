@@ -13,7 +13,9 @@ const BannerMoreDetails = () => {
         <div className="container mx-auto">
           <div className="block">
             <div className="text-center">
-              <h1 className="text-3xl font-bold mb-4">Welcome to VT Partner</h1>
+              <h1 className="text-3xl font-titillium mb-4">
+                Welcome to VT Partner
+              </h1>
               <p className="text-gray-700 mb-6">
                 At VT Partner, we are dedicated to delivering exceptional
                 service across all our offerings, ensuring a hassle-free

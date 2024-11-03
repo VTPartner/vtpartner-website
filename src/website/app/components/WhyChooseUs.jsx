@@ -56,6 +56,7 @@ const WhyChooseUs = () => {
           color: "text.primary",
           fontSize: { xs: "36px", md: "64px" },
           fontWeight: "bold",
+          fontFamily: "titillium",
           mb: 4,
         }}
       >
@@ -79,10 +80,18 @@ const WhyChooseUs = () => {
                 },
               }}
             >
-              <Typography variant="h5" fontWeight="bold" gutterBottom>
+              <Typography
+                variant="h5"
+                fontWeight="bold"
+                gutterBottom
+                sx={{ fontFamily: "titillium" }}
+              >
                 {service.title}
               </Typography>
-              <Typography color="text.secondary">
+              <Typography
+                color="text.secondary"
+                sx={{ fontFamily: "titillium" }}
+              >
                 {service.description}
               </Typography>
             </Box>

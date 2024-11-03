@@ -25,6 +25,10 @@ import {
   Icon,
   Avatar,
   Tooltip,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -167,6 +171,51 @@ const FullAllEnquiriesTable = () => {
 
   const handleDateChange = (date) => setSelectedDate({ ...selectedDate, date });
 
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedEnquiry, setSelectedEnquiry] = useState({
+    enquiry_id: "",
+    name: "",
+  });
+
+  const handleDeleteClick = (enquiry) => {
+    setSelectedEnquiry(enquiry);
+    setOpenDialog(true); // Open confirmation dialog
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setSelectedEnquiry({
+      enquiry_id: "",
+      name: "",
+    });
+  };
+
+  const deleteEnquiry = async () => {
+    try {
+      const response = await axios.post(
+        `${serverEndPoint}/delete_enquiry`,
+        {
+          enquiry_id: selectedEnquiry.enquiry_id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status === 200) {
+        // Reload the table after successful deletion
+        toast.success(`${selectedEnquiry.name} deleted successfully!`);
+        fetchAllEnquiries();
+      }
+    } catch (error) {
+      console.error("Error deleting enquiry:", error);
+      toast.success(`Error deleting ${selectedEnquiry.name}`);
+    } finally {
+      handleCloseDialog(); // Close the dialog
+    }
+  };
+
   if (loading) {
     return (
       <Box
@@ -289,7 +338,12 @@ const FullAllEnquiriesTable = () => {
                   <TableCell align="center">
                     <Tooltip title="Add New Entry" arrow>
                       <IconButton onClick={() => goToRegistrationPage(service)}>
-                        <Icon>arrow_forward</Icon>
+                        <Icon color="primary">arrow_forward</Icon>
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Delete" arrow>
+                      <IconButton onClick={() => handleDeleteClick(service)}>
+                        <Icon color="error">delete</Icon>
                       </IconButton>
                     </Tooltip>
                   </TableCell>
@@ -311,6 +365,30 @@ const FullAllEnquiriesTable = () => {
             setPage(0);
           }}
         />
+
+        {/* Confirmation Dialog */}
+        <Dialog
+          open={openDialog}
+          onClose={handleCloseDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{`Delete Enquiry? From ${selectedEnquiry.name}`}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Are you sure you want to delete this enquiry? This action cannot
+              be undone.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDialog} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={deleteEnquiry} color="error" autoFocus>
+              Yes, Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Box>
     </>
   );

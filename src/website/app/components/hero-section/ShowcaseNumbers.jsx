@@ -25,7 +25,7 @@ const ShowcaseNumbers = () => {
               whileInView="visible"
               viewport={{ once: true }}
             >
-              <h2 className="sm:text-4xl text-xl text-white font-medium">
+              <h2 className="sm:text-4xl text-xl text-white font-medium font-titillium">
                 Showcase some impressive numbers.
               </h2>
             </motion.div>
@@ -44,10 +44,12 @@ const ShowcaseNumbers = () => {
                 viewport={{ once: true }}
               >
                 <div className="box-number">
-                  <h2 className="sm:text-4xl text-xl text-white font-medium">
+                  <h2 className="sm:text-4xl text-xl text-white font-medium font-titillium">
                     285
                   </h2>
-                  <p className="sm:text-xl text-white">Vehicles</p>
+                  <p className="sm:text-xl text-white font-titillium">
+                    Vehicles
+                  </p>
                 </div>
               </motion.div>
               <motion.div
@@ -58,10 +60,10 @@ const ShowcaseNumbers = () => {
                 viewport={{ once: true }}
               >
                 <div className="box-number">
-                  <h2 className="sm:text-4xl text-xl text-white font-medium">
+                  <h2 className="sm:text-4xl text-xl text-white font-medium font-titillium">
                     97
                   </h2>
-                  <p className="sm:text-xl text-white">Awards</p>
+                  <p className="sm:text-xl text-white font-titillium">Cabs</p>
                 </div>
               </motion.div>
               <motion.div
@@ -72,10 +74,12 @@ const ShowcaseNumbers = () => {
                 viewport={{ once: true }}
               >
                 <div className="box-number">
-                  <h2 className="sm:text-4xl text-xl text-white font-medium">
+                  <h2 className="sm:text-4xl text-xl text-white font-medium font-titillium">
                     13K
                   </h2>
-                  <p className="sm:text-xl text-white">Happy Customers</p>
+                  <p className="sm:text-xl text-white font-titillium">
+                    Customers
+                  </p>
                 </div>
               </motion.div>
             </motion.div>

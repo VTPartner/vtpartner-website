@@ -32,6 +32,7 @@ import { styled } from "@mui/system";
 import { serverEndPoint, serverEndPointImage } from "../../constants";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
+import { FaQ } from "react-icons/fa6";
 
 const StyledTable = styled(Table)(() => ({
   whiteSpace: "pre",
@@ -202,6 +203,12 @@ const AllServicesTable = () => {
   const goToEnquiry = (category) => {
     navigate(
       `/all_enquiries/${category.category_id}/${category.category_name}`,
+      {}
+    );
+  };
+  const goToFAQ = (category) => {
+    navigate(
+      `/all_faqs/${category.category_id}/${category.category_name}`,
       {}
     );
   };
@@ -449,10 +456,10 @@ const AllServicesTable = () => {
                         </Icon>
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title="Enquiries" arrow>
-                      <IconButton onClick={() => goToEnquiry(service)}>
+                    <Tooltip title="Add FAQ" arrow>
+                      <IconButton onClick={() => goToFAQ(service)}>
                         <Icon color="gray">
-                          <MdOutlineFileOpen />
+                          <FaQ/>
                         </Icon>
                       </IconButton>
                     </Tooltip>

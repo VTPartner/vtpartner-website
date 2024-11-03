@@ -31,7 +31,7 @@ const ChangingLives = () => {
   return (
     <div className="py-16 bg-primary">
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-white">
+        <h1 className="text-3xl font-titillium text-white">
           CHANGING LIFE OF PEOPLE
         </h1>
       </div>

@@ -125,6 +125,7 @@ const LocationForm = ({ onCitySelect }) => {
     setDropPlaceId(placeId); // Save the selected placeId for drop
   };
   const navigate = useNavigate();
+  const [numericDistance, setDistance] = useState(0.0);
   // Function to calculate the distance between the two locations
   const fetchDistance = async (pickupPlaceId, dropPlaceId) => {
     try {
@@ -152,18 +153,12 @@ const LocationForm = ({ onCitySelect }) => {
           toast.warning(
             `The distance (${numericDistance} km) exceeds the covered distance (${selectedCityCoveredDistance} km) for this city.`
           );
+          setDistance(numericDistance);
+          handleRegister("outstation", numericDistance);
         } else {
           toast.success(`Distance is ${numericDistance} km`);
-          navigate(
-            "/fare_estimation_result/" +
-              selectedCityId +
-              "/" +
-              service.category_id +
-              "/" +
-              numericDistance +
-              "/" +
-              service.category_name
-          );
+          setDistance(numericDistance);
+          handleRegister("local", numericDistance);
         }
       } else {
         toast.error("Unable to calculate the distance.");
@@ -241,6 +236,8 @@ const LocationForm = ({ onCitySelect }) => {
     fetchCities();
   }, []);
 
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     if (cities.length > 0) {
       const { bg_image, covered_distance, city_id } = cities[0]; // Destructure to get values
@@ -301,7 +298,7 @@ const LocationForm = ({ onCitySelect }) => {
       .required("Phone Number is required!")
       .matches(/^[0-9]+$/, "Phone number must contain only digits") // Allow only digits
       .min(9, "Phone number must be at least 10 digits") // Adjust the length requirement as needed
-      .max(15, "Phone number must be no more than 15 digits"),
+      .max(10, "Phone number must be no more than 10 digits"),
     purpose: Yup.string().required("Please select the Purpose ?"),
   });
 
@@ -319,6 +316,70 @@ const LocationForm = ({ onCitySelect }) => {
     console.log("selectedCityId:", selectedCityCoveredDistance);
   }, [selectedCityId, selectedCityCoveredDistance]);
 
+  const handleRegister = async (request_type, numericDistance) => {
+    // e.preventDefault();
+    // setBtnLoading(true);
+    // if (!validateForm()) return;
+
+    const payload = {
+      category_id: service.category_id,
+      start_address: pickupLocation,
+      end_address: dropLocation,
+      name: contactName,
+      mobile_no: contactNumber,
+      purpose: purpose,
+      city_id: selectedCityId,
+      request_type: request_type,
+    };
+
+    try {
+      const response = await axios.post(
+        `${serverWebsiteEndPoint}/add_new_estimation_request`,
+        payload
+      );
+
+      if (response.status === 200) {
+        toast.success("Estimation Request Sent Successful!");
+        navigate(
+          "/fare_estimation_result/" +
+            selectedCityId +
+            "/" +
+            service.category_id +
+            "/" +
+            numericDistance +
+            "/" +
+            service.category_name
+        );
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      // setBtnLoading(false);
+    }
+  };
+  const handleError = (error) => {
+    if (error.response) {
+      if (error.response.status === 404) {
+        toast.error("No Data Found.");
+        setError("No Data Found");
+      } else if (error.response.status === 500) {
+        toast.error("Internal server error. Please try again later.");
+        setError("Internal Server Error");
+      } else if (error.response.status === 409) {
+        toast.warning(
+          "This Service Driver Registration has already been sent to us.\nWe Are working on it"
+        );
+        setError("Internal Server Error");
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+        setError("Unexpected Error");
+      }
+    } else {
+      toast.error("Code error.");
+      setError("Network Error");
+    }
+  };
+
   return (
     <>
       <div className=" relative flex items-center justify-center h-full w-full lg:mt-0 mt-[0rem]">
@@ -334,7 +395,7 @@ const LocationForm = ({ onCitySelect }) => {
                 <LocationSearchingOutlinedIcon
                   style={{ fontSize: "16px", fontWeight: "bold" }}
                 />
-                <p className="ml-2 font-bold">{selectedCity}</p>
+                <p className="ml-2 font-titillium">{selectedCity}</p>
                 <KeyboardArrowDown
                   style={{ fontSize: "18px", marginLeft: "5px" }}
                 />
@@ -556,7 +617,7 @@ const LocationForm = ({ onCitySelect }) => {
                     onChange={(e) => {
                       setContactNumber(e.target.value);
                       if (e.target.value) {
-                        values.contactNumber = contactNumber;
+                        values.contactNumber = e.target.value;
                       }
                     }}
                     variant="outlined"

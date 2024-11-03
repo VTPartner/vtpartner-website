@@ -276,7 +276,7 @@ const Registration = () => {
       {/* Registration Form Card */}
       <div className="relative z-10 flex items-center justify-end h-full w-full sm:pr-10">
         <Box className="bg-white p-8 shadow-lg rounded-sm w-full sm:max-w-[30rem] max-w-[40rem] max-h-[38rem]">
-          <h2 className="sm:text-2xl font-bold mb-4">Registration</h2>
+          <h2 className="sm:text-2xl font-titillium mb-4">Registration</h2>
 
           <form className="pb-4">
             {/* Full Name */}

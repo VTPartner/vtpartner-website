@@ -31,6 +31,10 @@ import {
   AllCabAgents,
   AllCraneDrivers,
   AllVendors,
+  DriverApplicationForm,
+  DriverQRCodeIdCard,
+  AllFAQs,
+  AllEstimations,
 } from "./dashboard/app/views";
 import Branches from "./dashboard/app/views/branches/Branches";
 import Layout from "./website/app/components/Layout";
@@ -40,6 +44,15 @@ import {
   Estimation,
   FareResults,
   Registration,
+  JcbCraneEstimation,
+  HandyManEstimation,
+  DriversEstimation,
+  JcbCraneRegistration,
+  DriversRegistration,
+  HandyManRegistration,
+  DriverEstimationResult,
+  JcbCraneEstimationResult,
+  HandyManEstimationResult,
 } from "./website/app/views";
 import Error404 from "./website/app/components/Error404";
 
@@ -61,16 +74,60 @@ const routes = [
         element: <About />,
       },
       {
-        path: "/agents",
+        path: "/agents/:category_id/:category_name/:category_type",
         element: <Registration />,
+      },
+      {
+        path: "/jcb_crane_registration",
+        element: <JcbCraneRegistration />,
+      },
+      {
+        path: "/drivers_registration/:category_id/:category_name/:category_type",
+        element: <DriversRegistration />,
+      },
+      {
+        path: "/handy_man_registration/:category_id/:category_name/:category_type",
+        element: <HandyManRegistration />,
       },
       {
         path: "/get_estimation",
         element: <Estimation />,
       },
       {
+        path: "/get_jcb_estimation",
+        element: <JcbCraneEstimation />,
+      },
+      {
+        path: "/get_handy_man_estimation",
+        element: <HandyManEstimation />,
+      },
+      {
+        path: "/get_drivers_estimation",
+        element: <DriversEstimation />,
+      },
+      {
+        path: "/application-form/:driver_id",
+        element: <DriverApplicationForm />,
+      },
+      {
+        path: "/driver-id-card/:driver_id",
+        element: <DriverQRCodeIdCard />,
+      },
+      {
         path: "/fare_estimation_result/:city_id/:category_id/:distance/:category_name",
         element: <FareResults />,
+      },
+      {
+        path: "/drivers_estimation_result/:city_id/:category_id/:distance/:hours/:days/:category_name",
+        element: <DriverEstimationResult />,
+      },
+      {
+        path: "/jcb_crane_estimation_result/:city_id/:category_id/:distance/:hours/:days/:category_name",
+        element: <JcbCraneEstimationResult />,
+      },
+      {
+        path: "/handy_man_estimation_result/:city_id/:category_id/:hours/:category_name/:sub_cat_name",
+        element: <HandyManEstimationResult />,
       },
     ],
   },
@@ -102,6 +159,10 @@ const routes = [
       {
         path: "/all_enquiries/:category_id/:category_name",
         element: <AllEnquiries />,
+      },
+      {
+        path: "/all_estimations",
+        element: <AllEstimations />,
       },
       {
         path: "/new_registration/:enquiry_id/:category_id",
@@ -188,6 +249,10 @@ const routes = [
       {
         path: "/all_vendors",
         element: <AllVendors />,
+      },
+      {
+        path: "/all_faqs/:category_id/:category_name",
+        element: <AllFAQs />,
       },
       // e-chart route
       // { path: "/charts/echarts", element: <AppEchart />, auth: authRoles.editor }

@@ -76,7 +76,7 @@ const HeroNew = () => {
                   initial="hidden"
                   animate="show"
                   exit="exit"
-                  className="text-3xl lg:text-4xl xl:text-5xl font-bold"
+                  className="text-3xl lg:text-4xl xl:text-5xl font-titillium"
                 >
                   {activeData.title}
                 </motion.h1>
@@ -99,7 +99,7 @@ const HeroNew = () => {
                 initial="hidden"
                 animate="show"
                 exit="exit"
-                className="text-3xl lg:text-4xl xl:text-5xl font-bold"
+                className="text-3xl lg:text-4xl xl:text-5xl font-titillium"
               >
                 {activeData.price}
               </motion.p>

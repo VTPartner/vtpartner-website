@@ -456,23 +456,59 @@ const NewRegistration = () => {
   };
 
   const uploadImage = async (imageFile) => {
+    // console.log("imageFile::", imageFile);
     if (!imageFile) return null;
 
-    const formData = new FormData();
-    formData.append("image", imageFile);
+    // Check if the imageFile is a Blob URL
+    //const isBlobUrl = (url) => url.startsWith("blob:");
+    const isBlobUrl = (url) =>
+      typeof url === "string" && url.startsWith("blob:");
+
+    if (isBlobUrl(imageFile)) {
+      const fileName = "image.jpg"; // or get the filename from your source if available
+      imageFile = await blobToFile(imageFile, fileName);
+    }
 
     try {
+      const formData = new FormData();
+      formData.append("image", imageFile);
+      // for (const [key, value] of formData.entries()) {
+      //   console.log("Image FormData", `${key}: ${value.name}`); // Should now log the correct file name
+      // }
       const uploadResponse = await axios.post(
         `${serverEndPointImage}/upload`,
-        formData
+        formData // Removed Content-Type header
       );
       return uploadResponse.data.image_url; // Assuming API returns the image URL
     } catch (error) {
-      console.error("Error uploading image:", error);
+      if (error.response) {
+        console.error("Response data:", error.response.data);
+        console.error("Response status:", error.response.status);
+      } else {
+        console.error("Error uploading image:", error);
+      }
       toast.error("Error uploading image or file size too large (2 MB max).");
       return null;
     }
   };
+  // const uploadImage = async (imageFile) => {
+  //   if (!imageFile) return null;
+
+  //   const formData = new FormData();
+  //   formData.append("image", imageFile);
+
+  //   try {
+  //     const uploadResponse = await axios.post(
+  //       `${serverEndPointImage}/upload`,
+  //       formData
+  //     );
+  //     return uploadResponse.data.image_url; // Assuming API returns the image URL
+  //   } catch (error) {
+  //     console.error("Error uploading image:", error);
+  //     toast.error("Error uploading image or file size too large (2 MB max).");
+  //     return null;
+  //   }
+  // };
 
   const uploadOptionalImages = async () => {
     const uploadedImages = []; // To store uploaded image URLs

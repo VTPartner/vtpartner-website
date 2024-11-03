@@ -39,7 +39,9 @@ const GrowingNetwork = () => {
     <div className="p-2 bg-primary text-white shadow-md">
       <div className="m-[10rem]">
         <div className="text-center mb-10">
-          <h2 className="text-2xl font-bold text-white">OUR GROWING NETWORK</h2>
+          <h2 className="text-2xl font-titillium text-white">
+            OUR GROWING NETWORK
+          </h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {data.map((item, index) => {

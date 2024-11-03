@@ -100,7 +100,7 @@ const CitySelectorMobile = ({ onCitySelect }) => {
           <LocationSearchingOutlinedIcon
             style={{ fontSize: "16px", fontWeight: "bold" }}
           />
-          <p className="ml-2 font-bold">{selectedCity}</p>
+          <p className="ml-2 font-titillium">{selectedCity}</p>
           <KeyboardArrowDown style={{ fontSize: "18px", marginLeft: "5px" }} />
         </div>
       </div>

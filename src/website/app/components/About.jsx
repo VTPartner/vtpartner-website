@@ -6,7 +6,7 @@ const About = () => {
     <section className="bg-black text-white mb-10 p-8">
       <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-8 items-center">
         <div className="text-center sm:text-left">
-          <h1 className="sm:text-3xl font-bold mb-4">
+          <h1 className="sm:text-3xl font-titillium mb-4">
             Drive when you want, make what you need
           </h1>
           <p className="sm:text-md text-sm mb-6">

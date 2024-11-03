@@ -4,7 +4,7 @@ const OwnMultipleVehicles = () => {
   return (
     <div className="relative py-10 bg-white">
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold">OWN MULTIPLE VEHICLES?</h1>
+        <h1 className="text-3xl font-titillium">OWN MULTIPLE VEHICLES?</h1>
       </div>
       <div className="flex flex-col md:flex-row items-center justify-center mx-20 p-20">
         <div className="flex-shrink-0 w-full md:w-1/2">

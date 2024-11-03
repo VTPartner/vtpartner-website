@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { serverWebsiteEndPoint } from "../../../dashboard/app/constants";
 import axios from "axios";
 import { Tabs, Tab, useMediaQuery } from "@mui/material";
+import { FaWeightScale } from "react-icons/fa6";
 
 const ServiceDetails = () => {
   const location = useLocation(); // Access location state
@@ -138,11 +139,7 @@ const ServiceDetails = () => {
                 {vehicle.weight > 0 && (
                   <div className="flex items-center gap-2 mb-2">
                     {/* Capacity Icon */}
-                    <img
-                      src="/assets/weight.svg"
-                      alt="Capacity Icon"
-                      className="w-4 h-4"
-                    />
+                    <FaWeightScale />
                     <p className="text-sm">{vehicle.weight} kg</p>
                   </div>
                 )}

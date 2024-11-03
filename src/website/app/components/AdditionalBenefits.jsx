@@ -35,7 +35,7 @@ const AdditionalBenefits = () => {
   return (
     <div className="py-10 bg-gray-50">
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold">Additional Benefits</h2>
+        <h2 className="text-3xl font-titillium">Additional Benefits</h2>
       </div>
       <div className="flex flex-wrap justify-center gap-8 mt-10">
         {benefits.map((benefit, index) => (

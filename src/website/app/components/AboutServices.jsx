@@ -37,7 +37,7 @@ const AboutServices = () => {
     <div className="bg-white py-20">
       <div className="container mx-auto px-4">
         <div className="mb-8">
-          <h2 className="sm:text-3xl text-lg font-bold text-gray-800">
+          <h2 className="sm:text-3xl text-lg font-titillium text-gray-800">
             Our Board Members
           </h2>
         </div>
@@ -54,7 +54,7 @@ const AboutServices = () => {
                   alt={service.title}
                 />
               </div>
-              <h3 className="text-2xl font-bold text-gray-800">
+              <h3 className="text-2xl font-titillium text-gray-800">
                 {service.title}
               </h3>
               <p className="text-gray-600 mt-2">{service.description}</p>

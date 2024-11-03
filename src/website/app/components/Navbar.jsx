@@ -16,7 +16,7 @@ const Navbar = () => {
   return (
     <>
       <DownloadApp />
-      <div className="bg-white text-black fixed w-full z-50 top-0 ">
+      <div className="bg-white font-titillium fixed w-full z-50 top-0">
         <motion.nav
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -26,7 +26,7 @@ const Navbar = () => {
           <NavLink
             className={({ isActive }) =>
               isActive
-                ? "text-black font-bold"
+                ? "text-black font-titillium"
                 : "hover:text-black text-secondary"
             }
             to="/"
@@ -44,8 +44,8 @@ const Navbar = () => {
               <NavLink
                 className={({ isActive }) =>
                   isActive
-                    ? "text-black font-bold"
-                    : "hover:text-black text-secondary font-bold"
+                    ? "text-black font-titillium"
+                    : "hover:text-black text-secondary font-titillium"
                 }
                 to="/"
               >
@@ -56,8 +56,8 @@ const Navbar = () => {
               <NavLink
                 className={({ isActive }) =>
                   isActive
-                    ? "text-black font-bold"
-                    : "hover:text-black text-secondary font-bold"
+                    ? "text-black  font-titillium"
+                    : "hover:text-black text-secondary font-titillium"
                 }
                 to="/about"
               >
@@ -68,7 +68,7 @@ const Navbar = () => {
             <NavLink
               className={({ isActive }) =>
                 isActive
-                  ? "text-white font-bold"
+                  ? "text-white font-titillium"
                   : "hover:text-white text-secondary"
               }
               to="/business"
@@ -76,24 +76,24 @@ const Navbar = () => {
               Business
             </NavLink>
           </li> */}
-            <li>
+            {/* <li>
               <NavLink
                 className={({ isActive }) =>
                   isActive
-                    ? "text-black font-bold"
-                    : "hover:text-black text-secondary font-bold"
+                    ? "text-black font-titillium"
+                    : "hover:text-black text-secondary  font-titillium"
                 }
                 to="/agents"
               >
                 Join Us
               </NavLink>
-            </li>
+            </li> */}
           </ul>
 
           {/* Desktop Contact Button */}
           <a
             href="#contact"
-            className="lg:block mr-4 hidden text-white bg-blue-500 rounded-md px-4 py-2 cursor-pointer"
+            className="lg:block mr-4 hidden text-white bg-blue-500 rounded-md px-4 py-2 cursor-pointer   font-titillium"
           >
             Contact
           </a>
@@ -132,7 +132,9 @@ const Navbar = () => {
                     <NavLink
                       onClick={toggleDrawer}
                       className={({ isActive }) =>
-                        isActive ? "text-black font-bold" : "text-secondary"
+                        isActive
+                          ? "text-black font-titillium"
+                          : "text-secondary"
                       }
                       to="/"
                     >
@@ -143,7 +145,9 @@ const Navbar = () => {
                     <NavLink
                       onClick={toggleDrawer}
                       className={({ isActive }) =>
-                        isActive ? "text-black font-bold" : "text-secondary"
+                        isActive
+                          ? "text-black font-titillium"
+                          : "text-secondary"
                       }
                       to="/about"
                     >
@@ -154,24 +158,26 @@ const Navbar = () => {
                   <NavLink
                     onClick={toggleDrawer}
                     className={({ isActive }) =>
-                      isActive ? "text-white font-bold" : "text-secondary"
+                      isActive ? "text-white font-titillium" : "text-secondary"
                     }
                     to="/business"
                   >
                     Business
                   </NavLink>
                 </li> */}
-                  <li>
+                  {/* <li>
                     <NavLink
                       onClick={toggleDrawer}
                       className={({ isActive }) =>
-                        isActive ? "text-black font-bold" : "text-secondary"
+                        isActive
+                          ? "text-black font-titillium"
+                          : "text-secondary"
                       }
                       to="/agents"
                     >
                       Join Us
                     </NavLink>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
 

@@ -52,9 +52,11 @@ const Home = () => {
         <HeroBanner />
         <ShowcaseNumbers />
         <SliderCarousal />
-        <HowItWorks />
+        <WhyChooseUs />
         <OurLocations />
-        <OurServices />
+        <HowItWorks />
+
+        {/* <OurServices /> */}
         <div className="relative z-0 bg-primary">
           <Contact />
           <StarsCanvas />

@@ -11,7 +11,7 @@ const OurMission = () => {
     <section className="bg-white py-10" id="" data-baseweb="block">
       <div className="container mx-auto px-4">
         <div className="mb-8">
-          <h2 className="sm:text-3xl text-lg font-bold text-gray-800">
+          <h2 className="sm:text-3xl text-lg font-titillium text-gray-800">
             Our Mission
           </h2>
         </div>

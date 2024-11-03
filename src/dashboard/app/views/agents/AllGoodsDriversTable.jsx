@@ -48,8 +48,7 @@ import { Pending, PhotoCamera, Verified } from "@mui/icons-material";
 import { GoVerified } from "react-icons/go";
 import { ValidatorForm } from "react-material-ui-form-validator";
 import { useLoadScript } from "@react-google-maps/api";
-import PrintForm from "./PrintForm";
-import ApplicationForm from "./ApplicationForm";
+
 
 const StyledTable = styled(Table)(() => ({
   whiteSpace: "pre",
@@ -766,10 +765,26 @@ const AllGoodsDriversTable = () => {
     setOpenPrintDialog(false);
   };
 
-  const handleApplicationFormOpen = (driver) => {
-    setSelectedDriver(driver);
-    setOpenModal(true);
+  const handleApplicationFormOpen = (service) => {
+    navigate(`/application-form/${service.goods_driver_id}`, {
+      state: { driverData: service },
+    });
   };
+  const handleIDCardFormOpen = (service) => {
+    navigate(`/driver-id-card/${service.goods_driver_id}`, {
+      state: { driverData: service },
+    });
+  };
+
+  //   const handleApplicationFormOpen = (service) => {
+  //     sessionStorage.setItem("driverData", JSON.stringify(service));
+  //     window.open("/application-form", "_blank");
+  //   };
+
+  //   const handleApplicationFormOpen = (driver) => {
+  //     setSelectedDriver(driver);
+  //     setOpenModal(true);
+  //   };
 
   if (loading) {
     return (
@@ -892,7 +907,7 @@ const AllGoodsDriversTable = () => {
                     </Tooltip>
 
                     <Tooltip title="Print Details" arrow>
-                      <IconButton onClick={() => handlePrintClick(service)}>
+                      <IconButton onClick={() => handleIDCardFormOpen(service)}>
                         <Icon color="primary">print</Icon>
                       </IconButton>
                     </Tooltip>
@@ -930,31 +945,6 @@ const AllGoodsDriversTable = () => {
           }}
         />
       </Box>
-
-      {/* Modal to display the Application Form */}
-      <Modal
-        open={openModal}
-        onClose={handleCloseModal}
-        aria-labelledby="application-form-title"
-        aria-describedby="application-form-description"
-      >
-        <Box
-          sx={{
-            bgcolor: "background.paper",
-            p: 4,
-            borderRadius: 2,
-            width: "800px",
-            margin: "auto",
-            marginTop: "100px",
-          }}
-        >
-          {selectedDriver && <ApplicationForm driver={selectedDriver} />}
-        </Box>
-      </Modal>
-
-      <Dialog open={openPrintDialog} onClose={handlePrintDialogClose}>
-        <PrintForm driverDetails={selectedGoodsDriver} />
-      </Dialog>
 
       {/* Modal for Adding or Editing Vehicle */}
       <Dialog

@@ -20,14 +20,18 @@ import AllGoodsDrivers from "./agents/AllGoodsDrivers";
 import AllCabAgents from "./cab_agents/AllCabAgents";
 import AllCraneDrivers from "./jcb_crane_agents/AllCraneDrivers";
 import AllVendors from "./vendor_agents/AllVendors";
+import DriverApplicationForm from "./DriverApplicationForm";
+import DriverQRCodeIdCard from "./DriverQRCodeIdCard";
+import AllFAQs from "./faqs/AllFAQs";
+import AllEstimations from "./estimations/AllEstimations";
 
 export {
   Login,
   Dashboard,
   GoodsDriverEnquiry,
-  CabDriverEnquiry,
   JCbDriverEnquiry,
   CraneDriverEnquiry,
+  CabDriverEnquiry,
   AllCustomers,
   AllowedCities,
   AllAllowedPincodes,
@@ -44,4 +48,8 @@ export {
   AllCabAgents,
   AllCraneDrivers,
   AllVendors,
+  DriverApplicationForm,
+  DriverQRCodeIdCard,
+  AllFAQs,
+  AllEstimations,
 };

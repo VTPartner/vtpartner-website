@@ -5,12 +5,14 @@ import {
   ChangingLives,
   AdditionalBenefits,
   OwnMultipleVehicles,
+  GoodsAndCabRegistrationHeroBanner,
 } from "../components";
 
 const Registration = () => {
   return (
     <>
-      <RegistrationHero />
+      {/* <RegistrationHero /> */}
+      <GoodsAndCabRegistrationHeroBanner />
       {/* <VTPartnerAdvantages />
       <ChangingLives />
       <AdditionalBenefits /> */}
