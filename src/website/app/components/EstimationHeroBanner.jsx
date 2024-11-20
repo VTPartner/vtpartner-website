@@ -117,9 +117,9 @@ const EstimationHeroBanner = ({ bgImage, onCitySelect }) => {
                   }
                 }}
               >
-                Register as a{" "}
+                Attach your Vehicles for{" "}
                 {service.category_type === "Delivery"
-                  ? `${service.category_name} Driver `
+                  ? `${service.category_name}`
                   : `Service ${service.category_name}`}
               </Button>
             </div>

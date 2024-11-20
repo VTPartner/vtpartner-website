@@ -311,7 +311,9 @@ const LocationTimeForm = ({ onCitySelect }) => {
     contactName: Yup.string().required("Full Name is required!"),
     contactNumber: Yup.string()
       .required("Phone Number is required!")
-      .matches(/^[0-9]+$/, "Phone number must be exactly 10 digits"), // Ensures exactly 10 digits
+      .matches(/^[0-9]+$/, "Phone number must contain only digits") // Allow only digits
+      .min(10, "Phone number must be at least 10 digits") // Adjust the length requirement as needed
+      .max(10, "Phone number must be no more than 10 digits"),
     purpose: Yup.string().required("Please select the Purpose ?"),
   });
 

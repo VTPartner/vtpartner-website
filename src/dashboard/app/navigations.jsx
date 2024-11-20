@@ -105,6 +105,7 @@ export const navigations = [
     // badge: { value: "30+", color: "secondary" },
     children: [
       { name: "HandyMan Agents", iconText: "SI", path: "/all_vendors" },
+      { name: "Drivers", iconText: "SI", path: "/all_drivers" },
     ],
   },
 ];

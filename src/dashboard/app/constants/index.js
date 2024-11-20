@@ -9,9 +9,9 @@ if (devMode === 1) {
   serverWebsiteEndPoint = "http://77.37.47.156:8000/api/website";
   serverEndPointImage = "http://77.37.47.156:8000/api/dashboard";
 } else {
-  serverEndPoint = "https://www.vtpartner.org/api/dashboard";
-  serverWebsiteEndPoint = "https://www.vtpartner.org/api/website";
-  serverEndPointImage = "https://www.vtpartner.org/api/dashboard";
+  serverEndPoint = "https://vtpartner.org/api/dashboard";
+  serverWebsiteEndPoint = "https://vtpartner.org/api/website";
+  serverEndPointImage = "https://vtpartner.org/api/dashboard";
 }
 
 const mapKey = "AIzaSyAAlmEtjJOpSaJ7YVkMKwdSuMTbTx39l_o";

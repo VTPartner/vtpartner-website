@@ -88,12 +88,12 @@ const SliderCarousal = () => {
   return (
     <AppContainer>
       <Wrapper>
-        <Text sx={{ fontFamily: "titillium", fontWeight: "bold" }}>
+        {/* <Text sx={{ fontFamily: "titillium", fontWeight: "bold" }}>
           Join Us
-        </Text>
-        <Note sx={{ fontFamily: "titillium" }}>
+        </Text> */}
+        {/* <Text sx={{ fontFamily: "titillium" }}>
           Reliable delivery, Anytime, Anywhere.
-        </Note>
+        </Text> */}
         <Marquee>
           <MarqueeGroup>
             {deliveryImages.map((el) => (
@@ -156,7 +156,7 @@ export default SliderCarousal;
 const AppContainer = styled("div")`
   width: 100vw;
   height: auto;
-  margin-top: 4rem;
+  // margin-top: 1rem;
   color: #000000;
   position: relative;
   display: flex;

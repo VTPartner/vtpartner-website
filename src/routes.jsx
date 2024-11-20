@@ -35,6 +35,7 @@ import {
   DriverQRCodeIdCard,
   AllFAQs,
   AllEstimations,
+  AllDrivers,
 } from "./dashboard/app/views";
 import Branches from "./dashboard/app/views/branches/Branches";
 import Layout from "./website/app/components/Layout";
@@ -249,6 +250,10 @@ const routes = [
       {
         path: "/all_vendors",
         element: <AllVendors />,
+      },
+      {
+        path: "/all_drivers",
+        element: <AllDrivers />,
       },
       {
         path: "/all_faqs/:category_id/:category_name",

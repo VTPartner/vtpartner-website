@@ -65,7 +65,7 @@ const HeroBanner = () => {
   }, []);
 
   return (
-    <Box component="section" sx={{ backgroundColor: "#ffff", py: 4 }}>
+    <Box component="section" sx={{ backgroundColor: "#ffff", py: 1 }}>
       <Container>
         <Grid container spacing={6} alignItems="center">
           {/* Carousel Section */}
@@ -107,8 +107,8 @@ const HeroBanner = () => {
                     loading="lazy"
                     style={{
                       width: "100%",
-                      height: "400px",
-                      maxHeight: "400px",
+                      height: "200px",
+                      maxHeight: "200px",
                       objectFit: "contain",
                     }}
                   />
@@ -199,7 +199,7 @@ const HeroBanner = () => {
                         }
                       }}
                     >
-                      Join Now
+                      Attach your vehicle
                     </Button>
                   </Box>
                 </Box>
@@ -209,9 +209,23 @@ const HeroBanner = () => {
 
           {/* Text and QR Section */}
           <Grid item xs={12} md={5} spacing={2}>
-            <img src="/logo_new.png" alt="logo" loading="lazy" />
+            <img
+              src="/logo_new.png"
+              alt="logo"
+              loading="lazy"
+              style={{
+                // width: "100%",
+                height: "200px",
+                marginLeft: "-20px",
+                maxHeight: "200px",
+                display: "flex",
+                alignItems: "start",
+                justifyContent: "start",
+                objectFit: "contain",
+              }}
+            />
             <Typography
-              variant="h4"
+              variant="h6"
               sx={{ fontWeight: "bold", fontFamily: "titillium" }}
             >
               <span

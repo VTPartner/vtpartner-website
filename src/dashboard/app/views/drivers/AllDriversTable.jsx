@@ -63,17 +63,17 @@ const StyledTable = styled(Table)(() => ({
 
 const libraries = ["places"]; // Load the places library
 
-const AllVendorsTable = () => {
-  const [allJcbCraneDrivers, setAllHandyManDetails] = useState([]);
+const AllDriversTable = () => {
+  const [allDriversDetails, setAllDriversDetails] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [openSelectedHandyManDialog, setOpenSelectedHandyManDialog] =
+  const [openSelectedDriverDialog, setOpenSelectedDriverDialog] =
     useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
 
-  const [selectedHandyMan, setSelectedHandyMan] = useState({
-    handyman_id: "",
-    name: "",
+  const [selectedDriver, setSelectedDriver] = useState({
+    other_driver_id: "",
+    driver_first_name: "",
     profile_pic: "",
     is_online: "",
     ratings: "",
@@ -103,14 +103,14 @@ const AllVendorsTable = () => {
     aadhar_card_back: "",
     pan_card_front: "",
     pan_card_back: "",
-    category_name: "",
-    sub_cat_name: "",
-    service_name: "",
+    category_driver_first_name: "",
+    sub_cat_driver_first_name: "",
+    service_driver_first_name: "",
   });
 
   const [errorDriver, setDriverErrors] = useState({
-    handyman_id: false,
-    name: false,
+    other_driver_id: false,
+    driver_first_name: false,
     profile_pic: false,
     is_online: false,
     ratings: false,
@@ -118,7 +118,7 @@ const AllVendorsTable = () => {
     registration_date: false,
     time: false,
     r_lat: false,
-    owner_name: false,
+    owner_driver_first_name: false,
     r_lng: false,
     current_lat: false,
     current_lng: false,
@@ -140,9 +140,9 @@ const AllVendorsTable = () => {
     aadhar_card_back: false,
     pan_card_front: false,
     pan_card_back: false,
-    category_name: false,
-    sub_cat_name: false,
-    service_name: false,
+    category_driver_first_name: false,
+    sub_cat_driver_first_name: false,
+    service_driver_first_name: false,
   });
 
   const [btnLoading, setBtnLoading] = useState(false);
@@ -150,7 +150,7 @@ const AllVendorsTable = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   // Fetch all vehicles and vehicle types
-  const fetchAllHandyManDetails = async () => {
+  const fetchAllDriversDetails = async () => {
     // Check if the user is online
     if (!navigator.onLine) {
       toast.error("No internet connection. Please check your connection.");
@@ -162,7 +162,7 @@ const AllVendorsTable = () => {
 
     try {
       const response = await axios.post(
-        `${serverEndPoint}/all_handy_man`,
+        `${serverEndPoint}/all_drivers`,
         {},
         {
           headers: {
@@ -173,7 +173,7 @@ const AllVendorsTable = () => {
       );
 
       // Update state with vehicle details
-      setAllHandyManDetails(response.data.all_handy_man_details);
+      setAllDriversDetails(response.data.all_drivers_details);
     } catch (error) {
       handleError(error); // Handle errors using your existing error handling function
     } finally {
@@ -182,7 +182,7 @@ const AllVendorsTable = () => {
   };
 
   useEffect(() => {
-    fetchAllHandyManDetails();
+    fetchAllDriversDetails();
   }, []);
 
   // Handle error responses
@@ -211,9 +211,11 @@ const AllVendorsTable = () => {
 
   const handleOpenDialog = () => {
     setActiveStep(0);
-    setSelectedHandyMan({
-      handyman_id: "",
-      name: "",
+    setSelectedSubcategory({ sub_cat_id: "", sub_cat_name: "" });
+    setSelectedOtherService("");
+    setSelectedDriver({
+      other_driver_id: "",
+      driver_first_name: "",
       profile_pic: "",
       is_online: "",
       ratings: "",
@@ -227,9 +229,7 @@ const AllVendorsTable = () => {
       status: "",
       recent_online_pic: "",
       is_verified: "",
-      category_id: "5",
-      // sub_cat_id: "",
-      // service_id: "",
+      category_id: "4",
       vehicle_id: "",
       city_id: "",
       aadhar_no: "",
@@ -242,30 +242,30 @@ const AllVendorsTable = () => {
       aadhar_card_back: "",
       pan_card_front: "",
       pan_card_back: "",
-      category_name: "",
-      sub_cat_name: "",
-      service_name: "",
+      category_driver_first_name: "",
+      sub_cat_driver_first_name: "",
+      service_driver_first_name: "",
       category_type: "Service",
     });
 
     setIsEditMode(false);
-    setOpenSelectedHandyManDialog(true);
+    setOpenSelectedDriverDialog(true);
   };
 
   const navigate = useNavigate();
 
   const handleEditClick = (service) => {
-    setSelectedHandyMan(service);
+    setSelectedDriver(service);
     setIsEditMode(true);
-    setOpenSelectedHandyManDialog(true);
+    setOpenSelectedDriverDialog(true);
   };
 
   useEffect(() => {
-    console.log("selectedDriverDetails::", selectedHandyMan);
-  }, [selectedHandyMan]);
+    console.log("selectedDriverDetails::", selectedDriver);
+  }, [selectedDriver]);
 
   const handleCloseDialog = () => {
-    setOpenSelectedHandyManDialog(false);
+    setOpenSelectedDriverDialog(false);
   };
 
   const [activeStep, setActiveStep] = useState(0);
@@ -295,7 +295,7 @@ const AllVendorsTable = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setSelectedHandyMan((prevData) => {
+    setSelectedDriver((prevData) => {
       const newData = {
         ...prevData,
         [name]: value,
@@ -338,8 +338,17 @@ const AllVendorsTable = () => {
   const [services, setServices] = useState([]);
   const [vehicles, setVehicles] = useState([]);
   const [selectedVehicle, setSelectedVehicle] = useState(
-    isEditMode ? selectedHandyMan.vehicle_id : ""
+    isEditMode ? selectedDriver.vehicle_id : ""
   );
+
+  const [selectedOtherService, setSelectedOtherService] = useState("");
+  const [selectedSubcategory, setSelectedSubcategory] = useState({
+    sub_cat_id: -1,
+    sub_cat_name: "",
+  });
+
+  const [subCategories, setSubCategories] = useState([]);
+  const [otherService, setOtherServices] = useState([]);
 
   const resetForm = () => {
     setRCImage(null);
@@ -375,8 +384,8 @@ const AllVendorsTable = () => {
       const imgUrl = URL.createObjectURL(file);
       setImage(imgUrl);
 
-      // Update the selectedHandyMan profile_pic or any other specified field
-      setSelectedHandyMan((selectedDriver) => ({
+      // Update the selectedDriver profile_pic or any other specified field
+      setSelectedDriver((selectedDriver) => ({
         ...selectedDriver,
         [field]: imgUrl, // Update the specific field, e.g., 'profile_pic'
       }));
@@ -386,67 +395,40 @@ const AllVendorsTable = () => {
   // Validate the current step whenever category type or field data changes
   useEffect(() => {
     validateStep();
-  }, [selectedHandyMan]);
+  }, [selectedDriver]);
 
   const validateStep = () => {
     if (activeStep === 0) {
       // Step 0: Agent Details
       const isAgentStepValid = !!(
-        selectedHandyMan.name &&
-        selectedHandyMan.mobile_no &&
-        selectedHandyMan.profile_pic
+        selectedDriver.driver_first_name &&
+        selectedDriver.mobile_no &&
+        selectedDriver.profile_pic
       );
       setIsStepValid(isAgentStepValid);
     } else if (activeStep === 1) {
       // Step 1: Documents
-      if (selectedHandyMan?.category_type === "Delivery") {
+      if (selectedDriver?.category_type === "Delivery") {
         const isDocumentStepValid = !!(
-          selectedHandyMan.aadhar_no &&
-          selectedHandyMan.pan_card_no &&
-          selectedHandyMan.aadhar_card_front &&
-          selectedHandyMan.aadhar_card_back &&
-          selectedHandyMan.pan_card_front &&
-          selectedHandyMan.pan_card_back
+          selectedDriver.aadhar_no &&
+          selectedDriver.pan_card_no &&
+          selectedDriver.aadhar_card_front &&
+          selectedDriver.aadhar_card_back &&
+          selectedDriver.pan_card_front &&
+          selectedDriver.pan_card_back
         );
         setIsStepValid(isDocumentStepValid);
-      } else if (selectedHandyMan?.category_type === "Service") {
+      } else if (selectedDriver?.category_type === "Service") {
         const isServiceStepValid = !!(
-          selectedHandyMan.aadhar_no &&
-          selectedHandyMan.pan_card_no &&
-          selectedHandyMan.profile_pic
+          selectedDriver.aadhar_no &&
+          selectedDriver.pan_card_no &&
+          selectedDriver.profile_pic
         );
         setIsStepValid(isServiceStepValid);
       }
     } else if (activeStep === 2) {
-      const agentAddressValid = !!selectedHandyMan.full_address;
+      const agentAddressValid = !!selectedDriver.full_address;
       setIsStepValid(agentAddressValid);
-    } else if (selectedHandyMan?.category_type === "Delivery") {
-      if (activeStep === 3) {
-        // Step 3: Owner Details
-        const isOwnerStepValid = !!(
-          ownerPhoto &&
-          selectedHandyMan.owner_name &&
-          selectedHandyMan.owner_address
-        );
-        setIsStepValid(isOwnerStepValid);
-      } else if (activeStep === 4) {
-        // Step 4: Vehicle Details
-        const isVehicleStepValid = !!(
-          selectedHandyMan.driving_license_no &&
-          selectedHandyMan.vehicle_plate_no &&
-          selectedHandyMan.rc_no &&
-          selectedHandyMan.insurance_no &&
-          selectedHandyMan.noc_no &&
-          selectedHandyMan.license_front &&
-          selectedHandyMan.license_back &&
-          selectedHandyMan.vehicle_image &&
-          selectedHandyMan.rc_image &&
-          selectedHandyMan.insurance_image &&
-          selectedHandyMan.noc_image &&
-          selectedHandyMan.pollution_certificate_image
-        );
-        setIsStepValid(isVehicleStepValid);
-      }
     } else {
       setIsStepValid(true); // Default for other steps
     }
@@ -460,11 +442,11 @@ const AllVendorsTable = () => {
     setActiveStep((prevStep) => prevStep - 1);
   };
 
-  const blobToFile = (blobUrl, fileName) => {
+  const blobToFile = (blobUrl, filedriver_first_name) => {
     return fetch(blobUrl)
       .then((response) => response.blob())
       .then((blob) => {
-        return new File([blob], fileName, { type: blob.type });
+        return new File([blob], filedriver_first_name, { type: blob.type });
       });
   };
 
@@ -478,15 +460,15 @@ const AllVendorsTable = () => {
       typeof url === "string" && url.startsWith("blob:");
 
     if (isBlobUrl(imageFile)) {
-      const fileName = "image.jpg"; // or get the filename from your source if available
-      imageFile = await blobToFile(imageFile, fileName);
+      const filedriver_first_name = "image.jpg"; // or get the filedriver_first_name from your source if available
+      imageFile = await blobToFile(imageFile, filedriver_first_name);
     }
 
     try {
       const formData = new FormData();
       formData.append("image", imageFile);
       // for (const [key, value] of formData.entries()) {
-      //   console.log("Image FormData", `${key}: ${value.name}`); // Should now log the correct file name
+      //   console.log("Image FormData", `${key}: ${value.driver_first_name}`); // Should now log the correct file driver_first_name
       // }
       const uploadResponse = await axios.post(
         `${serverEndPointImage}/upload`,
@@ -510,54 +492,67 @@ const AllVendorsTable = () => {
       setBtnLoading(true);
 
       if (agentPhoto) {
-        selectedHandyMan.profile_pic = await uploadImage(agentPhoto);
+        selectedDriver.profile_pic = await uploadImage(agentPhoto);
       }
       if (aadharCardFront) {
-        selectedHandyMan.aadhar_card_front = await uploadImage(aadharCardFront);
+        selectedDriver.aadhar_card_front = await uploadImage(aadharCardFront);
       }
       if (aadharCardBack) {
-        selectedHandyMan.aadhar_card_back = await uploadImage(aadharCardBack);
+        selectedDriver.aadhar_card_back = await uploadImage(aadharCardBack);
       }
       if (panCardFront) {
-        selectedHandyMan.pan_card_front = await uploadImage(panCardFront);
+        selectedDriver.pan_card_front = await uploadImage(panCardFront);
       }
       if (panCardBack) {
-        selectedHandyMan.pan_card_back = await uploadImage(panCardBack);
+        selectedDriver.pan_card_back = await uploadImage(panCardBack);
       }
 
       let registrationData = {};
       const token = Cookies.get("authToken");
       const city_id = Cookies.get("city_id");
+      console.log(
+        "selectedSubcategory.sub_cat_id::",
+        selectedSubcategory.sub_cat_id
+      );
+      console.log("selectedOtherService::", selectedOtherService);
+      if (
+        selectedSubcategory.sub_cat_id === "" ||
+        selectedOtherService === ""
+      ) {
+        toast.error("Please select the Service Type");
+        return;
+      }
 
       registrationData = {
-        handyman_id: isEditMode ? selectedHandyMan.handyman_id : -1,
-        category_id: isEditMode ? selectedHandyMan.category_id : "5",
-        // sub_cat_id: isEditMode ? selectedHandyMan.sub_cat_id : -1,
-        // service_id: isEditMode ? selectedHandyMan.service_id : -1,
+        other_driver_id: isEditMode ? selectedDriver.other_driver_id : -1,
+        category_id: isEditMode ? selectedDriver.category_id : "4",
+        // sub_cat_id: isEditMode ? selectedDriver.sub_cat_id : -1,
+        // service_id: isEditMode ? selectedDriver.service_id : -1,
         sub_cat_id: selectedSubcategory.sub_cat_id,
         service_id: selectedOtherService,
-        agent_name: selectedHandyMan.name,
-        mobile_no: selectedHandyMan.mobile_no,
-        gender: selectedHandyMan.gender,
-        aadhar_no: selectedHandyMan.aadhar_no,
-        pan_no: selectedHandyMan.pan_card_no,
-        address: selectedHandyMan.full_address,
-        house_no: selectedHandyMan.house_no,
-        city_name: selectedHandyMan.city_name,
-        agent_photo_url: selectedHandyMan.profile_pic,
-        aadhar_card_front_url: selectedHandyMan.aadhar_card_front,
-        aadhar_card_back_url: selectedHandyMan.aadhar_card_back,
-        pan_card_front_url: selectedHandyMan.pan_card_front,
-        pan_card_back_url: selectedHandyMan.pan_card_back,
-        city_id: isEditMode ? selectedHandyMan.city_id : city_id,
+        agent_name: selectedDriver.driver_first_name,
+        mobile_no: selectedDriver.mobile_no,
+        gender: selectedDriver.gender,
+        aadhar_no: selectedDriver.aadhar_no,
+        pan_no: selectedDriver.pan_card_no,
+        address: selectedDriver.full_address,
+        house_no: selectedDriver.house_no,
+        city_name: selectedDriver.city_name,
+        agent_photo_url: selectedDriver.profile_pic,
+        aadhar_card_front_url: selectedDriver.aadhar_card_front,
+        aadhar_card_back_url: selectedDriver.aadhar_card_back,
+        pan_card_front_url: selectedDriver.pan_card_front,
+        pan_card_back_url: selectedDriver.pan_card_back,
+
+        city_id: isEditMode ? selectedDriver.city_id : city_id,
       };
 
       console.log("registrationData->", registrationData);
 
       // Submit form data to the main endpoint
       const endpoint = isEditMode
-        ? `${serverEndPoint}/edit_handyman_details`
-        : `${serverEndPoint}/add_new_handyman_details`;
+        ? `${serverEndPoint}/edit_other_driver_details`
+        : `${serverEndPoint}/add_other_driver_details`;
 
       const response = await axios.post(endpoint, registrationData, {
         headers: {
@@ -569,10 +564,10 @@ const AllVendorsTable = () => {
       console.log("Registration submitted successfully:", response.data);
       //Navigating to All Enquiries
       toast.success("Registration submitted successfully!");
-      setOpenSelectedHandyManDialog(false);
+      setOpenSelectedDriverDialog(false);
       setActiveStep(0);
       resetForm();
-      fetchAllHandyManDetails();
+      fetchAllDriversDetails();
     } catch (error) {
       console.error("Error submitting registration:", error);
       toast.error("Error submitting registration.");
@@ -583,20 +578,11 @@ const AllVendorsTable = () => {
 
   const isMobile = useMediaQuery("(max-width: 600px)");
 
-  const [selectedOtherService, setSelectedOtherService] = useState("");
-  const [selectedSubcategory, setSelectedSubcategory] = useState({
-    sub_cat_id: -1,
-    sub_cat_name: "",
-  });
-
-  const [subCategories, setSubCategories] = useState([]);
-  const [otherService, setOtherServices] = useState([]);
-
   // Fetch subcategories based on category ID
   const fetchSubCategory = async () => {
     try {
       const endPoint = `${serverEndPoint}/all_sub_categories`;
-      const response = await axios.post(endPoint, { category_id: "5" });
+      const response = await axios.post(endPoint, { category_id: "4" });
       console.log(
         "Fetched subcategories:",
         response.data.sub_categories_details
@@ -617,6 +603,18 @@ const AllVendorsTable = () => {
         response.data.other_services_details
       );
       setOtherServices(response.data.other_services_details);
+
+      // If service_id is available in allDriversDetails, set it as the selected other service
+      if (allDriversDetails.service_id) {
+        const initialService = response.data.other_services_details.find(
+          (service) => service.service_id === allDriversDetails.service_id
+        );
+
+        if (initialService) {
+          setSelectedOtherService(initialService.service_id);
+          console.log("Initial other service selected:", initialService);
+        }
+      }
     } catch (error) {
       handleError(error);
     }
@@ -624,20 +622,20 @@ const AllVendorsTable = () => {
 
   useEffect(() => {
     if (isEditMode) {
-      setSelectedOtherService(selectedHandyMan.service_id);
+      setSelectedOtherService(selectedDriver.service_id);
     }
-  }, [isEditMode, selectedHandyMan.service_id]);
+  }, [isEditMode, selectedDriver.service_id]);
 
   useEffect(() => {
     if (isEditMode) {
       setSelectedSubcategory({
-        sub_cat_id: selectedHandyMan.sub_cat_id,
-        sub_cat_name: selectedHandyMan.sub_cat_name,
+        sub_cat_id: selectedDriver.sub_cat_id,
+        sub_cat_name: selectedDriver.sub_cat_name,
       });
       // Trigger async actions based on sub category
-      fetchOtherServices(selectedHandyMan.sub_cat_id);
+      fetchOtherServices(selectedDriver.sub_cat_id);
     }
-  }, [isEditMode, selectedHandyMan.sub_cat_id]);
+  }, [isEditMode, selectedDriver.sub_cat_id]);
 
   useEffect(() => {
     fetchSubCategory();
@@ -661,13 +659,14 @@ const AllVendorsTable = () => {
   // Handle change in Other Services selection
   const handleOtherServiceChange = (event) => {
     setSelectedOtherService(event.target.value);
+    console.log("selectedOtherService::", event.target.value);
   };
 
   const [open, setOpen] = useState(false);
 
   const handleStatusUpdateClick = (service) => {
     // Set selectedHandyMan details and open modal
-    setSelectedHandyMan(service);
+    setSelectedDriver(service);
     setOpen(true);
   };
 
@@ -676,7 +675,7 @@ const AllVendorsTable = () => {
   };
 
   const handleStatusChange = (event) => {
-    setSelectedHandyMan((prev) => ({
+    setSelectedDriver((prev) => ({
       ...prev,
       status: event.target.value,
     }));
@@ -685,16 +684,20 @@ const AllVendorsTable = () => {
   const handleUpdateStatus = async () => {
     try {
       // Call the API to update status
-      await axios.post(`${serverEndPoint}/update_handyman_status`, {
-        handyman_id: selectedHandyMan.handyman_id,
-        status: selectedHandyMan.status,
+      await axios.post(`${serverEndPoint}/update_other_driver_status`, {
+        other_driver_id: selectedDriver.other_driver_id,
+        status: selectedDriver.status,
       });
       // Pass the updated status to the parent component or refresh data
-      toast.success(`${selectedHandyMan.name} Status Updated Successfully`);
-      fetchAllHandyManDetails();
+      toast.success(
+        `${selectedDriver.driver_first_name} Status Updated Successfully`
+      );
+      fetchAllDriversDetails();
       setOpen(false);
     } catch (error) {
-      toast.error(`${selectedHandyMan.name} Status Updated Failed ${error}`);
+      toast.error(
+        `${selectedDriver.driver_first_name} Status Updated Failed ${error}`
+      );
       console.error("Error updating status:", error);
     }
   };
@@ -721,14 +724,14 @@ const AllVendorsTable = () => {
           sx={{ mb: 2 }}
           onClick={handleOpenDialog}
         >
-          Add New Handy Man
+          Add New Driver
         </Button>
 
         <StyledTable>
           <TableHead>
             <TableRow>
-              <TableCell align="left">Agent Name</TableCell>
-              <TableCell align="left">Agent ID</TableCell>
+              <TableCell align="left">Driver Name</TableCell>
+              <TableCell align="left">Driver ID</TableCell>
               <TableCell align="left">Service Type</TableCell>
               <TableCell align="left">Mobile No</TableCell>
               <TableCell align="left">Joining Date</TableCell>
@@ -740,21 +743,23 @@ const AllVendorsTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {allJcbCraneDrivers
+            {allDriversDetails
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((service) => (
-                <TableRow key={service.handyman_id}>
+                <TableRow key={service.other_driver_id}>
                   <TableCell align="left">
                     <Box display="flex" alignItems="center">
                       <Avatar
                         src={`${service.profile_pic}`}
-                        alt={service.name}
+                        alt={service.driver_first_name}
                         sx={{ width: 40, height: 40, marginRight: 1 }}
                       />
-                      {service.name}
+                      {service.driver_first_name}
                     </Box>
                   </TableCell>
-                  <TableCell align="left"># {service.handyman_id}</TableCell>
+                  <TableCell align="left">
+                    # {service.other_driver_id}
+                  </TableCell>
                   <TableCell align="left">
                     {service.sub_cat_name} / {service.service_name}
                   </TableCell>
@@ -821,7 +826,6 @@ const AllVendorsTable = () => {
                         <Icon color="primary">update</Icon>
                       </IconButton>
                     </Tooltip>
-
                     {/* <Tooltip title="Add Other Services" arrow>
                       <IconButton onClick={() => goToOtherServices(service)}>
                         <Icon color="gray">arrow_forward</Icon>
@@ -838,7 +842,7 @@ const AllVendorsTable = () => {
           page={page}
           component="div"
           rowsPerPage={rowsPerPage}
-          count={allJcbCraneDrivers.length}
+          count={allDriversDetails.length}
           onPageChange={(_, newPage) => setPage(newPage)}
           rowsPerPageOptions={[5, 10, 25]}
           onRowsPerPageChange={(event) => {
@@ -855,7 +859,7 @@ const AllVendorsTable = () => {
           <FormControl fullWidth margin="normal">
             <InputLabel>Status</InputLabel>
             <Select
-              value={selectedHandyMan.status}
+              value={selectedDriver.status}
               onChange={handleStatusChange}
               label="Status"
             >
@@ -882,20 +886,20 @@ const AllVendorsTable = () => {
 
       {/* Modal for Adding or Editing Vehicle */}
       <Dialog
-        open={openSelectedHandyManDialog}
+        open={openSelectedDriverDialog}
         onClose={handleCloseDialog}
         maxWidth="xl"
         fullWidth
       >
         <Box p={3}>
           <Typography variant="h6" gutterBottom>
-            {isEditMode ? "Edit Details" : "Add New HandyMan"}
+            {isEditMode ? "Edit Driver Details" : "Add New Driver"}
           </Typography>
 
           <ValidatorForm onSubmit={handleSubmit} onError={() => null}>
             <Box margin={5}>
               <Stepper activeStep={activeStep}>
-                {(selectedHandyMan.category_type === "Delivery"
+                {(selectedDriver.category_type === "Delivery"
                   ? stepsDelivery
                   : stepsService
                 ).map((label) => (
@@ -927,7 +931,7 @@ const AllVendorsTable = () => {
                       <label htmlFor="agentPhoto">
                         {" "}
                         <Avatar
-                          src={agentPhoto || selectedHandyMan.profile_pic}
+                          src={agentPhoto || selectedDriver.profile_pic}
                           alt="Agent Photo"
                           sx={{
                             width: 100,
@@ -945,18 +949,20 @@ const AllVendorsTable = () => {
                       </label>
                     </Box>
 
-                    {/* Agent Name TextField */}
+                    {/* Agent driver_first_name TextField */}
                     <TextField
-                      label="Agent Name"
+                      label="Driver Name"
                       fullWidth
                       margin="normal"
-                      name="name"
-                      value={selectedHandyMan.name}
+                      name="driver_first_name"
+                      value={selectedDriver.driver_first_name}
                       onChange={handleChange} // Ensure this is connected correctly
                       required
-                      error={errorDriver.name}
+                      error={errorDriver.driver_first_name}
                       helperText={
-                        errorDriver.name ? "Agent name is required." : ""
+                        errorDriver.driver_first_name
+                          ? "Driver Name is required."
+                          : ""
                       }
                       inputProps={{
                         autoComplete: "off",
@@ -968,13 +974,13 @@ const AllVendorsTable = () => {
                       type="number"
                       margin="normal"
                       name="mobile_no"
-                      value={selectedHandyMan.mobile_no}
+                      value={selectedDriver.mobile_no}
                       onChange={handleChange} // Ensure this is connected correctly
                       required
                       error={errorDriver.mobile_no}
                       helperText={
                         errorDriver.mobile_no
-                          ? "Agent Mobile Number is required and must be 10 Digits."
+                          ? "Driver Mobile Number is required and must be 10 Digits."
                           : ""
                       }
                       inputProps={{
@@ -1043,7 +1049,7 @@ const AllVendorsTable = () => {
                       row
                       name="gender"
                       sx={{ mb: 2 }}
-                      value={selectedHandyMan.gender}
+                      value={selectedDriver.gender}
                       onChange={handleChange}
                     >
                       <FormControlLabel
@@ -1078,7 +1084,7 @@ const AllVendorsTable = () => {
                       fullWidth
                       margin="normal"
                       name="aadhar_no"
-                      value={selectedHandyMan.aadhar_no}
+                      value={selectedDriver.aadhar_no}
                       onChange={handleChange} // Ensure this is connected correctly
                       required
                       error={errorDriver.aadhar_no}
@@ -1094,7 +1100,7 @@ const AllVendorsTable = () => {
                       fullWidth
                       margin="normal"
                       name="pan_card_no"
-                      value={selectedHandyMan.pan_card_no}
+                      value={selectedDriver.pan_card_no}
                       onChange={handleChange} // Ensure this is connected correctly
                       required
                       error={errorDriver.pan_card_no}
@@ -1134,7 +1140,7 @@ const AllVendorsTable = () => {
                           <Avatar
                             src={
                               aadharCardFront ||
-                              selectedHandyMan.aadhar_card_front
+                              selectedDriver.aadhar_card_front
                             }
                             alt="Aadhar Card Photo"
                             sx={{
@@ -1178,8 +1184,7 @@ const AllVendorsTable = () => {
                           {/* Changed from licenseBack to agentPhoto */}
                           <Avatar
                             src={
-                              aadharCardBack ||
-                              selectedHandyMan.aadhar_card_back
+                              aadharCardBack || selectedDriver.aadhar_card_back
                             }
                             alt="Aadhar Card Photo"
                             sx={{
@@ -1222,9 +1227,7 @@ const AllVendorsTable = () => {
                           {" "}
                           {/* Changed from licenseBack to agentPhoto */}
                           <Avatar
-                            src={
-                              panCardFront || selectedHandyMan.pan_card_front
-                            }
+                            src={panCardFront || selectedDriver.pan_card_front}
                             alt="Pan Card Photo"
                             sx={{
                               width: 250, // Adjust the width as needed
@@ -1266,7 +1269,7 @@ const AllVendorsTable = () => {
                           {" "}
                           {/* Changed from licenseBack to agentPhoto */}
                           <Avatar
-                            src={panCardBack || selectedHandyMan.pan_card_back}
+                            src={panCardBack || selectedDriver.pan_card_back}
                             alt="Pan Card Photo"
                             sx={{
                               width: 250, // Adjust the width as needed
@@ -1296,7 +1299,7 @@ const AllVendorsTable = () => {
                       fullWidth
                       margin="normal"
                       name="house_no"
-                      value={selectedHandyMan.house_no}
+                      value={selectedDriver.house_no}
                       onChange={handleChange}
                       required
                       error={errorDriver.house_no}
@@ -1314,7 +1317,7 @@ const AllVendorsTable = () => {
                       fullWidth
                       margin="normal"
                       name="city_name"
-                      value={selectedHandyMan.city_name}
+                      value={selectedDriver.city_name}
                       onChange={handleChange}
                       required
                       error={errorDriver.city_name}
@@ -1335,7 +1338,7 @@ const AllVendorsTable = () => {
                         margin="normal"
                         name="full_address"
                         inputRef={addressInputAgentRef}
-                        value={selectedHandyMan.full_address}
+                        value={selectedDriver.full_address}
                         onChange={handleChange}
                         required
                         error={errorDriver.full_address}
@@ -1373,13 +1376,13 @@ const AllVendorsTable = () => {
                   disabled={!isStepValid}
                   onClick={
                     activeStep ===
-                    (selectedHandyMan.category_type === "Delivery" ? 4 : 2)
+                    (selectedDriver.category_type === "Delivery" ? 4 : 2)
                       ? submitRegistrationData
                       : handleNext
                   }
                 >
                   {activeStep ===
-                  (selectedHandyMan.category_type === "Delivery" ? 4 : 2)
+                  (selectedDriver.category_type === "Delivery" ? 4 : 2)
                     ? "Submit"
                     : "Next"}
                 </LoadingButton>
@@ -1420,4 +1423,4 @@ const AllVendorsTable = () => {
   );
 };
 
-export default AllVendorsTable;
+export default AllDriversTable;

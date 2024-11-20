@@ -24,6 +24,7 @@ import DriverApplicationForm from "./DriverApplicationForm";
 import DriverQRCodeIdCard from "./DriverQRCodeIdCard";
 import AllFAQs from "./faqs/AllFAQs";
 import AllEstimations from "./estimations/AllEstimations";
+import AllDrivers from "./drivers/AllDrivers";
 
 export {
   Login,
@@ -52,4 +53,5 @@ export {
   DriverQRCodeIdCard,
   AllFAQs,
   AllEstimations,
+  AllDrivers,
 };

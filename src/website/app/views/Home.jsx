@@ -47,11 +47,11 @@ import { useNavigate } from "react-router-dom";
 const Home = () => {
   return (
     <>
-      <div className="bg-white text-black! lg:mt-[4.5rem] mt-[2.5rem]">
+      <div className="bg-white text-black! lg:mt-[3.5rem] mt-[2.5rem]">
         {/* <NavbarNew /> */}
         <HeroBanner />
-        <ShowcaseNumbers />
         <SliderCarousal />
+        <ShowcaseNumbers />
         <WhyChooseUs />
         <OurLocations />
         <HowItWorks />

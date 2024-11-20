@@ -35,6 +35,9 @@ import {
   Grid,
   RadioGroup,
   Modal,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { toast } from "react-toastify";
@@ -48,7 +51,6 @@ import { Pending, PhotoCamera, Verified } from "@mui/icons-material";
 import { GoVerified } from "react-icons/go";
 import { ValidatorForm } from "react-material-ui-form-validator";
 import { useLoadScript } from "@react-google-maps/api";
-
 
 const StyledTable = styled(Table)(() => ({
   whiteSpace: "pre",
@@ -72,7 +74,7 @@ const AllGoodsDriversTable = () => {
   const [imageFile, setImageFile] = useState(null);
   const [imageError, setImageError] = useState(false);
 
-  const [selectedGoodsDriver, setSelectedSelectedGoodsDriver] = useState({
+  const [selectedGoodsDriver, setSelectedGoodsDriver] = useState({
     goods_driver_id: "",
     driver_first_name: "",
     profile_pic: "",
@@ -247,7 +249,7 @@ const AllGoodsDriversTable = () => {
 
   const handleOpenDialog = () => {
     setActiveStep(0);
-    setSelectedSelectedGoodsDriver({
+    setSelectedGoodsDriver({
       goods_driver_id: "",
       driver_first_name: "",
       profile_pic: "",
@@ -321,7 +323,7 @@ const AllGoodsDriversTable = () => {
   };
 
   const handleEditClick = (service) => {
-    setSelectedSelectedGoodsDriver(service);
+    setSelectedGoodsDriver(service);
     setIsEditMode(true);
     setOpenSelectedGoodsDriverDialog(true);
   };
@@ -361,7 +363,7 @@ const AllGoodsDriversTable = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setSelectedSelectedGoodsDriver((prevData) => {
+    setSelectedGoodsDriver((prevData) => {
       const newData = {
         ...prevData,
         [name]: value,
@@ -441,7 +443,7 @@ const AllGoodsDriversTable = () => {
   const handleVehicleChange = (e) => {
     const vehicleId = e.target.value;
     setSelectedVehicle(vehicleId);
-    setSelectedSelectedGoodsDriver((prevState) => ({
+    setSelectedGoodsDriver((prevState) => ({
       ...prevState,
       vehicle_id: vehicleId,
     }));
@@ -465,7 +467,7 @@ const AllGoodsDriversTable = () => {
       setImage(imgUrl);
 
       // Update the selectedGoodsDriver profile_pic or any other specified field
-      setSelectedSelectedGoodsDriver((selectedGoodsDriver) => ({
+      setSelectedGoodsDriver((selectedGoodsDriver) => ({
         ...selectedGoodsDriver,
         [field]: imgUrl, // Update the specific field, e.g., 'profile_pic'
       }));
@@ -751,7 +753,7 @@ const AllGoodsDriversTable = () => {
   const [openPrintDialog, setOpenPrintDialog] = useState(false);
 
   const handlePrintClick = (service) => {
-    setSelectedSelectedGoodsDriver(service);
+    setSelectedGoodsDriver(service);
   };
 
   const [openModal, setOpenModal] = useState(false);
@@ -785,6 +787,46 @@ const AllGoodsDriversTable = () => {
   //     setSelectedDriver(driver);
   //     setOpenModal(true);
   //   };
+
+  const [open, setOpen] = useState(false);
+
+  const handleStatusUpdateClick = (service) => {
+    // Set selectedHandyMan details and open modal
+    setSelectedGoodsDriver(service);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleStatusChange = (event) => {
+    setSelectedGoodsDriver((prev) => ({
+      ...prev,
+      status: event.target.value,
+    }));
+  };
+
+  const handleUpdateStatus = async () => {
+    try {
+      // Call the API to update status
+      await axios.post(`${serverEndPoint}/update_goods_driver_status`, {
+        goods_driver_id: selectedGoodsDriver.goods_driver_id,
+        status: selectedGoodsDriver.status,
+      });
+      // Pass the updated status to the parent component or refresh data
+      toast.success(
+        `${selectedGoodsDriver.driver_first_name} Status Updated Successfully`
+      );
+      fetchAllGoodsDriver();
+      setOpen(false);
+    } catch (error) {
+      toast.error(
+        `${selectedGoodsDriver.driver_first_name} Status Updated Failed ${error}`
+      );
+      console.error("Error updating status:", error);
+    }
+  };
 
   if (loading) {
     return (
@@ -920,6 +962,14 @@ const AllGoodsDriversTable = () => {
                       </IconButton>
                     </Tooltip>
 
+                    <Tooltip title="Update Status" arrow>
+                      <IconButton
+                        onClick={() => handleStatusUpdateClick(service)}
+                      >
+                        <Icon color="primary">update</Icon>
+                      </IconButton>
+                    </Tooltip>
+
                     {/* <Tooltip title="Add Other Services" arrow>
                       <IconButton onClick={() => goToOtherServices(service)}>
                         <Icon color="gray">arrow_forward</Icon>
@@ -945,6 +995,38 @@ const AllGoodsDriversTable = () => {
           }}
         />
       </Box>
+
+      {/* Update Status Modal */}
+      <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+        <DialogTitle>Update Status</DialogTitle>
+        <DialogContent margin={2}>
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Status</InputLabel>
+            <Select
+              value={selectedGoodsDriver.status}
+              onChange={handleStatusChange}
+              label="Status"
+            >
+              <MenuItem value={1}>Verified</MenuItem>
+              <MenuItem value={2}>Blocked</MenuItem>
+              <MenuItem value={3}>Rejected</MenuItem>
+              <MenuItem value={0}>Not Verified</MenuItem>
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="secondary">
+            Cancel
+          </Button>
+          <Button
+            onClick={handleUpdateStatus}
+            color="primary"
+            variant="contained"
+          >
+            Update
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       {/* Modal for Adding or Editing Vehicle */}
       <Dialog

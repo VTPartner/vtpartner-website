@@ -34,6 +34,9 @@ import {
   Radio,
   Grid,
   RadioGroup,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { toast } from "react-toastify";
@@ -727,6 +730,46 @@ const AllCabAgentsTable = () => {
 
   const isMobile = useMediaQuery("(max-width: 600px)");
 
+  const [open, setOpen] = useState(false);
+
+  const handleStatusUpdateClick = (service) => {
+    // Set selectedHandyMan details and open modal
+    setSelectedSelectedCabDriver(service);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleStatusChange = (event) => {
+    setSelectedSelectedCabDriver((prev) => ({
+      ...prev,
+      status: event.target.value,
+    }));
+  };
+
+  const handleUpdateStatus = async () => {
+    try {
+      // Call the API to update status
+      await axios.post(`${serverEndPoint}/update_cab_driver_status`, {
+        cab_driver_id: selectedCabDriver.cab_driver_id,
+        status: selectedCabDriver.status,
+      });
+      // Pass the updated status to the parent component or refresh data
+      toast.success(
+        `${selectedCabDriver.driver_first_name} Status Updated Successfully`
+      );
+      fetchAllCabDriver();
+      setOpen(false);
+    } catch (error) {
+      toast.error(
+        `${selectedCabDriver.driver_first_name} Status Updated Failed ${error}`
+      );
+      console.error("Error updating status:", error);
+    }
+  };
+
   if (loading) {
     return (
       <Box
@@ -840,7 +883,13 @@ const AllCabAgentsTable = () => {
                         <Icon color="primary">edit</Icon>
                       </IconButton>
                     </Tooltip>
-
+                    <Tooltip title="Update Status" arrow>
+                      <IconButton
+                        onClick={() => handleStatusUpdateClick(service)}
+                      >
+                        <Icon color="primary">update</Icon>
+                      </IconButton>
+                    </Tooltip>
                     {/* <Tooltip title="Add Other Services" arrow>
                       <IconButton onClick={() => goToOtherServices(service)}>
                         <Icon color="gray">arrow_forward</Icon>
@@ -866,6 +915,38 @@ const AllCabAgentsTable = () => {
           }}
         />
       </Box>
+
+      {/* Update Status Modal */}
+      <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+        <DialogTitle>Update Status</DialogTitle>
+        <DialogContent margin={2}>
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Status</InputLabel>
+            <Select
+              value={selectedCabDriver.status}
+              onChange={handleStatusChange}
+              label="Status"
+            >
+              <MenuItem value={1}>Verified</MenuItem>
+              <MenuItem value={2}>Blocked</MenuItem>
+              <MenuItem value={3}>Rejected</MenuItem>
+              <MenuItem value={0}>Not Verified</MenuItem>
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="secondary">
+            Cancel
+          </Button>
+          <Button
+            onClick={handleUpdateStatus}
+            color="primary"
+            variant="contained"
+          >
+            Update
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       {/* Modal for Adding or Editing Vehicle */}
       <Dialog
