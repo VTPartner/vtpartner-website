@@ -54,6 +54,7 @@ import {
   DriverEstimationResult,
   JcbCraneEstimationResult,
   HandyManEstimationResult,
+  TermsAndConditions,
 } from "./website/app/views";
 import Error404 from "./website/app/components/Error404";
 
@@ -75,11 +76,15 @@ const routes = [
         element: <About />,
       },
       {
+        path: "/terms&conditions",
+        element: <TermsAndConditions />,
+      },
+      {
         path: "/agents/:category_id/:category_name/:category_type",
         element: <Registration />,
       },
       {
-        path: "/jcb_crane_registration",
+        path: "/jcb_crane_registration/:category_id/:category_name/:category_type",
         element: <JcbCraneRegistration />,
       },
       {

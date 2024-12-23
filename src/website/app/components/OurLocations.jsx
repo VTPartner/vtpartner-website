@@ -9,6 +9,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import Carousel from "react-material-ui-carousel";
+import ContentLoader from "react-content-loader";
 
 const OurLocations = () => {
   const [cities, setCities] = useState([]);
@@ -88,47 +89,61 @@ const OurLocations = () => {
         </Typography>
       </motion.div>
 
-      <Carousel
-        indicators={false}
-        autoPlay={true}
-        animation="slide"
-        interval={3000}
-        navButtonsAlwaysVisible={true}
-      >
-        {cities.map((area, index) => (
-          <Box key={index} sx={{ width: "100%" }}>
-            <Card sx={{ height: "100%", position: "relative" }}>
-              <CardMedia
-                component="div"
-                sx={{
-                  height: "200px",
-                  backgroundImage: `url(${area.bg_image})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  filter: "brightness(0.5)", // Darken entire image
-                }}
-              />
-              <CardContent
-                sx={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  color: "#fff",
-                  textAlign: "center",
-                }}
-              >
-                <Typography
-                  variant="h6"
-                  sx={{ fontWeight: "bold", fontFamily: "titillium" }}
+      {isLoading ? (
+        <ContentLoader
+          speed={2}
+          width="100%"
+          height={700}
+          viewBox="0 0 1000 600"
+          backgroundColor="#f3f3f3"
+          foregroundColor="#ecebeb"
+        >
+          {/* First Row of 4 Shimmer Boxes */}
+          <rect x="20" y="20" rx="5" ry="5" width="100%" height="180" />
+        </ContentLoader>
+      ) : (
+        <Carousel
+          indicators={false}
+          autoPlay={true}
+          animation="slide"
+          interval={3000}
+          navButtonsAlwaysVisible={true}
+        >
+          {cities.map((area, index) => (
+            <Box key={index} sx={{ width: "100%" }}>
+              <Card sx={{ height: "100%", position: "relative" }}>
+                <CardMedia
+                  component="div"
+                  sx={{
+                    height: "200px",
+                    backgroundImage: `url(${area.bg_image})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    filter: "brightness(0.5)", // Darken entire image
+                  }}
+                />
+                <CardContent
+                  sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    color: "#fff",
+                    textAlign: "center",
+                  }}
                 >
-                  {area.city_name}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Box>
-        ))}
-      </Carousel>
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: "bold", fontFamily: "titillium" }}
+                  >
+                    {area.city_name}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Box>
+          ))}
+        </Carousel>
+      )}
     </div>
   );
 };

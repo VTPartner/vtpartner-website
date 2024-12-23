@@ -12,6 +12,7 @@ import HandyManRegistration from "./registrations/HandManResigtration";
 import DriverEstimationResult from "./hourly-estimations-results/DriverEstimationResult";
 import HandyManEstimationResult from "./hourly-estimations-results/HandyManEstimationResult";
 import JcbCraneEstimationResult from "./hourly-estimations-results/JcbCraneEstimationResult";
+import TermsAndConditions from "./TermsAndConditions";
 
 export {
   Home,
@@ -28,4 +29,5 @@ export {
   DriverEstimationResult,
   HandyManEstimationResult,
   JcbCraneEstimationResult,
+  TermsAndConditions,
 };

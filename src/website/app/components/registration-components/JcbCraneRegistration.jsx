@@ -39,8 +39,8 @@ const JcbCraneRegistrationHeroBanner = () => {
     sub_cat_name: "",
   });
   const [selectedService, setSelectedService] = useState({
-    category_id: -1,
-    category_type: "",
+    category_id: 3,
+    category_type: "Service",
   });
 
   const [fullName, setFullName] = useState("");
@@ -141,7 +141,8 @@ const JcbCraneRegistrationHeroBanner = () => {
 
   useEffect(() => {
     fetchCities();
-    fetchServices();
+    // fetchServices();
+    fetchSubCategory(selectedService.category_id);
     // fetchAllVehicles();
     // fetchOtherServices();
   }, []);
@@ -267,7 +268,7 @@ const JcbCraneRegistrationHeroBanner = () => {
       {/* Background Image */}
       <div className="sm:block absolute inset-0 hidden">
         <img
-          src="assets/registration_bg.jpeg"
+          src="/assets/registration_bg.jpeg"
           alt="Background"
           className="object-cover bg-center w-[100%] h-full"
         />
@@ -328,7 +329,7 @@ const JcbCraneRegistrationHeroBanner = () => {
             />
 
             {/* Service Dropdown */}
-            <div className="flex mb-4 mt-3">
+            {/* <div className="flex mb-4 mt-3">
               <FormControl
                 fullWidth
                 size={isMobile ? "small" : "medium"}
@@ -354,7 +355,7 @@ const JcbCraneRegistrationHeroBanner = () => {
                   ))}
                 </Select>
               </FormControl>
-            </div>
+            </div> */}
 
             {/* Conditionally Render Vehicle Dropdown */}
             {selectedService.category_type === "Delivery" && (

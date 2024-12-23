@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { serverWebsiteEndPoint } from "../../../dashboard/app/constants";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Footer = () => {
   const [services, setServices] = useState([]);
@@ -254,30 +254,37 @@ const Footer = () => {
           reserved.
         </p>
         <div className="flex items-center sm:text-sm text-xs justify-center gap-4 sm:mt-0 mt-4 sm:mb-0 mb-4">
-          <a
+          {/* <a
             href=""
             className="hover:text-black text-gray-400  font-titillium"
             target="_self"
             aria-label="Learn more about VT Partner gift cards"
           >
             Privacy Policy
-          </a>
-          <a
-            href=""
+          </a> */}
+          <Link
+            to="/terms&conditions"
+            className="hover:text-black text-gray-400 font-titillium"
+            aria-label="Learn more about VT Partner gift cards"
+          >
+            Terms and Conditions
+          </Link>
+          {/* <a
+            href="/terms&conditions"
             className="hover:text-black text-gray-400 font-titillium"
             target="_self"
             aria-label="Learn more about VT Partner gift cards"
           >
-            Terms
-          </a>
-          <a
+            Terms and Conditions
+          </a> */}
+          {/* <a
             href=""
             className="hover:text-black text-gray-400 font-titillium"
             target="_self"
             aria-label="Learn more about VT Partner gift cards"
           >
             Notices
-          </a>
+          </a> */}
         </div>
       </div>
     </footer>

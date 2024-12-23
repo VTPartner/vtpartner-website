@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { serverWebsiteEndPoint } from "../../../../dashboard/app/constants";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import ContentLoader from "react-content-loader";
 
 const SliderCarousal = () => {
   const [deliveryImages, setDeliveryGalleryImages] = useState([]);
@@ -90,62 +91,87 @@ const SliderCarousal = () => {
       <Wrapper>
         {/* <Text sx={{ fontFamily: "titillium", fontWeight: "bold" }}>
           Join Us
-        </Text> */}
-        {/* <Text sx={{ fontFamily: "titillium" }}>
+        </Text>
+        <Text sx={{ fontFamily: "titillium" }}>
           Reliable delivery, Anytime, Anywhere.
         </Text> */}
-        <Marquee>
-          <MarqueeGroup>
-            {deliveryImages.map((el) => (
-              <ImageGroup key={el.gallery_id}>
-                <Image
-                  src={el.image_url}
-                  onClick={() => handleImageClick(el)}
-                  loading="lazy"
-                  alt="Delivery Image"
-                />
-              </ImageGroup>
-            ))}
-          </MarqueeGroup>
-          <MarqueeGroup>
-            {deliveryImages.map((el) => (
-              <ImageGroup key={el.gallery_id}>
-                <Image
-                  src={el.image_url}
-                  onClick={() => handleImageClick(el)}
-                  loading="lazy"
-                  alt="Delivery Image"
-                />
-              </ImageGroup>
-            ))}
-          </MarqueeGroup>
-        </Marquee>
-        <Marquee>
-          <MarqueeGroup2>
-            {serviceImages.map((el, index) => (
-              <ImageGroup key={index}>
-                <Image
-                  src={el.image_url}
-                  onClick={() => handleImageClick(el)}
-                  loading="lazy"
-                  alt={`Service ${index}`}
-                />
-              </ImageGroup>
-            ))}
-          </MarqueeGroup2>
-          <MarqueeGroup2>
-            {serviceImages.map((el, index) => (
-              <ImageGroup key={index}>
-                <Image
-                  src={el.image_url}
-                  onClick={() => handleImageClick(el)}
-                  loading="lazy"
-                  alt={`Service ${index}`}
-                />
-              </ImageGroup>
-            ))}
-          </MarqueeGroup2>
-        </Marquee>
+        {loading ? (
+          <ContentLoader
+            speed={2}
+            width="100%"
+            height={500}
+            viewBox="0 0 800 500"
+            backgroundColor="#f3f3f3"
+            foregroundColor="#ecebeb"
+          >
+            {/* First Row of 4 Shimmer Boxes */}
+            <rect x="20" y="20" rx="5" ry="5" width="180" height="180" />
+            <rect x="220" y="20" rx="5" ry="5" width="180" height="180" />
+            <rect x="420" y="20" rx="5" ry="5" width="180" height="180" />
+            <rect x="620" y="20" rx="5" ry="5" width="180" height="180" />
+
+            {/* Second Row of 4 Shimmer Boxes */}
+            <rect x="20" y="220" rx="5" ry="5" width="180" height="180" />
+            <rect x="220" y="220" rx="5" ry="5" width="180" height="180" />
+            <rect x="420" y="220" rx="5" ry="5" width="180" height="180" />
+            <rect x="620" y="220" rx="5" ry="5" width="180" height="180" />
+          </ContentLoader>
+        ) : (
+          <>
+            <Marquee>
+              <MarqueeGroup>
+                {deliveryImages.map((el) => (
+                  <ImageGroup key={el.gallery_id}>
+                    <Image
+                      src={el.image_url}
+                      onClick={() => handleImageClick(el)}
+                      loading="lazy"
+                      alt="Delivery Image"
+                    />
+                  </ImageGroup>
+                ))}
+              </MarqueeGroup>
+              <MarqueeGroup>
+                {deliveryImages.map((el) => (
+                  <ImageGroup key={el.gallery_id}>
+                    <Image
+                      src={el.image_url}
+                      onClick={() => handleImageClick(el)}
+                      loading="lazy"
+                      alt="Delivery Image"
+                    />
+                  </ImageGroup>
+                ))}
+              </MarqueeGroup>
+            </Marquee>
+            <Marquee>
+              <MarqueeGroup2>
+                {serviceImages.map((el, index) => (
+                  <ImageGroup key={index}>
+                    <Image
+                      src={el.image_url}
+                      onClick={() => handleImageClick(el)}
+                      loading="lazy"
+                      alt={`Service ${index}`}
+                    />
+                  </ImageGroup>
+                ))}
+              </MarqueeGroup2>
+              <MarqueeGroup2>
+                {serviceImages.map((el, index) => (
+                  <ImageGroup key={index}>
+                    <Image
+                      src={el.image_url}
+                      onClick={() => handleImageClick(el)}
+                      loading="lazy"
+                      alt={`Service ${index}`}
+                    />
+                  </ImageGroup>
+                ))}
+              </MarqueeGroup2>
+            </Marquee>
+          </>
+        )}
       </Wrapper>
     </AppContainer>
   );
@@ -156,7 +182,7 @@ export default SliderCarousal;
 const AppContainer = styled("div")`
   width: 100vw;
   height: auto;
-  // margin-top: 1rem;
+  margin-top: 2rem;
   color: #000000;
   position: relative;
   display: flex;
@@ -224,6 +250,8 @@ const common = css`
 
 const MarqueeGroup = styled("div")`
   ${common}
+  animation-direction: reverse; // Remove both lines to get back to slide from right to left
+  animation-delay: -4s;
 `;
 const MarqueeGroup2 = styled("div")`
   ${common}

@@ -181,7 +181,7 @@ const GoodsAndCabRegistrationHeroBanner = () => {
       {/* Background Image */}
       <div className="sm:block absolute inset-0 hidden">
         <img
-          src="/assets/registration_bg.jpeg"
+          src="/assets/vt_trucks_bg.jpeg"
           alt="Background"
           className="object-cover bg-center w-[100%] h-full"
         />

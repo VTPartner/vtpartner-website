@@ -65,6 +65,7 @@ import JcbCraneRegistrationHeroBanner from "./registration-components/JcbCraneRe
 import DriversRegistrationHeroBanner from "./registration-components/DriversRegistration";
 import HandyManRegistrationHeroBanner from "./registration-components/HandyManRegistration";
 import GoodsAndCabRegistrationHeroBanner from "./registration-components/GoodsAndCabRegistrationHeroBanner";
+import TermsAndConditionsCard from "./TermsAndConditionsCard";
 
 export {
   Navbar,
@@ -131,4 +132,5 @@ export {
   DriversRegistrationHeroBanner,
   HandyManRegistrationHeroBanner,
   GoodsAndCabRegistrationHeroBanner,
+  TermsAndConditionsCard,
 };
