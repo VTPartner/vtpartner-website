@@ -6,7 +6,7 @@ import { Footer, Navbar, ScrollToTop, TransparentNavBar } from "../components";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Layout = () => {
+const WebsiteLayout = () => {
   return (
     <div>
       <ScrollToTop />
@@ -20,4 +20,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default WebsiteLayout;

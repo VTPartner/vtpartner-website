@@ -207,10 +207,7 @@ const AllServicesTable = () => {
     );
   };
   const goToFAQ = (category) => {
-    navigate(
-      `/all_faqs/${category.category_id}/${category.category_name}`,
-      {}
-    );
+    navigate(`/all_faqs/${category.category_id}/${category.category_name}`, {});
   };
 
   const goToGallery = (category) => {
@@ -459,7 +456,7 @@ const AllServicesTable = () => {
                     <Tooltip title="Add FAQ" arrow>
                       <IconButton onClick={() => goToFAQ(service)}>
                         <Icon color="gray">
-                          <FaQ/>
+                          <FaQ />
                         </Icon>
                       </IconButton>
                     </Tooltip>
@@ -472,7 +469,7 @@ const AllServicesTable = () => {
                     )}
 
                     {service.category_type === "Service" && (
-                      <Tooltip title="Add Sub Category" arrow>
+                      <Tooltip itle="Add Sub Category" arrow>
                         <IconButton onClick={() => goToSubCategory(service)}>
                           <Icon color="gray">arrow_forward</Icon>
                         </IconButton>
@@ -497,8 +494,7 @@ const AllServicesTable = () => {
             setPage(0);
           }}
         />
-      </Box>
-
+ </Box>
       {/* Modal for Adding or Editing Vehicle */}
       <Dialog
         open={openServicesDialog}
@@ -521,10 +517,12 @@ const AllServicesTable = () => {
                     width: "100%",
                     height: "auto",
                     maxHeight: "100px",
+                                     
                     objectFit: "contain",
                     borderRadius: "26px",
                   }}
                 />
+                                     
               ) : (
                 <Typography variant="body2">
                   No Category image selected

@@ -6,7 +6,7 @@ import AuthGuard from "./dashboard/app/auth/AuthGuard";
 import { authRoles } from "./dashboard/app/auth/authRoles";
 
 import MatxLayout from "./dashboard/app/components/MatxLayout/MatxLayout";
-
+import { isLoginAuthenticatedToken } from "./website/app/views/auth";
 import { element } from "prop-types";
 import {
   AllCustomers,
@@ -40,6 +40,7 @@ import {
 import Branches from "./dashboard/app/views/branches/Branches";
 import Layout from "./website/app/components/Layout";
 import {
+  LoginWebsite,
   Home,
   About,
   Estimation,
@@ -64,6 +65,20 @@ const routes = [
     element: <Error404 />,
   },
   {
+    path: "/login",
+    element: isLoginAuthenticatedToken() ? (
+      <Navigate to="/" />
+    ) : (
+      <LoginWebsite />
+    ),
+  },
+  {
+    // path: "/",
+    // element: isLoginAuthenticatedToken() ? (
+    //   <Layout />
+    // ) : (
+    //   <Navigate to="/login" />
+    // ),
     path: "/",
     element: <Layout />,
     children: [
@@ -138,136 +153,136 @@ const routes = [
     ],
   },
   {
-    path: "/dashboard",
+    path: "/admin_dashboard",
     element: <Login />,
   },
-  {
-    path: "/dashboard/branches",
-    element: (
-      <AuthGuard>
-        <Branches />{" "}
-      </AuthGuard>
-    ),
-  },
-  {
-    element: (
-      <AuthGuard>
-        <MatxLayout />
-      </AuthGuard>
-    ),
-    children: [
-      // dashboard route
-      {
-        path: "/dashboard/home",
-        element: <Dashboard />,
-        auth: authRoles.sa,
-      },
-      {
-        path: "/all_enquiries/:category_id/:category_name",
-        element: <AllEnquiries />,
-      },
-      {
-        path: "/all_estimations",
-        element: <AllEstimations />,
-      },
-      {
-        path: "/new_registration/:enquiry_id/:category_id",
-        element: <AllEnquiries />,
-      },
-      {
-        path: "all-allowed-pincodes/:city_id/:city_name", // This will resolve to /dashboard/add-pincodes/:cityId
-        element: <AllAllowedPincodes />,
-        auth: authRoles.sa, // Specify the required authentication role
-      },
+  // {
+  //   path: "/dashboard/branches",
+  //   element: (
+  //     <AuthGuard>
+  //       <Branches />{" "}
+  //     </AuthGuard>
+  //   ),
+  // },
+  // {
+  //   element: (
+  //     <AuthGuard>
+  //       <MatxLayout />
+  //     </AuthGuard>
+  //   ),
+  //   children: [
+  //     // dashboard route
+  //     {
+  //       path: "/dashboard/home",
+  //       element: <Dashboard />,
+  //       auth: authRoles.sa,
+  //     },
+  //     {
+  //       path: "/all_enquiries/:category_id/:category_name",
+  //       element: <AllEnquiries />,
+  //     },
+  //     {
+  //       path: "/all_estimations",
+  //       element: <AllEstimations />,
+  //     },
+  //     {
+  //       path: "/new_registration/:enquiry_id/:category_id",
+  //       element: <AllEnquiries />,
+  //     },
+  //     {
+  //       path: "all-allowed-pincodes/:city_id/:city_name", // This will resolve to /dashboard/add-pincodes/:cityId
+  //       element: <AllAllowedPincodes />,
+  //       auth: authRoles.sa, // Specify the required authentication role
+  //     },
 
-      {
-        path: "/customer/all-customers",
-        element: <AllCustomers />,
-      },
+  //     {
+  //       path: "/customer/all-customers",
+  //       element: <AllCustomers />,
+  //     },
 
-      {
-        path: "/goods-driver/all-enquires",
-        element: <GoodsDriverEnquiry />,
-      },
+  //     {
+  //       path: "/goods-driver/all-enquires",
+  //       element: <GoodsDriverEnquiry />,
+  //     },
 
-      {
-        path: "/cab-driver/all-enquires",
-        element: <CabDriverEnquiry />,
-      },
+  //     {
+  //       path: "/cab-driver/all-enquires",
+  //       element: <CabDriverEnquiry />,
+  //     },
 
-      {
-        path: "/jcb-driver/all-enquires",
-        element: <JCbDriverEnquiry />,
-      },
+  //     {
+  //       path: "/jcb-driver/all-enquires",
+  //       element: <JCbDriverEnquiry />,
+  //     },
 
-      {
-        path: "/crane-driver/all-enquires",
-        element: <CraneDriverEnquiry />,
-      },
-      {
-        path: "/location_configuration/all_allow_cities",
-        element: <AllowedCities />,
-      },
-      {
-        path: "/all_vehicles/:category_id/:category_name",
-        element: <AllVehicles />,
-      },
-      {
-        path: "/all_sub_categories/:category_id/:category_name",
-        element: <AllSubServices />,
-      },
-      {
-        path: "/all_other_services/:sub_cat_id/:sub_cat_name",
-        element: <OtherServices />,
-      },
-      {
-        path: "/vehicle-price/:vehicle_id/:vehicle_name",
-        element: <VehiclePrices />,
-      },
-      {
-        path: "/all_services",
-        element: <AllServices />,
-      },
-      {
-        path: "/all_full_enquiries",
-        element: <FullAllEnquiries />,
-      },
-      {
-        path: "/new_registration/:enquiry_id/:category_id/:category_name",
-        element: <NewRegistration />,
-      },
-      {
-        path: "/gallery/:category_id/:category_name/:category_type_id",
-        element: <Gallery />,
-      },
-      {
-        path: "/all_goods_drivers",
-        element: <AllGoodsDrivers />,
-      },
-      {
-        path: "/all_cab_drivers",
-        element: <AllCabAgents />,
-      },
-      {
-        path: "/all_jcb_crane_drivers",
-        element: <AllCraneDrivers />,
-      },
-      {
-        path: "/all_vendors",
-        element: <AllVendors />,
-      },
-      {
-        path: "/all_drivers",
-        element: <AllDrivers />,
-      },
-      {
-        path: "/all_faqs/:category_id/:category_name",
-        element: <AllFAQs />,
-      },
-      // e-chart route
-      // { path: "/charts/echarts", element: <AppEchart />, auth: authRoles.editor }
-    ],
-  },
+  //     {
+  //       path: "/crane-driver/all-enquires",
+  //       element: <CraneDriverEnquiry />,
+  //     },
+  //     {
+  //       path: "/location_configuration/all_allow_cities",
+  //       element: <AllowedCities />,
+  //     },
+  //     {
+  //       path: "/all_vehicles/:category_id/:category_name",
+  //       element: <AllVehicles />,
+  //     },
+  //     {
+  //       path: "/all_sub_categories/:category_id/:category_name",
+  //       element: <AllSubServices />,
+  //     },
+  //     {
+  //       path: "/all_other_services/:sub_cat_id/:sub_cat_name",
+  //       element: <OtherServices />,
+  //     },
+  //     {
+  //       path: "/vehicle-price/:vehicle_id/:vehicle_name",
+  //       element: <VehiclePrices />,
+  //     },
+  //     {
+  //       path: "/all_services",
+  //       element: <AllServices />,
+  //     },
+  //     {
+  //       path: "/all_full_enquiries",
+  //       element: <FullAllEnquiries />,
+  //     },
+  //     {
+  //       path: "/new_registration/:enquiry_id/:category_id/:category_name",
+  //       element: <NewRegistration />,
+  //     },
+  //     {
+  //       path: "/gallery/:category_id/:category_name/:category_type_id",
+  //       element: <Gallery />,
+  //     },
+  //     {
+  //       path: "/all_goods_drivers",
+  //       element: <AllGoodsDrivers />,
+  //     },
+  //     {
+  //       path: "/all_cab_drivers",
+  //       element: <AllCabAgents />,
+  //     },
+  //     {
+  //       path: "/all_jcb_crane_drivers",
+  //       element: <AllCraneDrivers />,
+  //     },
+  //     {
+  //       path: "/all_vendors",
+  //       element: <AllVendors />,
+  //     },
+  //     {
+  //       path: "/all_drivers",
+  //       element: <AllDrivers />,
+  //     },
+  //     {
+  //       path: "/all_faqs/:category_id/:category_name",
+  //       element: <AllFAQs />,
+  //     },
+  //     // e-chart route
+  //     // { path: "/charts/echarts", element: <AppEchart />, auth: authRoles.editor }
+  //   ],
+  // },
 ];
 
 export default routes;

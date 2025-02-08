@@ -500,6 +500,9 @@ const AllowedCitiesTable = () => {
                 alignItems="center"
                 mb={2}
                 width="100%"
+                                    
+                                   
+                                  
               >
                 {editedCity.bg_image ? (
                   <img
