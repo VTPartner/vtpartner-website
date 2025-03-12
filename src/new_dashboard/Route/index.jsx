@@ -54,6 +54,11 @@ import AddSubCategoryPage from "../Pages/MainSettingsPages/AddSubCategoryPage";
 import AddOtherServicesPage from "../Pages/MainSettingsPages/AddOtherServicesPage";
 import AddVehiclePricesPage from "../Pages/MainSettingsPages/AddVehiclesPrices";
 import AddNewVehiclePage from "../Pages/MainSettingsPages/AddNewVehicle";
+import AddPinCodesPage from "../Pages/MainSettingsPages/AddPincodes";
+import PeakHourPricing from "../Pages/MainSettingsPages/PeakHoursTimings";
+import BannersPage from "../Pages/MainSettingsPages/AddBanners";
+import CouponsPage from "../Pages/MainSettingsPages/AddCoupons";
+import AllCustomers from "../Components/AllCustomers";
 // DashboardRoutes
 // const GoodsDriversHome = React.lazy(() =>
 //   import("@/Pages/Dashboard/GoodsDriversHome")
@@ -186,12 +191,28 @@ const Routes = () => {
           element: <AllGoodsDrivers />,
         },
         {
+          path: "/dashboard/all-customers",
+          element: <AllCustomers />,
+        },
+        {
           path: "/dashboard/all-regions",
           element: <AllRegionsCovered />,
         },
         {
+          path: "/dashboard/all-allowed-pincodes/:city_id/:city_name",
+          element: <AddPinCodesPage />,
+        },
+        {
           path: "/dashboard/all-services",
           element: <AllServicesPage />,
+        },
+        {
+          path: "/dashboard/all-banners",
+          element: <BannersPage />,
+        },
+        {
+          path: "/dashboard/all-coupons",
+          element: <CouponsPage />,
         },
         {
           path: "/dashboard/gallery/:category_id/:category_name/:category_type_id",
@@ -216,6 +237,10 @@ const Routes = () => {
         {
           path: "/dashboard/vehicle-price/:vehicle_id/:vehicle_name",
           element: <AddVehiclePricesPage />,
+        },
+        {
+          path: "/dashboard/vehicle-peak-hours-price/:vehicle_id/:vehicle_name",
+          element: <PeakHourPricing />,
         },
       ],
     },

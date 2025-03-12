@@ -28,10 +28,13 @@ import {
   Box,
   Dialog,
   FormControl,
+  Icon,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 
@@ -88,7 +91,7 @@ const AllRegionsCovered = () => {
       pincode_until: city.pincode_until,
       description: city.description || "",
       bg_image: city.bg_image || "", // Set the initial image URL
-      status: city.status || "",
+      status: parseInt(city.status) || 0,
     });
     setOpenDialog(true);
   };
@@ -96,7 +99,7 @@ const AllRegionsCovered = () => {
   const navigate = useNavigate();
   const goToAddPincodes = (city) => {
     navigate(
-      `dashboard/all-allowed-pincodes/${city.city_id}/${city.city_name}`,
+      `/dashboard/all-allowed-pincodes/${city.city_id}/${city.city_name}`,
       {
         state: { cities, currentPage }, // Pass cities and current page state
       }
@@ -387,6 +390,14 @@ const AllRegionsCovered = () => {
   //     setCurrentPage(pageNumber);
   //   };
 
+  const handleStatusInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedCity((prevCity) => ({
+      ...prevCity,
+      [name]: name === "status" ? parseInt(value) : value,
+    }));
+  };
+
   useEffect(() => {
     fetchCities();
   }, []);
@@ -543,14 +554,13 @@ const AllRegionsCovered = () => {
                                   <i className="ti ti-edit"></i>
                                 </Link>
                                 {city.status !== 0 ? ( // Check if the city is active
-                                  <Link
-                                    onClick={() => goToAddPincodes(city)}
-                                    role="button"
-                                    rel="noopener noreferrer"
-                                    className="btn btn-outline-primary icon-btn w-30 h-30 b-r-22 me-2"
-                                  >
-                                    <i className="ti ti-eye"></i>
-                                  </Link>
+                                  <Tooltip title="Add Pincode" arrow>
+                                    <IconButton
+                                      onClick={() => goToAddPincodes(city)}
+                                    >
+                                      <Icon color="gray">arrow_forward</Icon>
+                                    </IconButton>
+                                  </Tooltip>
                                 ) : null}{" "}
                               </td>
                             </tr>
@@ -681,14 +691,10 @@ const AllRegionsCovered = () => {
                 <Select
                   label="Status"
                   name="status"
-                  value={editedCity.status}
-                  onChange={(event) =>
-                    handleInputChange({
-                      target: { name: "status", value: event.target.value },
-                    })
-                  }
-                  required // Make this field mandatory
-                  error={errors.status} // Set error state if needed
+                  value={editedCity.status || 0}
+                  onChange={handleStatusInputChange}
+                  required
+                  error={errors.status}
                 >
                   <MenuItem value={1}>Active</MenuItem>
                   <MenuItem value={0}>Not Active</MenuItem>

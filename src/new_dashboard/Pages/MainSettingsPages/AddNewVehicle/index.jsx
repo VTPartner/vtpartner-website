@@ -197,6 +197,13 @@ const AddNewVehiclePage = () => {
       )}`
     );
   };
+  const goToAddPeakHourPricePage = (vehicle) => {
+    navigate(
+      `/dashboard/vehicle-peak-hours-price/${
+        vehicle.vehicle_id
+      }/${encodeURIComponent(vehicle.vehicle_name)}`
+    );
+  };
 
   const handleEditClick = (vehicle) => {
     setSelectedVehicle(vehicle);
@@ -595,7 +602,16 @@ const AddNewVehiclePage = () => {
                                   <IconButton
                                     onClick={() => goToAddPricePage(vehicle)}
                                   >
-                                    <Icon color="gray">arrow_forward</Icon>
+                                    <Icon color="gray">currency_rupee</Icon>
+                                  </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Add Peak Hours Price" arrow>
+                                  <IconButton
+                                    onClick={() =>
+                                      goToAddPeakHourPricePage(vehicle)
+                                    }
+                                  >
+                                    <Icon color="gray">access_time</Icon>
                                   </IconButton>
                                 </Tooltip>
                               </td>

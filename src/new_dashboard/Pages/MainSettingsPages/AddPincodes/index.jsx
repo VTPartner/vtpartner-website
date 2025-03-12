@@ -1,331 +1,343 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import {
-  orders,
-  delivered,
-  pickup,
-  returns,
-  cancelled,
-} from "../../../../Data/Orderpage/Orderpage";
+
 
 import { Card, CardBody, Col, Container, Row } from "reactstrap";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+
+import Cookies from "js-cookie";
+
 import {
   formatEpoch,
   serverEndPoint,
-} from "../../../../../dashboard/app/constants";
-import Cookies from "js-cookie";
-import Loader from "../../../Loader";
+} from "../../../../dashboard/app/constants";
+import Loader from "../../../Components/Loader";
+import { toast } from "react-toastify";
 
 const AddPinCodesPage = () => {
-  const [activeTab, setActiveTab] = useState("connect-tab");
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-  };
+  const { city_id, city_name } = useParams();
+  const [pinCodes, setPinCodes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [allOrders, setAllOrders] = useState([]);
-
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 7;
   const [searchQuery, setSearchQuery] = useState("");
 
-  const navigate = useNavigate();
+  // Dialog states
+  const [showPincodeModal, setShowPincodeModal] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [selectedPincode, setSelectedPincode] = useState({
+    pincode: "",
+    pincode_id: "",
+    status: 1,
+  });
+  const [errorPincode, setErrorPincode] = useState({ pincode: false });
+  const [btnLoading, setBtnLoading] = useState(false);
 
-  const goToOrderDetailPage = (category) => {
-    navigate(`/dashboard/order-details/1`, {});
-  };
-
-  const fetchAllOrdersData = async () => {
-    const token = Cookies.get("authToken");
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    };
+  // Fetch all the allowed Pincodes for a particular City
+  const fetchAllPinCodes = async (page = 1) => {
+    if (!navigator.onLine) {
+      toast.error("No internet connection. Please check your connection.");
+      setLoading(false);
+      return;
+    }
 
     try {
-      setLoading(true);
-
-      const [ordersResponse] = await Promise.all([
-        axios.post(
-          `${serverEndPoint}/get_goods_all_completed_orders_details`,
-          {
-            key: 1,
+      const token = Cookies.get("authToken");
+      const response = await axios.post(
+        `${serverEndPoint}/all_allowed_pincodes`,
+        { city_id, page },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
-          config
-        ),
-      ]);
+        }
+      );
 
-      setAllOrders(ordersResponse.data.results || []);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
+      setPinCodes(response.data.pincodes);
+      setCurrentPage(page);
       setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      handleError(error);
     }
   };
 
-  // Handle search input change
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value.toLowerCase());
-    setCurrentPage(1); // Reset to page 1 when search query changes
-  };
-
-  // Filter bookings based on the search query
-  const filteredBookings = allOrders.filter((order) => {
-    return (
-      order.order_id.toString().includes(searchQuery) ||
-      order.customer_name.toLowerCase().includes(searchQuery) ||
-      order.driver_first_name.toLowerCase().includes(searchQuery) ||
-      order.customer_mobile_no.toLowerCase().includes(searchQuery)
-    );
-  });
-
-  // Pagination logic
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredBookings.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
-  const totalPages = Math.ceil(filteredBookings.length / itemsPerPage);
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
   useEffect(() => {
-    fetchAllOrdersData();
+    fetchAllPinCodes();
   }, []);
 
-  if (loading) {
-    return <Loader />;
-  }
+  // Handle error responses
+  const handleError = (error) => {
+    if (error.response) {
+      if (error.response.status === 404) {
+        toast.error("No Data Found.");
+      } else if (error.response.status === 500) {
+        toast.error("Internal server error. Please try again later.");
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
+    } else {
+      toast.error("Failed to fetch data. Please check your connection.");
+    }
+  };
+
+  // Filter pincodes based on search
+  const filteredPinCodes = pinCodes.filter((pincode) =>
+    pincode.pincode.toString().includes(searchQuery.toLowerCase())
+  );
+
+  // Pincode validation
+  const pincodeRegex = /^[0-9]{6}$/;
+  const validatePincode = (pincode) => pincodeRegex.test(pincode);
+
+  // Handle input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSelectedPincode({ ...selectedPincode, [name]: value });
+
+    if (name === "pincode") {
+      setErrorPincode({ ...errorPincode, [name]: !validatePincode(value) });
+    }
+  };
+
+  // Save pincode details
+  const savePincodeDetails = async () => {
+    setBtnLoading(true);
+
+    const newErrors = { pincode: !validatePincode(selectedPincode.pincode) };
+    setErrorPincode(newErrors);
+
+    if (Object.values(newErrors).some((error) => error)) {
+      setBtnLoading(false);
+      return;
+    }
+
+    try {
+      const token = Cookies.get("authToken");
+      const endpoint = isEditMode
+        ? `${serverEndPoint}/edit_pincode`
+        : `${serverEndPoint}/add_new_pincode`;
+
+      const requestData = {
+        city_id,
+        pincode: selectedPincode.pincode,
+        pincode_status: selectedPincode.status,
+        pincode_id: isEditMode ? selectedPincode.pincode_id : 0,
+      };
+
+      const response = await axios.post(endpoint, requestData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        toast.success(
+          isEditMode
+            ? "Pincode updated successfully!"
+            : "Pincode added successfully!"
+        );
+        setShowPincodeModal(false);
+        fetchAllPinCodes(currentPage);
+      }
+    } catch (error) {
+      if (error.response?.status === 409) {
+        toast.error("Pincode already exists.");
+      } else {
+        toast.error("An error occurred while saving the pincode.");
+      }
+    } finally {
+      setBtnLoading(false);
+    }
+  };
+
+  if (loading) return <Loader />;
 
   return (
     <div>
       <Container fluid>
         <Row className="m-1">
           <Col xs={12}>
-            <h4 className="main-title">Goods Orders</h4>
+            <h4 className="main-title">Manage Pincodes</h4>
             <ul className="app-line-breadcrumbs mb-3">
               <li className="">
                 <a href="#" className="f-s-14 f-w-500">
                   <span>
-                    <i className="ph-duotone  ph-stack f-s-16"></i> Goods
+                    <i className="ph-duotone ph-map-pin f-s-16"></i> Pincodes
                   </span>
                 </a>
               </li>
-
               <li className="active mt-2">
                 <a href="#" className="f-s-14 f-w-500">
-                  Orders
+                  {city_name}
                 </a>
               </li>
             </ul>
           </Col>
         </Row>
+
         <Row>
           <Col xs={12}>
             <Card className="shadow-lg border-0 rounded-lg">
               <CardBody>
-                <ul
-                  className="nav nav-tabs app-tabs-primary order-tabs d-flex justify-content-start border-0 mb-0 pb-0"
-                  id="Outline"
-                  role="tablist"
+                {/* Add New Pincode Button */}
+                <button
+                  className="btn btn-primary mb-3"
+                  onClick={() => {
+                    setIsEditMode(false);
+                    setSelectedPincode({
+                      pincode: "",
+                      pincode_id: "",
+                      status: 1,
+                    });
+                    setShowPincodeModal(true);
+                  }}
                 >
-                  <li className="nav-item" role="presentation">
-                    <button
-                      className={`nav-link d-flex align-items-center gap-1 ${
-                        activeTab === "connect-tab" ? "active" : ""
-                      }`}
-                      id="connect-tab"
-                      data-bs-toggle="tab"
-                      data-bs-target="#connect-tab-pane"
-                      type="button"
-                      role="tab"
-                      aria-controls="connect-tab-pane"
-                      aria-selected={activeTab === "connect-tab"}
-                      onClick={() => handleTabClick("connect-tab")}
-                    >
-                      <i className="ti ti-sort-descending-2 f-s-18 mg-b-3"></i>{" "}
-                      All Orders
-                    </button>
-                  </li>
-                </ul>
-              </CardBody>
+                  Add New Pincode
+                </button>
 
-              <div className="card-body order-tab-content p-0">
-                <div className="tab-content" id="OutlineContent">
-                  <div
-                    className={`tab-pane fade ${
-                      activeTab === "connect-tab" ? "active show" : ""
-                    }`}
-                    id="connect-tab-pane"
-                    role="tabpanel"
-                    aria-labelledby="connect-tab"
-                    tabIndex="0"
-                  >
-                    <div className="order-list-table table-responsive app-scroll">
-                      {/* Search Input */}
-                      <div className="mb-3">
-                        <input
-                          type="text"
-                          className="form-control m-4 align-middle"
-                          placeholder="Search by Order ID, Customer, Driver, or Mobile"
-                          value={searchQuery}
-                          onChange={handleSearch}
-                        />
-                      </div>
-                      <table className="table table-bottom-border align-middle mb-0">
-                        <thead>
-                          <tr>
-                            <th>Order Id</th>
-                            <th scope="col">Customer</th>
-                            <th scope="col">Driver</th>
-                            <th scope="col">Pickup</th>
-                            <th scope="col">Drop</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Booking Details</th>
-                            <th scope="col">Distance</th>
-                            <th scope="col">Amount</th>
-                            <th scope="col">Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {currentItems.map((order, index) => (
-                            <tr key={index}>
-                              <td># {order.order_id}</td>
-                              <td>
-                                <div className="position-relative">
-                                  <div>
-                                    <h6 className="mb-0 f-s-16">
-                                      {order.customer_name}
-                                    </h6>
-                                    <p className="mb-0 f-s-14 text-secondary">
-                                      {order.customer_mobile_no}
-                                    </p>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <div className="position-relative">
-                                  <div className="h-40 w-40 d-flex-center b-r-15 overflow-hidden p-1 position-absolute">
-                                    <img
-                                      src={order.vehicle_image}
-                                      alt={order.driver_first_name}
-                                      className="img-fluid"
-                                    />
-                                  </div>
-                                  <div className="ms-5">
-                                    <h6 className="mb-0 f-s-16">
-                                      {order.driver_first_name}
-                                    </h6>
-                                    <p className="mb-0 f-s-14 text-secondary">
-                                      {order.driver_mobile_no}
-                                    </p>
-                                    <p className="mb-0 f-s-14 text-secondary">
-                                      {order.vehicle_name}
-                                    </p>
-                                  </div>
-                                </div>
-                              </td>
-
-                              <td>
-                                <p className="mb-0 f-s-12 text-secondary">
-                                  {order.pickup_address}
-                                </p>
-                              </td>
-                              <td>
-                                <p className="mb-0 f-s-12 text-secondary">
-                                  {order.drop_address}
-                                </p>
-                              </td>
-                              <td>
-                                <span
-                                  className={`badge bg-${(() => {
-                                    if (order.booking_status === "Cancelled")
-                                      return "danger";
-                                    if (order.booking_status === "End Trip")
-                                      return "success";
-                                    if (
-                                      order.booking_status === "Driver Arrived"
-                                    )
-                                      return "warning";
-                                    if (
-                                      order.booking_status === "Driver Accepted"
-                                    )
-                                      return "info";
-                                    if (order.booking_status === "Start Trip")
-                                      return "secondary";
-                                    return "light";
-                                  })()}`}
-                                >
-                                  {order.booking_status === "End Trip"
-                                    ? "Completed"
-                                    : order.booking_status}
-                                </span>
-                              </td>
-
-                              <td>{formatEpoch(order.booking_timing)}</td>
-                              <td>
-                                <span className={`badge bg-info`}>
-                                  {order.distance} Km
-                                </span>
-                              </td>
-                              <td>
-                                <span className={`badge bg-primary`}>
-                                  Rs.{order.total_price}
-                                </span>
-                              </td>
-                              <td>
-                                <Link
-                                  to={{
-                                    pathname: `/dashboard/order-details/${order.booking_id}/${order.order_id}`,
-                                    state: { orderDetails: order }, // Pass additional data
-                                  }}
-                                  role="button"
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="btn btn-outline-primary icon-btn w-30 h-30 b-r-22 me-2"
-                                >
-                                  <i className="ti ti-eye"></i>
-                                </Link>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                      {/* Pagination Controls */}
-                      <div className="pagination-controls d-flex justify-content-end align-items-center mt-3 p-4">
-                        <button
-                          className="btn btn-outline-secondary"
-                          onClick={() => handlePageChange(currentPage - 1)}
-                          disabled={currentPage === 1}
-                        >
-                          Previous
-                        </button>
-                        <span className="mx-2">
-                          Page {currentPage} of {totalPages}
-                        </span>
-                        <button
-                          className="btn btn-outline-secondary"
-                          onClick={() => handlePageChange(currentPage + 1)}
-                          disabled={currentPage === totalPages}
-                        >
-                          Next
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+                {/* Search Input */}
+                <div className="mb-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Search pincode..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
                 </div>
-              </div>
+
+                {/* Pincodes Table */}
+                <div className="table-responsive">
+                  <table className="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Pincode</th>
+                        <th>Last Updated</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredPinCodes.map((pincode, index) => (
+                        <tr key={index}>
+                          <td>{pincode.pincode}</td>
+                          <td>{formatEpoch(pincode.creation_time)}</td>
+                          <td>
+                            <span
+                              className={`badge ${
+                                pincode.status == 1 ? "bg-success" : "bg-danger"
+                              }`}
+                            >
+                              {pincode.status == 1 ? "Active" : "Inactive"}
+                            </span>
+                          </td>
+                          <td>
+                            <button
+                              className="btn btn-outline-primary btn-sm"
+                              onClick={() => {
+                                setSelectedPincode({
+                                  pincode: pincode.pincode,
+                                  status: pincode.status,
+                                  pincode_id: pincode.pincode_id,
+                                });
+                                setIsEditMode(true);
+                                setShowPincodeModal(true);
+                              }}
+                            >
+                              <i className="ti ti-edit"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </CardBody>
             </Card>
           </Col>
         </Row>
       </Container>
+
+      {/* Add/Edit Pincode Modal */}
+      {showPincodeModal && (
+        <div className="modal show d-block" tabIndex="-1">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">
+                  {isEditMode ? "Edit Pincode" : "Add New Pincode"}
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setShowPincodeModal(false)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <div className="mb-3">
+                  <label className="form-label">Pincode</label>
+                  <input
+                    type="text"
+                    className={`form-control ${
+                      errorPincode.pincode ? "is-invalid" : ""
+                    }`}
+                    name="pincode"
+                    value={selectedPincode.pincode}
+                    onChange={handleInputChange}
+                  />
+                  {errorPincode.pincode && (
+                    <div className="invalid-feedback">
+                      Pincode must be 6 digits
+                    </div>
+                  )}
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Status</label>
+                  <select
+                    className="form-select"
+                    name="status"
+                    value={selectedPincode.status}
+                    onChange={handleInputChange}
+                  >
+                    <option value={1}>Active</option>
+                    <option value={0}>Inactive</option>
+                  </select>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShowPincodeModal(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={savePincodeDetails}
+                  disabled={btnLoading}
+                >
+                  {btnLoading ? (
+                    <span
+                      className="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                  ) : isEditMode ? (
+                    "Update"
+                  ) : (
+                    "Save"
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

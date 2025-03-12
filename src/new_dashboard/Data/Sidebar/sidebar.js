@@ -9,10 +9,10 @@ export const sidebarConfig = [
     path: "/dashboard",
     children: [
       { name: "Goods Admin Panel", path: "/dashboard/home" },
-      { name: "Cab Admin Panel", path: "/dashboard/cab-home" },
-      { name: "JCB/Crane Admin Panel", path: "/dashboard/jcb-crane-home" },
-      { name: "Drivers Admin Panel", path: "/dashboard/drivers-home" },
-      { name: "HandyMan Admin Panel", path: "/dashboard/handyman-home" },
+      // { name: "Cab Admin Panel", path: "/dashboard/cab-home" },
+      // { name: "JCB/Crane Admin Panel", path: "/dashboard/jcb-crane-home" },
+      // { name: "Drivers Admin Panel", path: "/dashboard/drivers-home" },
+      // { name: "HandyMan Admin Panel", path: "/dashboard/handyman-home" },
     ],
   },
 
@@ -27,7 +27,20 @@ export const sidebarConfig = [
     children: [
       { name: "Regions", path: "/dashboard/all-regions" },
       { name: "Services", path: "/dashboard/all-services" },
+      { name: "Banners", path: "/dashboard/all-banners" },
+      { name: "Coupons", path: "/dashboard/all-coupons" },
     ],
+  },
+
+  //Customers
+  {
+    type: "dropdown",
+    title: "Customer",
+    iconClass: "ph-duotone ph-stack",
+    name: "customer details",
+    collapseId: "Customer",
+    path: "/dashboard/customer",
+    children: [{ name: "Customers", path: "/dashboard/all-customers" }],
   },
 
   //Goods All Routes
