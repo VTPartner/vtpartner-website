@@ -16,6 +16,8 @@ import {
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { LoadingButton } from "@mui/lab";
 
 import { useParams } from "react-router-dom";
@@ -229,6 +231,7 @@ const PeakHourPricing = () => {
 
   return (
     <Container fluid>
+      <ToastContainer position="top-right" />
       <Row>
         <Row className="m-1">
           <Col xs={12}>

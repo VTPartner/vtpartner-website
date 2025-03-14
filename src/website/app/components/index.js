@@ -66,6 +66,7 @@ import DriversRegistrationHeroBanner from "./registration-components/DriversRegi
 import HandyManRegistrationHeroBanner from "./registration-components/HandyManRegistration";
 import GoodsAndCabRegistrationHeroBanner from "./registration-components/GoodsAndCabRegistrationHeroBanner";
 import TermsAndConditionsCard from "./TermsAndConditionsCard";
+import DeleteAccount from "./DeleteAccount";
 
 export {
   Navbar,
@@ -133,4 +134,5 @@ export {
   HandyManRegistrationHeroBanner,
   GoodsAndCabRegistrationHeroBanner,
   TermsAndConditionsCard,
+  DeleteAccount,
 };

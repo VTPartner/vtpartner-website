@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 
-import { Card, CardBody, Col, Container, Row } from "reactstrap";
+import { Card, CardBody, Col, Container, Row, Toast } from "reactstrap";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -13,6 +13,10 @@ import {
   serverEndPoint,
 } from "../../../../dashboard/app/constants";
 import Loader from "../../Loader";
+import { Switch } from "@mui/material";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 const AllGoodsDrivers = () => {
   const [activeTab, setActiveTab] = useState("connect-tab");
@@ -331,12 +335,84 @@ const AllGoodsDrivers = () => {
     fetchVerifiedDriversData();
   }, []);
 
+  // Add these state variables at the component level
+  const [togglingDrivers, setTogglingDrivers] = useState({});
+
+  // Modified toggle handler function
+  const handleOnlineStatusToggle = async (driver) => {
+    try {
+      // Set loading state for specific driver
+      setTogglingDrivers((prev) => ({
+        ...prev,
+        [driver.goods_driver_id]: true,
+      }));
+
+      const token = Cookies.get("authToken");
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      };
+
+      // If going offline, check if driver is free
+      if (driver.is_online === 1) {
+        const checkResponse = await axios.post(
+          `${serverEndPoint}/check_driver_status`,
+          { driver_id: driver.goods_driver_id },
+          config
+        );
+
+        if (!checkResponse.data.is_free) {
+          toast.error("Driver has active bookings and cannot go offline");
+          return;
+        }
+      }
+
+      const response = await axios.post(
+        `${serverEndPoint}/toggle_driver_online_status`,
+        {
+          driver_id: driver.goods_driver_id,
+          online_status: driver.is_online === 1 ? 0 : 1,
+          current_lat: driver.current_lat || 0,
+          current_lng: driver.current_lng || 0,
+        },
+        config
+      );
+
+      if (response.status === 200) {
+        toast.success(driver.driver_first_name + " " + response.data.message);
+
+        // Update the specific driver's status in the local state
+        setAllDrivers((prevDrivers) =>
+          prevDrivers.map((d) =>
+            d.goods_driver_id === driver.goods_driver_id
+              ? { ...d, is_online: driver.is_online === 1 ? 0 : 1 }
+              : d
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Toggle error:", error);
+      toast.error(
+        error.response?.data?.message || "Error updating driver status"
+      );
+    } finally {
+      // Clear loading state for specific driver
+      setTogglingDrivers((prev) => ({
+        ...prev,
+        [driver.goods_driver_id]: false,
+      }));
+    }
+  };
+
   if (loading) {
     return <Loader />;
   }
 
   return (
     <div>
+      <ToastContainer position="top-right" />
       <Container fluid>
         <Row className="m-1">
           <Col xs={12}>
@@ -491,6 +567,7 @@ const AllGoodsDrivers = () => {
                             <th scope="col">Address</th>
                             <th scope="col">Vehicle Details</th>
                             <th scope="col">Status</th>
+                            <th scope="col">Online Status</th>
                             <th scope="col">Registration Date</th>
                             <th scope="col">Actions</th>
                           </tr>
@@ -565,7 +642,32 @@ const AllGoodsDrivers = () => {
                                   })()}
                                 </span>
                               </td>
-
+                              <td>
+                                <div className="d-flex align-items-center">
+                                  <Switch
+                                    checked={driver.is_online === 1}
+                                    onChange={() =>
+                                      handleOnlineStatusToggle(driver)
+                                    }
+                                    disabled={
+                                      togglingDrivers[driver.goods_driver_id]
+                                    }
+                                    color="success"
+                                    size="small"
+                                  />
+                                  <span
+                                    className={`ms-2 badge bg-${
+                                      driver.is_online === 1
+                                        ? "success"
+                                        : "secondary"
+                                    }`}
+                                  >
+                                    {driver.is_online === 1
+                                      ? "Online"
+                                      : "Offline"}
+                                  </span>
+                                </div>
+                              </td>
                               <td>{driver.registration_date}</td>
 
                               <td>

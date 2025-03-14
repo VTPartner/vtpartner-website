@@ -214,7 +214,7 @@ const AdminCard = () => {
                   <div className="flex-shrink-0 align-self-end">
                     <p className="f-s-16 mb-0">Total Earnings</p>
                     <h5>
-                      ₹ {totalEarnings}/-
+                      ₹ {totalEarnings.toFixed(2)}/-
                       {/* <span className="f-s-12 text-success">+68%</span> */}
                     </h5>
                   </div>
@@ -245,7 +245,7 @@ const AdminCard = () => {
                     <p className="f-s-16 mb-0">Monthly Earnings</p>
                     <h5>
                       {/* $63,987<span className="f-s-12 text-success">+68%</span> */}
-                      ₹ {monthlyEarnings}/-
+                      ₹ {monthlyEarnings.toFixed(2)}/-
                     </h5>
                   </div>
                   <div className="sales-chart">

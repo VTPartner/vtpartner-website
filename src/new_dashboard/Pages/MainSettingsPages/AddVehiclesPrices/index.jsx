@@ -39,7 +39,8 @@ import {
   Tooltip,
   Autocomplete,
 } from "@mui/material";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { format } from "date-fns";
 import { LoadingButton } from "@mui/lab";
 
@@ -318,6 +319,7 @@ const AddVehiclePricesPage = () => {
 
   return (
     <div>
+      <ToastContainer position="top-right" />
       <Container fluid>
         <Row className="m-1">
           <Col xs={12}>

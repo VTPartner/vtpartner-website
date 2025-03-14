@@ -59,6 +59,8 @@ import PeakHourPricing from "../Pages/MainSettingsPages/PeakHoursTimings";
 import BannersPage from "../Pages/MainSettingsPages/AddBanners";
 import CouponsPage from "../Pages/MainSettingsPages/AddCoupons";
 import AllCustomers from "../Components/AllCustomers";
+import OrdersReport from "../Components/Admindashboard/OrdersReport";
+import { DeleteAccount } from "../../website/app/components";
 // DashboardRoutes
 // const GoodsDriversHome = React.lazy(() =>
 //   import("@/Pages/Dashboard/GoodsDriversHome")
@@ -92,6 +94,10 @@ const Routes = () => {
         {
           path: "/about",
           element: <About />,
+        },
+        {
+          path: "/delete-account",
+          element: <DeleteAccount />,
         },
         {
           path: "/terms&conditions",
@@ -193,6 +199,10 @@ const Routes = () => {
         {
           path: "/dashboard/all-customers",
           element: <AllCustomers />,
+        },
+        {
+          path: "/dashboard/all-orders-report",
+          element: <OrdersReport />,
         },
         {
           path: "/dashboard/all-regions",

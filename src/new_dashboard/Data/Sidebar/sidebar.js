@@ -57,6 +57,17 @@ export const sidebarConfig = [
       { name: "Orders", path: "/dashboard/goods/orders" },
     ],
   },
+
+   //Reports
+   {
+    type: "dropdown",
+    title: "Reports",
+    iconClass: "ph-duotone ph-stack",
+    name: "All Reports",
+    collapseId: "Reports",
+    path: "/dashboard/reports",
+    children: [{ name: "Orders Report", path: "/dashboard/all-orders-report" }],
+  },
 ];
 
 // sidebarConfig.forEach((item, index) => {

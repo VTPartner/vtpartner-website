@@ -15,6 +15,8 @@ import {
 } from "../../../../dashboard/app/constants";
 import Loader from "../../../Components/Loader";
 import { toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddPinCodesPage = () => {
   const { city_id, city_name } = useParams();
@@ -157,6 +159,7 @@ const AddPinCodesPage = () => {
 
   return (
     <div>
+      <ToastContainer position="top-right" />
       <Container fluid>
         <Row className="m-1">
           <Col xs={12}>

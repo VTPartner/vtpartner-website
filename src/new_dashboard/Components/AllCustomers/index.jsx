@@ -90,7 +90,7 @@ const AllCustomers = () => {
                       <th>Registration</th>
                       <th>Purpose</th>
                       <th>Status</th>
-                      <th>Actions</th>
+                      {/* <th>Actions</th> */}
                     </tr>
                   </thead>
                   <tbody>
@@ -99,7 +99,7 @@ const AllCustomers = () => {
                         <td>#{customer.customer_id}</td>
                         <td>
                           <div className="d-flex align-items-center">
-                            <div className="flex-shrink-0">
+                            {/* <div className="flex-shrink-0">
                               <img
                                 src={customer.profile_pic}
                                 alt={customer.customer_name}
@@ -107,7 +107,7 @@ const AllCustomers = () => {
                                 width="40"
                                 height="40"
                               />
-                            </div>
+                            </div> */}
                             <div className="ms-3">
                               <h6 className="mb-0">{customer.customer_name}</h6>
                             </div>
@@ -159,14 +159,14 @@ const AllCustomers = () => {
                             {customer.status === 1 ? "Active" : "Inactive"}
                           </span>
                         </td>
-                        <td>
+                        {/* <td>
                           <Link
                             to={`/dashboard/customer-details/${customer.customer_id}`}
                             className="btn btn-outline-primary icon-btn w-30 h-30 b-r-22 me-2"
                           >
                             <i className="ti ti-eye"></i>
                           </Link>
-                        </td>
+                        </td> */}
                       </tr>
                     ))}
                   </tbody>

@@ -106,7 +106,7 @@ const AdminCardMore = () => {
                   <div className="flex-shrink-0 align-self-end">
                     <p className="f-s-16 mb-0">Todays Earnings</p>
                     <h5>
-                      ₹ {todaysEarnings}/-
+                      ₹ {todaysEarnings.toFixed(2)}/-
                       {/* <span className="f-s-12 text-success">+68%</span> */}
                     </h5>
                   </div>

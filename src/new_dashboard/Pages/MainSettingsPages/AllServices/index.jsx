@@ -44,6 +44,8 @@ import {
   serverEndPointImage,
 } from "../../../../dashboard/app/constants";
 import Loader from "../../../Components/Loader";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AllServicesPage = () => {
   const [activeTab, setActiveTab] = useState("connect-tab");
@@ -391,6 +393,7 @@ const AllServicesPage = () => {
 
   return (
     <div>
+      <ToastContainer position="top-right" />
       <Container fluid>
         <Row className="m-1">
           <Col xs={12}>
