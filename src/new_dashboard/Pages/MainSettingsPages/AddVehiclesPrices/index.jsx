@@ -70,6 +70,7 @@ const AddVehiclePricesPage = () => {
     city_name: "",
     price_type: "", //Local or Outstation
     outstation_distance: "", // Added outstation distance field
+    base_fare: "",
   });
 
   const [openVehiclePriceDialog, setOpenVehiclePriceDialog] = useState(false);
@@ -86,6 +87,7 @@ const AddVehiclePricesPage = () => {
     city_name: false,
     price_type: false, //Local or Outstation
     outstation_distance: false, // Added outstation distance validation
+    base_fare: false,
   });
 
   // Fetch all vehiclePrices and vehicle types
@@ -288,6 +290,7 @@ const AddVehiclePricesPage = () => {
       minimum_time: !selectedPrice.minimum_time,
       outstation_distance:
         isLocalPriceType && !selectedPrice.outstation_distance,
+      base_fare: isLocalPriceType && !selectedPrice.base_fare,
     };
     setVehicleErrors(newErrors);
 
@@ -321,6 +324,7 @@ const AddVehiclePricesPage = () => {
       // Add outstation_distance only if the price type is Local
       if (isLocalPriceType) {
         requestData.outstation_distance = selectedPrice.outstation_distance;
+        requestData.base_fare = selectedPrice.base_fare;
       }
 
       const response = await axios.post(endpoint, requestData, {
@@ -440,8 +444,8 @@ const AddVehiclePricesPage = () => {
                             <th scope="col">City Name</th>
                             <th scope="col">Price</th>
                             <th scope="col">Price Type</th>
-                            {/* Add outstation distance column */}
                             <th scope="col">Outstation Distance (km)</th>
+                            <th scope="col">Base Fare (₹)</th>
                             <th scope="col">Last Updated</th>
                             <th scope="col">Actions</th>
                           </tr>
@@ -487,6 +491,13 @@ const AddVehiclePricesPage = () => {
                                 <p className="mb-0 f-s-12 text-secondary">
                                   {vehicle.price_type === "Local"
                                     ? vehicle.outstation_distance || "Not Set"
+                                    : "N/A"}
+                                </p>
+                              </td>
+                              <td>
+                                <p className="mb-0 f-s-12 text-secondary">
+                                  {vehicle.price_type === "Local"
+                                    ? `₹${vehicle.base_fare || "Not Set"}`
                                     : "N/A"}
                                 </p>
                               </td>
@@ -611,24 +622,45 @@ const AddVehiclePricesPage = () => {
               />
             </FormControl>
 
-            {/* Show outstation distance field only if price type is "Local" */}
+            {/* Show base_fare field only if price type is "Local" */}
             {isLocalPriceType && (
-              <TextField
-                label="Outstation Distance (km)"
-                fullWidth
-                margin="normal"
-                name="outstation_distance"
-                type="number"
-                value={selectedPrice.outstation_distance}
-                onChange={handleInputChange}
-                error={errorVehicle.outstation_distance}
-                helperText={
-                  errorVehicle.outstation_distance
-                    ? "Outstation distance is required for Local price type."
-                    : ""
-                }
-                required
-              />
+              <>
+                <TextField
+                  label="Outstation Distance (km)"
+                  fullWidth
+                  margin="normal"
+                  name="outstation_distance"
+                  type="number"
+                  value={selectedPrice.outstation_distance}
+                  onChange={handleInputChange}
+                  error={errorVehicle.outstation_distance}
+                  helperText={
+                    errorVehicle.outstation_distance
+                      ? "Outstation distance is required for Local price type."
+                      : ""
+                  }
+                  required
+                />
+                <TextField
+                  label="Base Fare (₹)"
+                  fullWidth
+                  margin="normal"
+                  name="base_fare"
+                  type="number"
+                  value={selectedPrice.base_fare}
+                  onChange={handleInputChange}
+                  error={errorVehicle.base_fare}
+                  helperText={
+                    errorVehicle.base_fare
+                      ? "Base fare is required for Local price type."
+                      : ""
+                  }
+                  required
+                  inputProps={{
+                    step: "0.01", // Allows for double precision values
+                  }}
+                />
+              </>
             )}
 
             <TextField

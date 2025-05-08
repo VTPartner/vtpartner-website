@@ -56,6 +56,8 @@ const AddSubCategoryPage = () => {
     cat_id: "",
     image: "",
     epoch_time: "",
+    service_base_price: "",
+    penalty_charges_amount: "",
   });
 
   const [errorService, setServiceErrors] = useState({
@@ -64,6 +66,8 @@ const AddSubCategoryPage = () => {
     cat_id: false,
     image: false,
     epoch_time: false,
+    service_base_price: false,
+    penalty_charges_amount: false,
   });
 
   const [btnLoading, setBtnLoading] = useState(false);
@@ -248,6 +252,8 @@ const AddSubCategoryPage = () => {
           category_id: category_id,
           sub_cat_name: selectedSubService.sub_cat_name,
           image: serviceImageUrl,
+          service_base_price: selectedSubService.service_base_price,
+          penalty_charges_amount: selectedSubService.penalty_charges_amount,
         },
         {
           headers: {
@@ -402,6 +408,8 @@ const AddSubCategoryPage = () => {
                           <tr>
                             <th scope="col">Sl No</th>
                             <th>Sub Category Name</th>
+                            <th scope="col">Base Price</th>
+                            <th scope="col">Penalty Charges</th>
                             <th scope="col">Last Updated</th>
                             <th scope="col">Actions</th>
                           </tr>
@@ -431,6 +439,9 @@ const AddSubCategoryPage = () => {
                                   </div>
                                 </div>
                               </td>
+
+                              <td>₹{service.service_base_price}</td>
+                              <td>₹{service.penalty_charges_amount}</td>
 
                               <td>
                                 <p className="mb-0 f-s-12 text-secondary">
@@ -550,6 +561,40 @@ const AddSubCategoryPage = () => {
               error={errorService.image} // Set error state for image
               helperText={
                 errorService.image ? "Sub Category Image is required." : ""
+              }
+            />
+
+            <TextField
+              label="Service Base Price"
+              fullWidth
+              margin="normal"
+              name="service_base_price"
+              type="number"
+              value={selectedSubService.service_base_price}
+              onChange={handleInputChange}
+              required
+              error={errorService.service_base_price}
+              helperText={
+                errorService.service_base_price
+                  ? "Service base price is required."
+                  : ""
+              }
+            />
+
+            <TextField
+              label="Penalty Charges Amount"
+              fullWidth
+              margin="normal"
+              name="penalty_charges_amount"
+              type="number"
+              value={selectedSubService.penalty_charges_amount}
+              onChange={handleInputChange}
+              required
+              error={errorService.penalty_charges_amount}
+              helperText={
+                errorService.penalty_charges_amount
+                  ? "Penalty charges amount is required."
+                  : ""
               }
             />
 
