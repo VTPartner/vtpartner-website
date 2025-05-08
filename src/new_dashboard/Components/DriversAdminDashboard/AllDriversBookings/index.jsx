@@ -276,7 +276,7 @@ const AllDriversBookings = () => {
               </td>
               <td>
                 <Link
-                  to={`/dashboard/driver-booking-details/${order.booking_id}`}
+                  to={`/dashboard/other-driver-booking-details/${order.booking_id}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-outline-primary icon-btn w-30 h-30 b-r-22 me-2"
