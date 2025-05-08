@@ -39,12 +39,12 @@ const About = () => {
           <OurMission />
           <RightSideImage
             title="More than Just Transportation"
-            description="At VT Partner, we redefine mobility by offering a comprehensive suite of services designed to meet your diverse needs..."
+            description="At KASP, we redefine mobility by offering a comprehensive suite of services designed to meet your diverse needs..."
             imgSrc="https://images.unsplash.com/photo-1717126476861-25a064d81996?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           />
           <LeftSideImage
             title="Pioneering Sustainable Mobility"
-            description="At VT Partner, we are committed to fostering a sustainable transportation ecosystem..."
+            description="At KASP, we are committed to fostering a sustainable transportation ecosystem..."
             imgSrc="https://images.unsplash.com/photo-1717616171263-de4808015831?q=80&w=1987&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           />
 

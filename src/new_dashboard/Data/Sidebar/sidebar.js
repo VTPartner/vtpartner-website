@@ -9,10 +9,10 @@ export const sidebarConfig = [
     path: "/dashboard",
     children: [
       { name: "Goods Admin Panel", path: "/dashboard/home" },
-      // { name: "Cab Admin Panel", path: "/dashboard/cab-home" },
-      // { name: "JCB/Crane Admin Panel", path: "/dashboard/jcb-crane-home" },
-      // { name: "Drivers Admin Panel", path: "/dashboard/drivers-home" },
-      // { name: "HandyMan Admin Panel", path: "/dashboard/handyman-home" },
+      { name: "Cab Admin Panel", path: "/dashboard/cab-home" },
+      { name: "JCB/Crane Admin Panel", path: "/dashboard/jcb-crane-home" },
+      { name: "Drivers Admin Panel", path: "/dashboard/drivers-home" },
+      { name: "HandyMan Admin Panel", path: "/dashboard/handyman-home" },
     ],
   },
 
@@ -27,6 +27,8 @@ export const sidebarConfig = [
     children: [
       { name: "Regions", path: "/dashboard/all-regions" },
       { name: "Services", path: "/dashboard/all-services" },
+      { name: "Goods Types", path: "/dashboard/all-goods_types" },
+      { name: "Recharge Plans", path: "/dashboard/all-recharge-plans" },
       { name: "Banners", path: "/dashboard/all-banners" },
       { name: "Coupons", path: "/dashboard/all-coupons" },
     ],
@@ -36,7 +38,7 @@ export const sidebarConfig = [
   {
     type: "dropdown",
     title: "Customer",
-    iconClass: "ph-duotone ph-stack",
+    iconClass: "ph-duotone ph-user",
     name: "customer details",
     collapseId: "Customer",
     path: "/dashboard/customer",
@@ -47,7 +49,7 @@ export const sidebarConfig = [
   {
     type: "dropdown",
     title: "Goods",
-    iconClass: "ph-duotone ph-stack",
+    iconClass: "ph-duotone ph-van",
     name: "goods details",
     collapseId: "Goods",
     path: "/dashboard/goods",
@@ -58,15 +60,90 @@ export const sidebarConfig = [
     ],
   },
 
-   //Reports
-   {
+  //Cab All Routes
+  {
+    type: "dropdown",
+    title: "Cabs",
+    iconClass: "ph-duotone ph-car",
+    name: "Cabs details",
+    collapseId: "Cabs",
+    path: "/dashboard/cab",
+    children: [
+      { name: "Drivers", path: "/dashboard/all-cab-drivers" },
+      { name: "Bookings", path: "/dashboard/cab/bookings" },
+      { name: "Orders", path: "/dashboard/cab/orders" },
+    ],
+  },
+
+  //Driver Agent All Routes
+  {
+    type: "dropdown",
+    title: "Drivers",
+    iconClass: "ph-duotone ph-person",
+    name: "Drivers details",
+    collapseId: "Drivers",
+    path: "/dashboard/other-drivers",
+    children: [
+      { name: "Agents", path: "/dashboard/all-other-drivers" },
+      { name: "Bookings", path: "/dashboard/other-drivers/bookings" },
+      { name: "Orders", path: "/dashboard/other-drivers/orders" },
+    ],
+  },
+
+  //JCB Crane Agent All Routes
+  {
+    type: "dropdown",
+    title: "JCB/Crane",
+    iconClass: "ph-duotone ph-stack",
+    name: "JCB/Crane details",
+    collapseId: "JCB/Crane",
+    path: "/dashboard/jcb-crane-drivers",
+    children: [
+      { name: "Agents", path: "/dashboard/all-jcb-crane-drivers" },
+      { name: "Bookings", path: "/dashboard/jcb-crane/bookings" },
+      { name: "Orders", path: "/dashboard/jcb-crane/orders" },
+    ],
+  },
+
+  //HandyMan Agent All Routes
+  {
+    type: "dropdown",
+    title: "HandyMan",
+    iconClass: "ph-duotone ph-wrench",
+    name: "Handyman details",
+    collapseId: "HandyMan",
+    path: "/dashboard/handyman",
+    children: [
+      { name: "Agents", path: "/dashboard/all-handyman" },
+      { name: "Bookings", path: "/dashboard/handyman/bookings" },
+      { name: "Orders", path: "/dashboard/handyman/orders" },
+    ],
+  },
+
+  //Reports
+  {
     type: "dropdown",
     title: "Reports",
     iconClass: "ph-duotone ph-stack",
     name: "All Reports",
     collapseId: "Reports",
     path: "/dashboard/reports",
-    children: [{ name: "Orders Report", path: "/dashboard/all-orders-report" }],
+    children: [
+      { name: "Goods Orders Report", path: "/dashboard/all-orders-report" },
+      { name: "Cab Orders Report", path: "/dashboard/all-cab-report" },
+      {
+        name: "Drivers Orders Report",
+        path: "/dashboard/all-other-drivers-report",
+      },
+      {
+        name: "Jcb/Crane Orders Report",
+        path: "/dashboard/all-jcb-crane-drivers-report",
+      },
+      {
+        name: "Handyman Orders Report",
+        path: "/dashboard/all-handyman-report",
+      },
+    ],
   },
 ];
 

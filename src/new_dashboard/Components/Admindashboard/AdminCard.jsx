@@ -10,12 +10,13 @@ import {
   orderChartData,
   salesChartData,
 } from "../../Data/Charts/EcommerceChart";
+import { useNavigate } from "react-router-dom";
 
 const AdminCard = () => {
-  const [totalDrivers, setTotalDrivers] = useState(null);
-  const [waitingApproval, setWaitingApproval] = useState(null);
-  const [totalEarnings, setTotalEarnings] = useState(null);
-  const [monthlyEarnings, setMonthlyEarnings] = useState(null);
+  const [totalDrivers, setTotalDrivers] = useState(0);
+  const [waitingApproval, setWaitingApproval] = useState(0);
+  const [totalEarnings, setTotalEarnings] = useState(0);
+  const [monthlyEarnings, setMonthlyEarnings] = useState(0);
   //   const [todaysEarnings, setTodaysEarnings] = useState(null);
   const [percentageIncrease, setPercentageIncrease] = useState({
     drivers: 0,
@@ -39,60 +40,90 @@ const AdminCard = () => {
     try {
       setLoading(true);
 
-      const [
-        totalDriversRes,
-        waitingApprovalRes,
-        totalEarningsRes,
-        monthlyEarningsRes,
-      ] = await Promise.all([
-        axios.post(
-          `${serverEndPoint}/get_total_goods_drivers_verified_with_count`,
-          {},
-          config
-        ),
-        axios.post(
-          `${serverEndPoint}/get_total_goods_drivers_un_verified_with_count`,
-          {},
-          config
-        ),
-        axios.post(
-          `${serverEndPoint}/get_total_goods_drivers_orders_and_earnings`,
-          {},
-          config
-        ),
-        axios.post(
-          `${serverEndPoint}/get_goods_drivers_current_month_earnings`,
-          {},
-          config
-        ),
-      ]);
-      console.log(
-        "totalDriversRes.data.total_count::" +
-          totalDriversRes.data["total_count"]
-      );
-      const totalDrivers = totalDriversRes.data["total_count"] || 0;
-      const waitingApproval =
-        waitingApprovalRes.data["drivers"][0]["total_count"] || 0;
-      const totalEarnings = totalEarningsRes.data.total_earnings || 0;
-      //   const todaysEarnings = todaysEarningRes.data.today_earnings || 0;
-      const monthlyEarnings =
-        monthlyEarningsRes.data.current_month_earnings || 0;
+      // Create an array of API calls with their corresponding names
+      const apiCalls = [
+        {
+          name: "totalDrivers",
+          call: axios.post(
+            `${serverEndPoint}/get_total_goods_drivers_verified_with_count`,
+            {},
+            config
+          ),
+        },
+        {
+          name: "waitingApproval",
+          call: axios.post(
+            `${serverEndPoint}/get_total_goods_drivers_un_verified_with_count`,
+            {},
+            config
+          ),
+        },
+        {
+          name: "totalEarnings",
+          call: axios.post(
+            `${serverEndPoint}/get_total_goods_drivers_orders_and_earnings`,
+            {},
+            config
+          ),
+        },
+        {
+          name: "monthlyEarnings",
+          call: axios.post(
+            `${serverEndPoint}/get_goods_drivers_current_month_earnings`,
+            {},
+            config
+          ),
+        },
+      ];
 
+      // Execute all API calls and handle individual failures
+      const results = await Promise.allSettled(apiCalls.map((api) => api.call));
+
+      // Initialize variables with default values
+      let totalDrivers = 0;
+      let waitingApproval = 0;
+      let totalEarnings = 0;
+      let monthlyEarnings = 0;
+
+      // Process results
+      results.forEach((result, index) => {
+        if (result.status === "fulfilled") {
+          const data = result.value.data;
+          switch (apiCalls[index].name) {
+            case "totalDrivers":
+              totalDrivers = data["total_count"] || 0;
+              console.log("totalDriversRes.data.total_count::" + totalDrivers);
+              break;
+            case "waitingApproval":
+              waitingApproval = data["drivers"]?.[0]?.["total_count"] || 0;
+              break;
+            case "totalEarnings":
+              totalEarnings = data.total_earnings || 0;
+              break;
+            case "monthlyEarnings":
+              monthlyEarnings = data.current_month_earnings || 0;
+              break;
+          }
+        } else {
+          console.error(`Error in ${apiCalls[index].name}:`, result.reason);
+        }
+      });
+
+      // Update state with available data
       setTotalDrivers(totalDrivers);
       setWaitingApproval(waitingApproval);
       setTotalEarnings(totalEarnings);
       setMonthlyEarnings(monthlyEarnings);
-      //   setTodaysEarnings(todaysEarnings);
 
-      // Mock calculation for percentage increases (replace with actual values if available)
+      // Update percentage increase with available data
       setPercentageIncrease({
-        drivers: totalDrivers, // Example 15% increase
+        drivers: totalDrivers,
         approval: waitingApproval,
         totalEarnings: totalEarnings,
         monthlyEarnings: monthlyEarnings,
       });
 
-      // Generate chart data dynamically based on API response
+      // Update chart data with available data
       setChartData({
         drivers: {
           series: [{ data: [totalDrivers - 10, totalDrivers] }],
@@ -124,7 +155,7 @@ const AdminCard = () => {
         },
       });
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error in fetchData:", error);
     } finally {
       setLoading(false);
     }
@@ -133,6 +164,15 @@ const AdminCard = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const navigate = useNavigate(); // Add this hook
+
+  const handleCardClick = () => {
+    navigate("/dashboard/all-goods-drivers");
+  };
+  const handleOrderClick = () => {
+    navigate("/dashboard/goods/orders");
+  };
 
   if (loading) {
     return <Loader />;
@@ -143,7 +183,12 @@ const AdminCard = () => {
       <div className="col-lg-7 col-xxl-6">
         <div className="row">
           <div className="col-sm-6">
-            <div className="card eshop-cards shadow-lg border-0 rounded">
+            <div
+              className="card eshop-cards shadow-lg border-0 rounded"
+              onClick={handleCardClick}
+              style={{ cursor: "pointer" }} // Add cursor pointer to indicate clickable
+              role="button"
+            >
               <div className="card-body">
                 <div className="d-flex justify-content-between align-items-center">
                   <span className="bg-primary h-40 w-40 d-flex-center b-r-15 f-s-18">
@@ -174,7 +219,12 @@ const AdminCard = () => {
             </div>
           </div>
           <div className="col-sm-6">
-            <div className="card eshop-cards shadow-lg border-0 rounded">
+            <div
+              className="card eshop-cards shadow-lg border-0 rounded"
+              onClick={handleCardClick}
+              style={{ cursor: "pointer" }} // Add cursor pointer to indicate clickable
+              role="button"
+            >
               <div className="card-body">
                 <div className="d-flex justify-content-between align-items-center">
                   <span className="bg-secondary h-40 w-40 d-flex-center b-r-15 f-s-18">
@@ -203,7 +253,12 @@ const AdminCard = () => {
             </div>
           </div>
           <div className="col-sm-6">
-            <div className="card eshop-cards shadow-lg border-0 rounded">
+            <div
+              className="card eshop-cards shadow-lg border-0 rounded"
+              onClick={handleOrderClick}
+              style={{ cursor: "pointer" }} // Add cursor pointer to indicate clickable
+              role="button"
+            >
               <div className="card-body">
                 <div className="d-flex justify-content-between align-items-center">
                   <span className=" bg-green-700 h-40 w-40 d-flex-center b-r-15 f-s-18">
@@ -233,7 +288,12 @@ const AdminCard = () => {
             </div>
           </div>
           <div className="col-sm-6">
-            <div className="card eshop-cards shadow-lg border-0 rounded">
+            <div
+              className="card eshop-cards shadow-lg border-0 rounded"
+              onClick={handleOrderClick}
+              style={{ cursor: "pointer" }} // Add cursor pointer to indicate clickable
+              role="button"
+            >
               <div className="card-body">
                 <div className="d-flex justify-content-between align-items-center">
                   <span className=" bg-purple-700 h-40 w-40 d-flex-center b-r-15 f-s-18">

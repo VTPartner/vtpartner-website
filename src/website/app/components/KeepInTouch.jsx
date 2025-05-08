@@ -41,7 +41,7 @@ const KeepInTouch = () => {
             <div>
               <h3 className="text-lg font-semibold">Blog</h3>
               <p className="text-gray-600 mb-2">
-                Find new places to explore and learn about VT Partner products,
+                Find new places to explore and learn about KASP products,
                 partnerships, and more.
               </p>
               <a

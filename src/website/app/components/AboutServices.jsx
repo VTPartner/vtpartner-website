@@ -11,7 +11,7 @@ const AboutServices = () => {
   //     imgSrc: "https://www.olacabs.com/mediaimage/wysiwyg/city.svg",
   //     title: "250+",
   //     description:
-  //       "Cities serviced by VT Partner to get you to your destination on time, every time",
+  //       "Cities serviced by KASP to get you to your destination on time, every time",
   //   },
   //   {
   //     imgSrc: "https://www.olacabs.com/mediaimage/wysiwyg/partner.svg",

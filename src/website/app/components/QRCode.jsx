@@ -8,10 +8,10 @@ const QRCode = () => {
       {/* Section Heading */}
       <div className="text-center mb-8">
         <h2 className="text-2xl font-semibold text-white">
-          Streamline Your Transport Needs with VT Partner
+          Streamline Your Transport Needs with KASP
         </h2>
         <p className="text-secondary mt-2">
-          Download the VT Partner app for seamless booking of delivery, cab, and
+          Download the KASP app for seamless booking of delivery, cab, and
           vendor services at your fingertips!
         </p>
       </div>

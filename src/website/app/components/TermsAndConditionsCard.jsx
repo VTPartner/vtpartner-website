@@ -13,40 +13,61 @@ const TermsAndConditionsCard = () => {
       <div className="container mx-auto px-4">
         <div className="mb-8">
           <h2 className="sm:text-3xl text-lg font-titillium text-gray-800">
-            Welcome to VT PARTNER TRANS PVT LTD
+            Welcome to KASP TRANS PVT LTD
           </h2>
         </div>
 
         <div className="mb-6">
+          <p className="text-gray-700 text-sm leading-relaxed mb-2">
+            These terms of service outline the rules and regulations for the use
+            of KASP TRANS PVT LTD Website. KASP TRANS PVT LTD is located at:
+            Plot No- PAP -A45 Near Mahindra gate no -02 CHAKAN MIDC Nighoje.,
+            Pune-410501 Maharashtra, India By accessing our website, we assume
+            you accept these terms of service in full. Do not continue to use
+            KASP TRANS PVT LTD's website if you do not accept all of the terms
+            of service stated on this page.
+            <br />
+            <br />
+            <strong>Location Data Usage:</strong>
+            <br />
+            Our app collects and processes location data to provide essential
+            services including: - Real-time tracking of vehicles and drivers -
+            Accurate pickup and delivery location services - Route optimization
+            and navigation - Distance calculation for fare estimation -
+            Emergency assistance services Your location data is collected only
+            when using the app and with your explicit permission. This data is
+            securely stored and used solely for service delivery purposes.
+            <br />
+          </p>
           <p className="text-gray-700 text-sm leading-relaxed">
             These terms of service outline the rules and regulations for the use
-            of VT PARTNER TRANS PVT LTD's Website. VT PARTNER TRANS PVT LTD is
-            located at: Plot No- PAP -A45 Near Mahindra gate no -02 CHAKAN MIDC
-            Nighoje., Pune-410501 Maharashtra, India By accessing our website,
-            we assume you accept these terms of service in full. Do not continue
-            to use VT PARTNER TRANS PVT LTD's website if you do not accept all
-            of the terms of service stated on this page.<br></br> The following
-            terminology applies to these Terms of Service, Privacy Statement and
-            Disclaimer Notice and any or all Agreements: "Client", "You" and
-            "Your" refers to you, the person accessing this website and
-            accepting the Company's terms of service. "The Company",
-            "Ourselves", "We", "Our" and "Us", refers to our Company. "Party",
-            "Parties", or "Us", refers to both the Client and ourselves, or
-            either the Client or ourselves. All terms refer to the offer,
-            acceptance and consideration of payment necessary to undertake the
-            process of our assistance to the Client in the most appropriate
-            manner, whether by formal meetings of a fixed duration, or any other
-            means, for the express purpose of meeting the Client's needs in
-            respect of provision of the Company's stated services/products, in
-            accordance with and subject to, prevailing law of India. Any use of
-            the above terminology or other words in the singular, plural,
-            capitalisation and/or he/she or they, are taken as interchangeable
-            and therefore as referring to same. <br></br>WE WOULD LIKE TO
-            CLARIFY THAT THESE USER TERMS WILL NOT APPLY TO CORPORATE ENTITIES
-            WHO ARE GOVERNED BY THE VTPARTNER CORPORATE TERMS OF USE.HOWEVER ALL
-            THE CUSTOMERS WHO ARE AVAILING SERVICES LIKE OBTAINING A RIDE OR
-            SHIFITING OF GOODS UNDER THE DIRECT ARRANGEMENTS BETWEEN CORPORATE
-            ENTITIES AND VTPARTNER SHALL ALSO BE GOVERNED BY THESE USER TERMS.
+            of KASP TRANS PVT LTD's Website. KASP TRANS PVT LTD is located at:
+            Plot No- PAP -A45 Near Mahindra gate no -02 CHAKAN MIDC Nighoje.,
+            Pune-410501 Maharashtra, India By accessing our website, we assume
+            you accept these terms of service in full. Do not continue to use
+            KASP TRANS PVT LTD's website if you do not accept all of the terms
+            of service stated on this page.<br></br> The following terminology
+            applies to these Terms of Service, Privacy Statement and Disclaimer
+            Notice and any or all Agreements: "Client", "You" and "Your" refers
+            to you, the person accessing this website and accepting the
+            Company's terms of service. "The Company", "Ourselves", "We", "Our"
+            and "Us", refers to our Company. "Party", "Parties", or "Us", refers
+            to both the Client and ourselves, or either the Client or ourselves.
+            All terms refer to the offer, acceptance and consideration of
+            payment necessary to undertake the process of our assistance to the
+            Client in the most appropriate manner, whether by formal meetings of
+            a fixed duration, or any other means, for the express purpose of
+            meeting the Client's needs in respect of provision of the Company's
+            stated services/products, in accordance with and subject to,
+            prevailing law of India. Any use of the above terminology or other
+            words in the singular, plural, capitalisation and/or he/she or they,
+            are taken as interchangeable and therefore as referring to same.{" "}
+            <br></br>WE WOULD LIKE TO CLARIFY THAT THESE USER TERMS WILL NOT
+            APPLY TO CORPORATE ENTITIES WHO ARE GOVERNED BY THE KAPS CORPORATE
+            TERMS OF USE.HOWEVER ALL THE CUSTOMERS WHO ARE AVAILING SERVICES
+            LIKE OBTAINING A RIDE OR SHIFITING OF GOODS UNDER THE DIRECT
+            ARRANGEMENTS BETWEEN CORPORATE ENTITIES AND KAPS SHALL ALSO BE
+            GOVERNED BY THESE USER TERMS.
           </p>
         </div>
         {/* <div className="border-t border-gray-300"> */}
@@ -85,7 +106,7 @@ const TermsAndConditionsCard = () => {
                       <li>
                         <strong>• “Account”</strong> means the account created
                         by the Customer on the Application, IN ORDER TO AVAIL
-                        the Services provided by VTPartner.
+                        the Services provided by KAPS.
                       </li>
                       <li>
                         <strong>• “Additional Fee”</strong> may mean any toll,
@@ -104,8 +125,8 @@ const TermsAndConditionsCard = () => {
                       </li>
                       <li>
                         <strong>• “Application”</strong> shall mean the mobile
-                        application “VTPartner APP” updated timely basis needs
-                        by VTPartner.
+                        application “KAPS APP” updated timely basis needs by
+                        KAPS.
                       </li>
                       <li>
                         <strong>• “Cancellation Fee”</strong> shall mean a fee
@@ -121,10 +142,10 @@ const TermsAndConditionsCard = () => {
                         individuals as may be evaluated, appointed and trained
                         by an operator associated with us to provide the
                         transportation services and persons who are registered
-                        with VTPartner and own such Vehicles with necessary city
-                        taxi permits and other applicable transport vehicle
-                        permits and licenses to provide transportation services
-                        within the Inter-City/Intracity of Operations.
+                        with KAPS and own such Vehicles with necessary city taxi
+                        permits and other applicable transport vehicle permits
+                        and licenses to provide transportation services within
+                        the Inter-City/Intracity of Operations.
                       </li>
                       <li>
                         <strong>• “E-Wallet”</strong> shall mean a pre-paid
@@ -141,7 +162,7 @@ const TermsAndConditionsCard = () => {
                         also reflect the fares that may have been stipulated by
                         the respective Governments from time to time. It may
                         include components to reflect any promotions carried out
-                        by VTPartner.
+                        by KAPS.
                       </li>
                       <li>
                         <strong>• “Force Majeure Event”</strong> shall mean any
@@ -152,12 +173,12 @@ const TermsAndConditionsCard = () => {
                         <strong>• “Registration Data”</strong> shall mean and
                         may include the present, valid, true and accurate name,
                         email ID, phone number and such other information as may
-                        be required by VTPartner from the Customer from time to
-                        time for registration on the Application.
+                        be required by KAPS from the Customer from time to time
+                        for registration on the Application.
                       </li>
                       <li>
                         <strong>• “Service(s)”</strong> means the services
-                        provided by VTPartner.
+                        provided by KAPS.
                       </li>
                       <li>
                         <strong>• “Ride”</strong> shall mean the travel in the
@@ -258,12 +279,12 @@ const TermsAndConditionsCard = () => {
                         age, you must abide by such age limits.
                       </li>
                       <li>
-                        VTPartner advises its users that while accessing the web
-                        site to follow/abide by the related laws. VTPartner is
-                        not responsible for the possible consequences caused by
-                        your behaviour / acts during use of web site. VTPartner
-                        may, in its sole discretion, refuse the service to
-                        anyone at any time.
+                        KAPS advises its users that while accessing the web site
+                        to follow/abide by the related laws. KAPS is not
+                        responsible for the possible consequences caused by your
+                        behaviour / acts during use of web site. KAPS may, in
+                        its sole discretion, refuse the service to anyone at any
+                        time.
                       </li>
                     </ul>
                   </p>
@@ -275,7 +296,7 @@ const TermsAndConditionsCard = () => {
                       <li>
                         User agreement applies to all the users including
                         drivers who use our platform for services provided by
-                        VTPartner.
+                        KAPS.
                       </li>
                       <li>
                         User(s) may use our platform solely for their own
@@ -289,14 +310,14 @@ const TermsAndConditionsCard = () => {
                   <p className="text-gray-700 text-xs leading-6 pt-2">
                     <ul className="list-inside pl-4">
                       <li>
-                        • VTPartner holds all the rights to change/modify or
-                        edit this user agreement on a timely basis in accordance
-                        with the requirements of the services provided or in
-                        case of the addition of new services, offers, etc. The
-                        amended and restated terms and conditions of use shall
-                        be effective immediately upon posting. If you do not
-                        adhere to the changes, you must stop using the service.
-                        Your continuous use of the Services will signify your
+                        • KAPS holds all the rights to change/modify or edit
+                        this user agreement on a timely basis in accordance with
+                        the requirements of the services provided or in case of
+                        the addition of new services, offers, etc. The amended
+                        and restated terms and conditions of use shall be
+                        effective immediately upon posting. If you do not adhere
+                        to the changes, you must stop using the service. Your
+                        continuous use of the Services will signify your
                         acceptance of the changed terms and deemed acceptance of
                         the amended Agreement.
                       </li>
@@ -323,9 +344,8 @@ const TermsAndConditionsCard = () => {
                             our network in any way whatsoever;
                           </li>
                           <li>
-                            (v) You will provide VTPartner with such information
-                            and documents which VTPartner may reasonably
-                            request;
+                            (v) You will provide KAPS with such information and
+                            documents which KAPS may reasonably request;
                           </li>
                           <li>
                             (vi) You will only use an authorized network to
@@ -334,10 +354,9 @@ const TermsAndConditionsCard = () => {
                           <li>
                             (vii) You are aware that when requesting Services,
                             whether by message, via Site, or calling the call
-                            center of VTPartner, standard messaging charges,
-                            data charges, and voice charges, as applicable, of
-                            Your and Our phone network service providers, will
-                            apply;
+                            center of KAPS, standard messaging charges, data
+                            charges, and voice charges, as applicable, of Your
+                            and Our phone network service providers, will apply;
                           </li>
                           <li>
                             (viii) You are aware of and shall comply with the
@@ -434,9 +453,9 @@ const TermsAndConditionsCard = () => {
                                   Independent Contractors:
                                 </span>{" "}
                                 Drivers using the App are independent
-                                contractors and not employees of VTPartner.
-                                Drivers are responsible for their own taxes,
-                                insurance, and other legal obligations.
+                                contractors and not employees of KAPS. Drivers
+                                are responsible for their own taxes, insurance,
+                                and other legal obligations.
                               </li>
                               <li>
                                 <span className="font-semibold">
@@ -471,8 +490,8 @@ const TermsAndConditionsCard = () => {
                                 <span className="font-semibold">
                                   Limitation of Liability:
                                 </span>{" "}
-                                To the maximum extent permitted by law,
-                                VTPartner shall not be liable for any indirect,
+                                To the maximum extent permitted by law, KAPS
+                                shall not be liable for any indirect,
                                 incidental, or consequential damages arising
                                 from the use of the App or the Ride Services,
                                 including but not limited to personal injury or
@@ -481,7 +500,7 @@ const TermsAndConditionsCard = () => {
                               <li>
                                 In the event of breakdown of the Vehicle, which
                                 is beyond repair, before completion of the Ride,
-                                VTPartner on a best effort basis and at its sole
+                                KAPS on a best effort basis and at its sole
                                 discretion may arrange for a Substitute Vehicle
                                 for completion of Your Ride to Your destination.
                                 However, the arrangement of Substitute Vehicle
@@ -545,7 +564,7 @@ const TermsAndConditionsCard = () => {
                             <ul className="list-disc pl-6">
                               <li>
                                 Transporters are independent contractors, not
-                                employees of VTPartner.
+                                employees of KAPS.
                               </li>
                               <li>
                                 Transporters are responsible for ensuring that
@@ -644,7 +663,7 @@ const TermsAndConditionsCard = () => {
                             <span className="font-semibold">
                               Limitation of Liability:
                             </span>{" "}
-                            VTPartner is not liable for any direct, indirect,
+                            KAPS is not liable for any direct, indirect,
                             incidental, or consequential damages resulting from
                             the use of the App or transport services, including
                             but not limited to personal injury, property damage,
@@ -652,12 +671,12 @@ const TermsAndConditionsCard = () => {
                           </li>
                           <li>
                             In the event of breakdown of the Vehicle, which is
-                            beyond repair, before completion of the Ride,
-                            VTPartner on a best effort basis and at its sole
-                            discretion may arrange for a Substitute Vehicle for
-                            completion of Your Ride to Your destination.
-                            However, the arrangement of Substitute Vehicle shall
-                            be subject to its availability.
+                            beyond repair, before completion of the Ride, KAPS
+                            on a best effort basis and at its sole discretion
+                            may arrange for a Substitute Vehicle for completion
+                            of Your Ride to Your destination. However, the
+                            arrangement of Substitute Vehicle shall be subject
+                            to its availability.
                           </li>
                           <li>
                             The services of goods transport of vehicles by
@@ -683,8 +702,8 @@ const TermsAndConditionsCard = () => {
                             </span>{" "}
                             Shippers may be encouraged to obtain insurance for
                             their goods, especially if the goods are valuable or
-                            fragile. VTPartner does not provide insurance for
-                            the goods being transported.
+                            fragile. KAPS does not provide insurance for the
+                            goods being transported.
                           </li>
                         </ul>
                       </li>
@@ -700,7 +719,7 @@ const TermsAndConditionsCard = () => {
                         <span className="font-semibold">Services Provided</span>
                         <ul className="list-disc pl-4">
                           <li>
-                            VTPartner provides a platform to book pest control
+                            KAPS provides a platform to book pest control
                             services, connecting Users with qualified Service
                             Providers. The Services may include:
                           </li>
@@ -715,9 +734,9 @@ const TermsAndConditionsCard = () => {
                           </ul>
                           <li>
                             The Services offered by Service Providers through
-                            the VTPartner App are subject to availability and
-                            may vary based on the location and specific needs of
-                            the User.
+                            the KAPS App are subject to availability and may
+                            vary based on the location and specific needs of the
+                            User.
                           </li>
                         </ul>
                       </li>
@@ -755,7 +774,7 @@ const TermsAndConditionsCard = () => {
                           </li>
                           <li>
                             <span className="font-semibold">Service Fees:</span>{" "}
-                            VTPartner may charge a service fee, which will be
+                            KAPS may charge a service fee, which will be
                             disclosed at the time of booking. Additional charges
                             may apply for additional services or special
                             requests.
@@ -841,9 +860,9 @@ const TermsAndConditionsCard = () => {
                         <span className="font-semibold">Services Provided</span>
                         <ul className="list-disc pl-4">
                           <li>
-                            VTPartner connects Users with qualified Technicians
-                            for puncture repair services. The services offered
-                            may include:
+                            KAPS connects Users with qualified Technicians for
+                            puncture repair services. The services offered may
+                            include:
                           </li>
                           <ul className="list-disc pl-6">
                             <li>Puncture repair (on-site or in-shop)</li>
@@ -890,7 +909,7 @@ const TermsAndConditionsCard = () => {
                           </li>
                           <li>
                             <span className="font-semibold">Service Fees:</span>{" "}
-                            VTPartner may charge a service fee, which will be
+                            KAPS may charge a service fee, which will be
                             disclosed at the time of booking. Additional charges
                             may apply for services that exceed the basic
                             puncture repair (e.g., tire replacement, extra time
@@ -1024,7 +1043,7 @@ const TermsAndConditionsCard = () => {
                           </li>
                           <li>
                             <span className="font-semibold">Service Fees:</span>{" "}
-                            VTPartner may charge a service fee, which will be
+                            KAPS may charge a service fee, which will be
                             disclosed during the booking process.
                           </li>
                         </ul>
@@ -1103,22 +1122,22 @@ const TermsAndConditionsCard = () => {
                             <span className="font-semibold">
                               No Guarantee of Results:
                             </span>{" "}
-                            VTPartner does not guarantee that the services
-                            provided will fully resolve the issue or meet the
-                            User’s expectations. The effectiveness of water
-                            purifier services may depend on various factors,
-                            including the model of the water purifier and the
-                            nature of the problem.
+                            KAPS does not guarantee that the services provided
+                            will fully resolve the issue or meet the User’s
+                            expectations. The effectiveness of water purifier
+                            services may depend on various factors, including
+                            the model of the water purifier and the nature of
+                            the problem.
                           </li>
                           <li>
                             <span className="font-semibold">
                               No Responsibility for Damages:
                             </span>{" "}
-                            VTPartner is not responsible for any personal
-                            injury, property damage, or loss arising from the
-                            use of the App or services provided by Service
-                            Providers. Users agree to hold VTPartner harmless
-                            for any damages or claims.
+                            KAPS is not responsible for any personal injury,
+                            property damage, or loss arising from the use of the
+                            App or services provided by Service Providers. Users
+                            agree to hold KAPS harmless for any damages or
+                            claims.
                           </li>
                           <li>
                             <span className="font-semibold">
@@ -1232,7 +1251,7 @@ const TermsAndConditionsCard = () => {
                           </li>
                           <li>
                             <span className="font-semibold">Service Fees:</span>{" "}
-                            VTPartner may charge a service fee, which will be
+                            KAPS may charge a service fee, which will be
                             disclosed during the booking process. Additional
                             charges may apply if additional services are
                             requested or required.
@@ -1325,8 +1344,8 @@ const TermsAndConditionsCard = () => {
                               Technician Cancellations:
                             </span>{" "}
                             If the Technician is unable to fulfil a service (due
-                            to illness, emergency, or other reasons), VTPartner
-                            will notify the User and assist in rescheduling or
+                            to illness, emergency, or other reasons), KAPS will
+                            notify the User and assist in rescheduling or
                             finding an alternative Technician.
                           </li>
                           <li>
@@ -1349,8 +1368,8 @@ const TermsAndConditionsCard = () => {
                             <span className="font-semibold">
                               No Guarantee of Results:
                             </span>{" "}
-                            VTPartner does not guarantee that the services
-                            provided will fully resolve all issues or meet User
+                            KAPS does not guarantee that the services provided
+                            will fully resolve all issues or meet User
                             expectations. The effectiveness of TV/Dish services
                             depends on the nature of the problem, the type of
                             equipment, and other factors.
@@ -1359,11 +1378,11 @@ const TermsAndConditionsCard = () => {
                             <span className="font-semibold">
                               Liability for Damages:
                             </span>{" "}
-                            VTPartner is not liable for any personal injury,
-                            property damage, or loss arising from the use of the
-                            App or the services provided by Technicians. Users
-                            agree to hold VTPartner harmless for any claims or
-                            damages that arise from the service.
+                            KAPS is not liable for any personal injury, property
+                            damage, or loss arising from the use of the App or
+                            the services provided by Technicians. Users agree to
+                            hold KAPS harmless for any claims or damages that
+                            arise from the service.
                           </li>
                           <li>
                             <span className="font-semibold">
@@ -1515,7 +1534,7 @@ const TermsAndConditionsCard = () => {
                           </li>
                           <li>
                             <span className="font-semibold">Service Fees:</span>{" "}
-                            VTPartner may charge a service fee, which will be
+                            KAPS may charge a service fee, which will be
                             disclosed during the booking process. Additional
                             charges may apply if additional services are
                             requested or required.
@@ -1610,8 +1629,8 @@ const TermsAndConditionsCard = () => {
                               Technician Cancellations:
                             </span>{" "}
                             If the Technician is unable to fulfil a service (due
-                            to illness, emergency, or other reasons), VTPartner
-                            will notify the User and assist in rescheduling or
+                            to illness, emergency, or other reasons), KAPS will
+                            notify the User and assist in rescheduling or
                             finding an alternative Technician.
                           </li>
                           <li>
@@ -1634,8 +1653,8 @@ const TermsAndConditionsCard = () => {
                             <span className="font-semibold">
                               No Guarantee of Results:
                             </span>{" "}
-                            VTPartner does not guarantee that the services
-                            provided will fully resolve all issues or meet User
+                            KAPS does not guarantee that the services provided
+                            will fully resolve all issues or meet User
                             expectations. The effectiveness of services depends
                             on the nature of the problem, the type of equipment,
                             and other factors.
@@ -1644,11 +1663,11 @@ const TermsAndConditionsCard = () => {
                             <span className="font-semibold">
                               Liability for Damages:
                             </span>{" "}
-                            VTPartner is not liable for any personal injury,
-                            property damage, or loss arising from the use of the
-                            App or the services provided by Technicians. Users
-                            agree to hold VTPartner harmless for any claims or
-                            damages that arise from the service.
+                            KAPS is not liable for any personal injury, property
+                            damage, or loss arising from the use of the App or
+                            the services provided by Technicians. Users agree to
+                            hold KAPS harmless for any claims or damages that
+                            arise from the service.
                           </li>
                           <li>
                             <span className="font-semibold">
@@ -1674,10 +1693,9 @@ const TermsAndConditionsCard = () => {
                           <li>
                             The rates for vehicle rentals and other services may
                             be subject to regular updates and modifications at
-                            the discretion of VT Partner Trans Pvt Ltd. Any
-                            changes will be communicated promptly to users via
-                            the app, notifications, or other appropriate
-                            channels.
+                            the discretion of KASP Trans Pvt Ltd. Any changes
+                            will be communicated promptly to users via the app,
+                            notifications, or other appropriate channels.
                           </li>
                           <li>
                             Payments to and from service providers and customers
@@ -1710,11 +1728,11 @@ const TermsAndConditionsCard = () => {
 
                   <span className="font-semibold text-sm mt-4">8. REFUND</span>
                   <p className="text-gray-700 text-xs leading-6 pt-2">
-                    Refund policies for VTPartner can vary significantly
-                    depending on the type of service, the company’s terms and
-                    conditions, and the region or country in which they operate.
-                    However, there are some general principles that VTPartner
-                    follows when handling refund requests.
+                    Refund policies for KAPS can vary significantly depending on
+                    the type of service, the company’s terms and conditions, and
+                    the region or country in which they operate. However, there
+                    are some general principles that KAPS follows when handling
+                    refund requests.
                     <ul className="list-inside pl-4">
                       <li>
                         <span className="font-semibold">
@@ -1725,9 +1743,9 @@ const TermsAndConditionsCard = () => {
                             <span className="font-semibold">
                               Refunds for Cancellations by the Company:
                             </span>{" "}
-                            If VTPartner cancels a booking (e.g., due to
-                            technical issues, availability problems), a refund
-                            is typically offered.
+                            If KAPS cancels a booking (e.g., due to technical
+                            issues, availability problems), a refund is
+                            typically offered.
                           </li>
                           <li>
                             <span className="font-semibold">
@@ -1762,8 +1780,8 @@ const TermsAndConditionsCard = () => {
                             </span>{" "}
                             If there’s a delay in delivery due to the fault of
                             the carrier (e.g., lost items, missed delivery
-                            deadlines), VTPartner provide a refund or credit for
-                            the shipping cost.
+                            deadlines), KAPS provide a refund or credit for the
+                            shipping cost.
                           </li>
                           <li>
                             <span className="font-semibold">
@@ -1778,8 +1796,8 @@ const TermsAndConditionsCard = () => {
                           </li>
                           <li>
                             <span className="font-semibold">Change Fees:</span>{" "}
-                            VTPartner refunds or allows changes to travel dates,
-                            but with associated change fees. These fees are
+                            KAPS refunds or allows changes to travel dates, but
+                            with associated change fees. These fees are
                             typically deducted from the refund.
                           </li>
                           <li>
@@ -1815,8 +1833,8 @@ const TermsAndConditionsCard = () => {
                     9. INDEMNIFICATION
                   </span>
                   <p className="text-gray-700 text-xs leading-6 pt-2">
-                    You agree to indemnify, defend, and hold harmless VTPartner,
-                    its affiliates, employees, agents, and licensors from any
+                    You agree to indemnify, defend, and hold harmless KAPS, its
+                    affiliates, employees, agents, and licensors from any
                     claims, damages, losses, or expenses arising out of your use
                     of the App or your violation of these Terms.
                   </p>
@@ -1860,10 +1878,10 @@ const TermsAndConditionsCard = () => {
                     11. TERMINATION OF ACCESS
                   </span>
                   <p className="text-gray-700 text-xs leading-6 pt-2">
-                    • <strong>Termination by VTPartner:</strong> VTPartner
-                    reserves the right to suspend or terminate the account of
-                    any User (Shipper or Transporter) at its discretion for
-                    violations of these Terms or other misconduct. <br />•{" "}
+                    • <strong>Termination by KAPS:</strong> KAPS reserves the
+                    right to suspend or terminate the account of any User
+                    (Shipper or Transporter) at its discretion for violations of
+                    these Terms or other misconduct. <br />•{" "}
                     <strong>Termination by User:</strong> Users can deactivate
                     their account at any time by following the procedures in the
                     App or contacting customer support.
@@ -1928,11 +1946,11 @@ const TermsAndConditionsCard = () => {
                       unfavorably on us or our accredited businesses; (b) the
                       organization does not have an unsatisfactory record with
                       us; (c) the benefit to us from the visibility associated
-                      with the hyperlink outweighs the absence of VT PARTNER
-                      TRANS PVT LTD; and (d) where the link is in the context of
-                      general resource information or is consistent with
-                      editorial content in a newsletter or similar product
-                      furthering the mission of the organization.
+                      with the hyperlink outweighs the absence of KASP TRANS PVT
+                      LTD; and (d) where the link is in the context of general
+                      resource information or is consistent with editorial
+                      content in a newsletter or similar product furthering the
+                      mission of the organization.
                     </p>
                     <strong>C.</strong> These organizations may link to our home
                     page, publications, or other Web site information so long as
@@ -1943,12 +1961,12 @@ const TermsAndConditionsCard = () => {
                     <p className="pt-2">
                       If you are among the organizations listed above and are
                       interested in linking to our website, you must notify us
-                      by sending an e-mail to vtpartner7@gmail.com. Please
-                      include your name, organization name, contact information
-                      (phone number and/or e-mail address), the URL of your
-                      site, a list of URLs from which you intend to link to our
-                      Web site, and a list of the URL(s) on our site to which
-                      you would like to link. Allow 2–3 weeks for a response.
+                      by sending an e-mail to KAPS7@gmail.com. Please include
+                      your name, organization name, contact information (phone
+                      number and/or e-mail address), the URL of your site, a
+                      list of URLs from which you intend to link to our Web
+                      site, and a list of the URL(s) on our site to which you
+                      would like to link. Allow 2–3 weeks for a response.
                     </p>
                     <strong>D.</strong> Approved organizations may hyperlink to
                     our Web site as follows:
@@ -1966,8 +1984,8 @@ const TermsAndConditionsCard = () => {
                       </li>
                     </ul>
                     <p className="pt-2">
-                      No use of VT PARTNER TRANS PVT LTD's logo or other artwork
-                      will be allowed for linking absent a trademark license
+                      No use of KASP TRANS PVT LTD's logo or other artwork will
+                      be allowed for linking absent a trademark license
                       agreement.
                     </p>
                   </p>
@@ -1987,8 +2005,8 @@ const TermsAndConditionsCard = () => {
                     14. MODIFICATION OF TERMS
                   </span>
                   <p className="text-gray-700 text-xs leading-6 pt-2">
-                    VTPartner reserves the right to modify or update these Terms
-                    at any time. Any changes will be posted within the App, and
+                    KAPS reserves the right to modify or update these Terms at
+                    any time. Any changes will be posted within the App, and
                     Users will be notified of significant changes. Continued use
                     of the App after changes to the Terms constitutes acceptance
                     of the updated Terms.
@@ -2097,12 +2115,12 @@ const TermsAndConditionsCard = () => {
                     App, or our services, please contact us at:
                   </p>
                   <p className="text-gray-700 text-xs leading-6 pt-2">
-                    <strong>VT PARTNER TRANS PVT LTD</strong>
+                    <strong>KASP TRANS PVT LTD</strong>
                     <br />
                     Plot No- PAP -A45 Near Mahindra gate no -02 CHAKAN MIDC
                     Nighoje, Pune-410501
                     <br />
-                    <strong>Email:</strong> info@vtpartner.in
+                    <strong>Email:</strong> info@KAPS.in
                     <br />
                     <strong>Phone:</strong> [+91-]
                   </p>
@@ -2112,8 +2130,8 @@ const TermsAndConditionsCard = () => {
                   <ul className="text-gray-700 text-xs leading-6 pt-2">
                     <li>
                       <strong>Entire Agreement:</strong> These Terms constitute
-                      the entire agreement between you and VTPartner regarding
-                      the use of the App and services.
+                      the entire agreement between you and KAPS regarding the
+                      use of the App and services.
                     </li>
                     <li>
                       <strong>Severability:</strong> If any provision of these
@@ -2121,14 +2139,14 @@ const TermsAndConditionsCard = () => {
                       remaining provisions will remain in full force and effect.
                     </li>
                     <li>
-                      <strong>Force Majeure:</strong> VTPartner shall not be
-                      liable for any failure or delay in performing services
-                      caused by events beyond its reasonable control, including
-                      but not limited to natural disasters, technical failures,
-                      or strikes.
+                      <strong>Force Majeure:</strong> KAPS shall not be liable
+                      for any failure or delay in performing services caused by
+                      events beyond its reasonable control, including but not
+                      limited to natural disasters, technical failures, or
+                      strikes.
                     </li>
                     <li>
-                      <strong>Responsibility:</strong> VTPartner bears no
+                      <strong>Responsibility:</strong> KAPS bears no
                       responsibility and liability for delays and losses
                       suffered by You or caused to You as a consequence of the
                       breakdown of the Vehicle or the Substitute Vehicle.

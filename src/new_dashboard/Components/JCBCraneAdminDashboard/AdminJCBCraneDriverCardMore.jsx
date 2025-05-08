@@ -1,28 +1,130 @@
-// import React from "react";
+/* eslint-disable no-unused-vars */
 import {
   activityChartData,
   salesChartData,
 } from "../../Data/Charts/EcommerceChart";
 import Chart from "react-apexcharts";
-// import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
+import Loader from "../Loader";
+import { useNavigate } from "react-router-dom";
+import { serverEndPoint } from "../../../dashboard/app/constants";
 
 const AdminJCBCraneDriverCardMore = () => {
+  const [totalRides, setTotalRides] = useState(null);
+  const [todaysEarnings, setTodaysEarnings] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchData = async () => {
+    // Set initial state
+    setTotalRides(0.0);
+    setTodaysEarnings(0.0);
+
+    const token = Cookies.get("authToken");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    try {
+      setLoading(true);
+
+      // Create an array of API calls with their corresponding names
+      const apiCalls = [
+        {
+          name: "todaysEarnings",
+          call: axios.post(
+            `${serverEndPoint}/get_jcb_crane_drivers_today_earnings`,
+            {},
+            config
+          ),
+        },
+        {
+          name: "totalRides",
+          call: axios.post(
+            `${serverEndPoint}/get_total_jcb_crane_drivers_orders_and_earnings`,
+            {},
+            config
+          ),
+        },
+      ];
+
+      // Execute all API calls and handle individual failures
+      const results = await Promise.allSettled(apiCalls.map((api) => api.call));
+
+      // Initialize variables with default values
+      let totalRides = 0.0;
+      let todayEarn = 0.0;
+
+      // Process results
+      results.forEach((result, index) => {
+        if (result.status === "fulfilled") {
+          const data = result.value.data;
+          switch (apiCalls[index].name) {
+            case "todaysEarnings":
+              todayEarn = data.today_earnings || 0.0;
+              break;
+            case "totalRides":
+              totalRides = data.total_orders || 0.0;
+              break;
+          }
+        } else {
+          console.error(`Error in ${apiCalls[index].name}:`, result.reason);
+        }
+      });
+
+      // Update state with available data
+      setTotalRides(totalRides);
+      setTodaysEarnings(todayEarn);
+    } catch (error) {
+      console.error("Error in fetchData:", error);
+      // States are already set to 0.0 at the beginning
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigate("/dashboard/all-jcb-crane-orders-report");
+  };
+  const handleOrderClick = () => {
+    navigate("/dashboard/jcb-crane/orders");
+  };
+
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
     <>
       <div className="col-lg-7 col-xxl-6">
         <div className="row">
           <div className="col-sm-6">
-            <div className="card eshop-cards">
+            <div
+              className="card eshop-cards shadow-lg border-0 rounded"
+              onClick={handleOrderClick}
+              style={{ cursor: "pointer" }}
+              role="button"
+            >
               <div className="card-body">
                 <div className="d-flex justify-content-between align-items-center">
                   <span className="bg-success h-40 w-40 d-flex-center b-r-15 f-s-18">
-                    <i className="ph-bold  ph-pulse"></i>
+                    <i className="ph-bold ph-pulse"></i>
                   </span>
                 </div>
                 <div className="d-flex justify-content-between align-items-center">
                   <div className="flex-shrink-0 align-self-end">
-                    <p className="f-s-16 mb-0">Total Rides</p>
-                    <h5>45k</h5>
+                    <p className="f-s-16 mb-0">Total Services Completed</p>
+                    <h5>{totalRides}</h5>
                   </div>
                   <div className="activity-chart">
                     <Chart
@@ -38,19 +140,22 @@ const AdminJCBCraneDriverCardMore = () => {
             </div>
           </div>
           <div className="col-sm-6">
-            <div className="card eshop-cards">
+            <div
+              className="card eshop-cards shadow-lg border-0 rounded"
+              onClick={handleCardClick}
+              style={{ cursor: "pointer" }}
+              role="button"
+            >
               <div className="card-body">
                 <div className="d-flex justify-content-between align-items-center">
                   <span className="bg-warning h-40 w-40 d-flex-center b-r-15 f-s-18">
-                    <i className="ph-fill  ph-coins"></i>
+                    <i className="ph-fill ph-coins"></i>
                   </span>
                 </div>
                 <div className="d-flex justify-content-between align-items-center">
                   <div className="flex-shrink-0 align-self-end">
                     <p className="f-s-16 mb-0">Todays Earnings</p>
-                    <h5>
-                      $63,987<span className="f-s-12 text-success">+68%</span>
-                    </h5>
+                    <h5>₹ {todaysEarnings.toFixed(2)}/-</h5>
                   </div>
                   <div className="sales-chart">
                     <Chart
@@ -60,37 +165,6 @@ const AdminJCBCraneDriverCardMore = () => {
                       width={120}
                       height={120}
                     />
-                    {/*<div id="salesChart"></div>*/}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-sm-6">
-            <div className="card eshop-cards">
-              <div className="card-body">
-                <div className="d-flex justify-content-between align-items-center">
-                  <span className="bg-black h-40 w-40 d-flex-center b-r-15 f-s-18">
-                    <i className="ph-fill  ph-desktop text-white"></i>
-                  </span>
-                </div>
-                <div className="d-flex justify-content-between align-items-center">
-                  <div className="flex-shrink-0 align-self-end">
-                    <p className="f-s-16 mb-0">Complaints</p>
-                    <h5>
-                      63,987<span className="f-s-12 text-success">+68%</span>
-                    </h5>
-                  </div>
-                  <div className="sales-chart">
-                    <Chart
-                      options={salesChartData}
-                      series={salesChartData.series}
-                      type="bar"
-                      width={120}
-                      height={120}
-                    />
-                    {/*<div id="salesChart"></div>*/}
                   </div>
                 </div>
               </div>

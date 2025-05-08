@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Card, CardBody, Col, Container, Row } from "reactstrap";
-import { Link } from "react-router-dom";
+
 import axios from "axios";
 
 import Cookies from "js-cookie";
 import { serverEndPoint, formatEpoch } from "../../../dashboard/app/constants";
 import Loader from "../Loader";
+import { Link } from "react-router-dom";
 
 const AllCustomers = () => {
   const [loading, setLoading] = useState(true);
@@ -13,6 +14,7 @@ const AllCustomers = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchCustomers = async () => {
     const token = Cookies.get("authToken");
@@ -30,7 +32,7 @@ const AllCustomers = () => {
         {
           page: currentPage,
           limit: 10,
-          search: searchQuery,
+          search: searchTerm,
         },
         config
       );
@@ -46,11 +48,25 @@ const AllCustomers = () => {
 
   useEffect(() => {
     fetchCustomers();
-  }, [currentPage, searchQuery]);
+  }, [currentPage, searchTerm]);
 
+  // const handleSearch = (e) => {
+  //   setSearchQuery(e.target.value);
+  //   setCurrentPage(1);
+  // };
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
+  };
+
+  const handleSearchSubmit = () => {
+    setSearchTerm(searchQuery);
     setCurrentPage(1);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearchSubmit();
+    }
   };
 
   const handlePageChange = (pageNumber) => {
@@ -68,14 +84,21 @@ const AllCustomers = () => {
           <h4 className="main-title">Customers</h4>
           <Card className="shadow-lg border-0 rounded-lg">
             <CardBody>
-              <div className="mb-3">
+              <div className="mb-3 d-flex">
                 <input
                   type="text"
                   className="form-control"
                   placeholder="Search by Name, Mobile, Email or GST No"
                   value={searchQuery}
                   onChange={handleSearch}
+                  onKeyPress={handleKeyPress}
                 />
+                <button
+                  className="btn btn-primary ms-2"
+                  onClick={handleSearchSubmit}
+                >
+                  Search
+                </button>
               </div>
 
               <div className="table-responsive">
@@ -90,7 +113,7 @@ const AllCustomers = () => {
                       <th>Registration</th>
                       <th>Purpose</th>
                       <th>Status</th>
-                      {/* <th>Actions</th> */}
+                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -158,6 +181,17 @@ const AllCustomers = () => {
                           >
                             {customer.status === 1 ? "Active" : "Inactive"}
                           </span>
+                        </td>
+                        <td>
+                          <Link
+                            to={`/dashboard/customer-wallet-details/${customer.customer_id}/${customer.customer_name}`}
+                            role="button"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-outline-primary icon-btn w-30 h-30 b-r-22 ms-2 me-2"
+                          >
+                            <i className="ti ti-wallet"></i>
+                          </Link>
                         </td>
                         {/* <td>
                           <Link

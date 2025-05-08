@@ -17,7 +17,12 @@ const FareEstimateQr = () => {
           <img src="/logo_new.png" alt="logo" loading="lazy" />
 
           <Box display="flex" mt={3}>
-            <Button component="a" href="" target="_blank">
+            <Button
+              component="a"
+              href="https://play.google.com/store/apps/details?id=com.kapstranspvtltd.kaps&hl=en_IN"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <img
                 src="/assets/images/play_store.png"
                 alt="Play Store"

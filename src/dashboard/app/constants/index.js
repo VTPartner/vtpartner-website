@@ -2,19 +2,31 @@
 
 // Define the variables
 let serverEndPoint, serverWebsiteEndPoint, serverEndPointImage;
-const devMode = 0; // Change this to 1 for development mode
+const devMode = 1; // Change this to 1 for development mode
 
 if (devMode === 1) {
-  serverEndPoint = "http://77.37.47.156:8000/api/dashboard";
-  serverWebsiteEndPoint = "http://77.37.47.156:8000/api/website";
-  serverEndPointImage = "http://77.37.47.156:8000/api/dashboard";
+  serverEndPoint = "http://100.24.44.74:8000/api/dashboard";
+  serverWebsiteEndPoint = "http://100.24.44.74:8000/api/website";
+  serverEndPointImage = "http://100.24.44.74:8000/api/dashboard";
 } else {
-  serverEndPoint = "https://vtpartner.org/api/dashboard";
-  serverWebsiteEndPoint = "https://vtpartner.org/api/website";
-  serverEndPointImage = "https://vtpartner.org/api/dashboard";
+  serverEndPoint = "http://100.24.44.74/api/dashboard";
+  serverWebsiteEndPoint = "https://www.kaps9.in/api/website";
+  serverEndPointImage = "http://100.24.44.74/api/dashboard";
 }
 
+// if (devMode === 1) {
+//   serverEndPoint = "http://77.37.47.156:8000/api/dashboard";
+//   serverWebsiteEndPoint = "http://77.37.47.156:8000/api/website";
+//   serverEndPointImage = "http://77.37.47.156:8000/api/dashboard";
+// } else {
+//   serverEndPoint = "https://vtpartner.org/api/dashboard";
+//   serverWebsiteEndPoint = "https://vtpartner.org/api/website";
+//   serverEndPointImage = "https://vtpartner.org/api/dashboard";
+// }
+
 const mapKey = "AIzaSyAAlmEtjJOpSaJ7YVkMKwdSuMTbTx39l_o";
+export const RAZORPAY_KEY_ID = "rzp_test_61op4YoSkMBW6u";
+export const RAZORPAY_KEY_SECRET = "rzp_test_61op4YoSkMBW6u";
 
 function formatEpoch(epoch) {
   if (!epoch) return "N/A"; // Handle cases where epoch is null or undefined

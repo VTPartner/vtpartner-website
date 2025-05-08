@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 
 import { Card, CardBody, Col, Container, Row } from "reactstrap";
@@ -68,10 +69,12 @@ const AddVehiclePricesPage = () => {
     price_type_id: "",
     city_name: "",
     price_type: "", //Local or Outstation
+    outstation_distance: "", // Added outstation distance field
   });
 
   const [openVehiclePriceDialog, setOpenVehiclePriceDialog] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [isLocalPriceType, setIsLocalPriceType] = useState(false);
 
   const [errorVehicle, setVehicleErrors] = useState({
     price_id: false,
@@ -82,6 +85,7 @@ const AddVehiclePricesPage = () => {
     price_type_id: false,
     city_name: false,
     price_type: false, //Local or Outstation
+    outstation_distance: false, // Added outstation distance validation
   });
 
   // Fetch all vehiclePrices and vehicle types
@@ -219,13 +223,22 @@ const AddVehiclePricesPage = () => {
       price_type_id: "",
       city_name: "",
       price_type: "", //Local or Outstation
+      outstation_distance: "", // Reset outstation distance
     });
+    setIsLocalPriceType(false);
     setIsEditMode(false);
     setOpenVehiclePriceDialog(true);
   };
 
   const handleEditClick = (vehicle) => {
     setSelectedPrice(vehicle);
+    // Check if the price type is "Local"
+    const selectedPriceType = priceTypes.find(
+      (pt) => pt.price_type_id === vehicle.price_type_id
+    );
+    setIsLocalPriceType(
+      selectedPriceType && selectedPriceType.price_type === "Local"
+    );
     setIsEditMode(true);
     setOpenVehiclePriceDialog(true);
   };
@@ -242,6 +255,29 @@ const AddVehiclePricesPage = () => {
     }));
   };
 
+  const handlePriceTypeChange = (event, newValue) => {
+    // Check if the price type is "Local"
+    const isLocal = newValue && newValue.price_type === "Local";
+    setIsLocalPriceType(isLocal);
+
+    handleInputChange({
+      target: {
+        name: "price_type_id",
+        value: newValue ? newValue.price_type_id : "",
+      },
+    });
+
+    // If not local, clear the outstation distance
+    if (!isLocal) {
+      handleInputChange({
+        target: {
+          name: "outstation_distance",
+          value: "",
+        },
+      });
+    }
+  };
+
   const saveVehiclePriceDetails = async () => {
     setBtnLoading(true);
 
@@ -250,6 +286,8 @@ const AddVehiclePricesPage = () => {
       city_id: !selectedPrice.city_id,
       price_type_id: !selectedPrice.price_type_id,
       minimum_time: !selectedPrice.minimum_time,
+      outstation_distance:
+        isLocalPriceType && !selectedPrice.outstation_distance,
     };
     setVehicleErrors(newErrors);
 
@@ -271,23 +309,26 @@ const AddVehiclePricesPage = () => {
         formData.append(key, selectedPrice[key]);
       }
 
-      const response = await axios.post(
-        endpoint,
-        {
-          price_id: isEditMode ? selectedPrice.price_id : "0",
-          city_id: selectedPrice.city_id,
-          vehicle_id: vehicle_id,
-          starting_price_km: selectedPrice.starting_price_per_km,
-          minimum_time: selectedPrice.minimum_time,
-          price_type_id: selectedPrice.price_type_id,
+      const requestData = {
+        price_id: isEditMode ? selectedPrice.price_id : "0",
+        city_id: selectedPrice.city_id,
+        vehicle_id: vehicle_id,
+        starting_price_km: selectedPrice.starting_price_per_km,
+        minimum_time: selectedPrice.minimum_time,
+        price_type_id: selectedPrice.price_type_id,
+      };
+
+      // Add outstation_distance only if the price type is Local
+      if (isLocalPriceType) {
+        requestData.outstation_distance = selectedPrice.outstation_distance;
+      }
+
+      const response = await axios.post(endpoint, requestData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      });
 
       if (response.status === 200) {
         toast.success(
@@ -392,16 +433,6 @@ const AddVehiclePricesPage = () => {
                     tabIndex="0"
                   >
                     <div className="order-list-table table-responsive app-scroll">
-                      {/* Search Input */}
-                      {/* <div className="mb-3">
-                        <input
-                          type="text"
-                          className="form-control m-4 align-middle"
-                          placeholder="Search by Order ID, Customer, Driver, or Mobile"
-                          value={searchQuery}
-                          onChange={handleSearch}
-                        />
-                      </div> */}
                       <table className="table table-bottom-border align-middle mb-0">
                         <thead>
                           <tr>
@@ -409,6 +440,8 @@ const AddVehiclePricesPage = () => {
                             <th scope="col">City Name</th>
                             <th scope="col">Price</th>
                             <th scope="col">Price Type</th>
+                            {/* Add outstation distance column */}
+                            <th scope="col">Outstation Distance (km)</th>
                             <th scope="col">Last Updated</th>
                             <th scope="col">Actions</th>
                           </tr>
@@ -416,7 +449,7 @@ const AddVehiclePricesPage = () => {
                         <tbody>
                           {filteredVehiclePrices.map((vehicle, index) => (
                             <tr key={index}>
-                              <td># {index}</td>
+                              <td># {index + 1}</td>
 
                               <td>
                                 <div className="position-relative">
@@ -425,6 +458,10 @@ const AddVehiclePricesPage = () => {
                                       src={vehicle.bg_image}
                                       alt={vehicle.city_name}
                                       className="img-fluid"
+                                      onError={(e) => {
+                                        e.target.src =
+                                          "https://via.placeholder.com/40";
+                                      }}
                                     />
                                   </div>
                                   <div className="ms-5">
@@ -443,6 +480,14 @@ const AddVehiclePricesPage = () => {
                               <td>
                                 <p className="mb-0 f-s-12 text-secondary">
                                   {vehicle.price_type}
+                                </p>
+                              </td>
+                              {/* Display outstation distance */}
+                              <td>
+                                <p className="mb-0 f-s-12 text-secondary">
+                                  {vehicle.price_type === "Local"
+                                    ? vehicle.outstation_distance || "Not Set"
+                                    : "N/A"}
                                 </p>
                               </td>
                               <td>
@@ -466,26 +511,6 @@ const AddVehiclePricesPage = () => {
                           ))}
                         </tbody>
                       </table>
-                      {/* Pagination Controls */}
-                      {/* <div className="pagination-controls d-flex justify-content-end align-items-center mt-3 p-4">
-                        <button
-                          className="btn btn-outline-secondary"
-                          onClick={() => handlePageChange(currentPage - 1)}
-                          disabled={currentPage === 1}
-                        >
-                          Previous
-                        </button>
-                        <span className="mx-2">
-                          Page {currentPage} of {totalPages}
-                        </span>
-                        <button
-                          className="btn btn-outline-secondary"
-                          onClick={() => handlePageChange(currentPage + 1)}
-                          disabled={currentPage === totalPages}
-                        >
-                          Next
-                        </button>
-                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -503,7 +528,7 @@ const AddVehiclePricesPage = () => {
           <Box p={3}>
             <Typography variant="h6" gutterBottom>
               {isEditMode
-                ? "Edit Vehicle"
+                ? "Edit Vehicle Price"
                 : "Add New Price For " + vehicle_name}
             </Typography>
 
@@ -568,14 +593,7 @@ const AddVehiclePricesPage = () => {
                       price.price_type_id === selectedPrice.price_type_id
                   ) || null
                 } // Find the currently selected city
-                onChange={(event, newValue) => {
-                  handleInputChange({
-                    target: {
-                      name: "price_type_id", // Update the name based on the input
-                      value: newValue ? newValue.price_type_id : "", // Get the price_type_id of the selected Price
-                    },
-                  });
-                }}
+                onChange={handlePriceTypeChange} // Use the new handler to check if type is Local
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -592,6 +610,26 @@ const AddVehiclePricesPage = () => {
                 )}
               />
             </FormControl>
+
+            {/* Show outstation distance field only if price type is "Local" */}
+            {isLocalPriceType && (
+              <TextField
+                label="Outstation Distance (km)"
+                fullWidth
+                margin="normal"
+                name="outstation_distance"
+                type="number"
+                value={selectedPrice.outstation_distance}
+                onChange={handleInputChange}
+                error={errorVehicle.outstation_distance}
+                helperText={
+                  errorVehicle.outstation_distance
+                    ? "Outstation distance is required for Local price type."
+                    : ""
+                }
+                required
+              />
+            )}
 
             <TextField
               label="Minimum Time In Minutes [Ex: 15]"

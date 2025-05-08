@@ -17,6 +17,7 @@ import { Switch } from "@mui/material";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
+import GoodsDriverRechargeHistory from "./GoodsDriverRechargeHistory";
 
 const AllGoodsDrivers = () => {
   const [activeTab, setActiveTab] = useState("connect-tab");
@@ -39,6 +40,23 @@ const AllGoodsDrivers = () => {
   const [searchQueryOnlineDrivers, setSearchQueryOnlineDrivers] = useState("");
   const [currentPageOnlineDrivers, setCurrentPageOnlineDrivers] = useState(1);
   const driversPerPage = 10;
+  const [offlineDrivers, setOfflineDrivers] = useState([]);
+  const [searchQueryOfflineDrivers, setSearchQueryOfflineDrivers] =
+    useState("");
+  const [currentPageOfflineDrivers, setCurrentPageOfflineDrivers] = useState(1);
+  const [totalPagesOfflineDrivers, setTotalPagesOfflineDrivers] = useState(1);
+
+  // Add these state variables in your component
+  const [isRechargeHistoryOpen, setIsRechargeHistoryOpen] = useState(false);
+  const [selectedDriverId, setSelectedDriverId] = useState(null);
+  const [selectedDriverName, setSelectedDriverName] = useState("");
+
+  // Add this function to handle the eye icon click
+  const handleViewRechargeHistory = (driver) => {
+    setSelectedDriverId(driver.goods_driver_id);
+    setSelectedDriverName(driver.driver_first_name);
+    setIsRechargeHistoryOpen(true);
+  };
 
   const filteredDrivers = allDrivers.filter((driver) =>
     [driver.goods_driver_id, driver.driver_first_name, driver.mobile_no]
@@ -137,6 +155,8 @@ const AllGoodsDrivers = () => {
       fetchUnVerifiedDriversData();
     } else if (tab === "online-driver-tab") {
       fetchOnlineDriversData();
+    } else if (tab === "offline-driver-tab") {
+      fetchOfflineDriversData();
     } else {
       fetchVerifiedDriversData();
     }
@@ -235,6 +255,87 @@ const AllGoodsDrivers = () => {
       setLoading(false);
     }
   };
+
+  // Add this with your other state variables at the top
+  const [displayedOfflineDrivers, setDisplayedOfflineDrivers] = useState([]);
+
+  // Add this with your other filter functions
+  const filteredOfflineDrivers = offlineDrivers.filter(
+    (driver) =>
+      driver.goods_driver_id.toString().includes(searchQueryOfflineDrivers) ||
+      driver.driver_first_name
+        .toLowerCase()
+        .includes(searchQueryOfflineDrivers.toLowerCase()) ||
+      driver.mobile_no.includes(searchQueryOfflineDrivers)
+  );
+
+  // Update the fetchOfflineDriversData function
+  const fetchOfflineDriversData = async () => {
+    setDisplayedOfflineDrivers([]);
+    const token = Cookies.get("authToken");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        `${serverEndPoint}/get_offline_drivers`,
+        {
+          page: currentPageOfflineDrivers,
+          limit: driversPerPage,
+          search: searchQueryOfflineDrivers,
+        },
+        config
+      );
+
+      if (response.data.drivers) {
+        setOfflineDrivers(response.data.drivers);
+        setTotalPagesOfflineDrivers(
+          Math.ceil(response.data.total_count / driversPerPage)
+        );
+
+        // Calculate displayed drivers
+        const filtered = response.data.drivers.filter(
+          (driver) =>
+            driver.goods_driver_id
+              .toString()
+              .includes(searchQueryOfflineDrivers) ||
+            driver.driver_first_name
+              .toLowerCase()
+              .includes(searchQueryOfflineDrivers.toLowerCase()) ||
+            driver.mobile_no.includes(searchQueryOfflineDrivers)
+        );
+
+        setDisplayedOfflineDrivers(filtered);
+      }
+    } catch (error) {
+      console.error("Error fetching offline drivers:", error);
+      toast.error("no offline drivers");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Add this useEffect to update displayed drivers when search changes
+  useEffect(() => {
+    if (offlineDrivers.length > 0) {
+      const filtered = offlineDrivers.filter(
+        (driver) =>
+          driver.goods_driver_id
+            .toString()
+            .includes(searchQueryOfflineDrivers) ||
+          driver.driver_first_name
+            .toLowerCase()
+            .includes(searchQueryOfflineDrivers.toLowerCase()) ||
+          driver.mobile_no.includes(searchQueryOfflineDrivers)
+      );
+      setDisplayedOfflineDrivers(filtered);
+    }
+  }, [searchQueryOfflineDrivers, offlineDrivers]);
 
   const fetchOnlineDriversData = async () => {
     const token = Cookies.get("authToken");
@@ -339,6 +440,73 @@ const AllGoodsDrivers = () => {
   const [togglingDrivers, setTogglingDrivers] = useState({});
 
   // Modified toggle handler function
+  // const handleOnlineStatusToggle = async (driver) => {
+  //   try {
+  //     // Set loading state for specific driver
+  //     setTogglingDrivers((prev) => ({
+  //       ...prev,
+  //       [driver.goods_driver_id]: true,
+  //     }));
+
+  //     const token = Cookies.get("authToken");
+  //     const config = {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         "Content-Type": "application/json",
+  //       },
+  //     };
+
+  //     // If going offline, check if driver is free
+  //     if (driver.is_online === 1) {
+  //       const checkResponse = await axios.post(
+  //         `${serverEndPoint}/check_driver_status`,
+  //         { driver_id: driver.goods_driver_id },
+  //         config
+  //       );
+
+  //       if (!checkResponse.data.is_free) {
+  //         toast.error("Driver has active bookings and cannot go offline");
+  //         return;
+  //       }
+  //     }
+
+  //     const response = await axios.post(
+  //       `${serverEndPoint}/toggle_driver_online_status`,
+  //       {
+  //         driver_id: driver.goods_driver_id,
+  //         online_status: driver.is_online === 1 ? 0 : 1,
+  //         current_lat: driver.current_lat || 0,
+  //         current_lng: driver.current_lng || 0,
+  //       },
+  //       config
+  //     );
+
+  //     if (response.status === 200) {
+  //       toast.success(driver.driver_first_name + " " + response.data.message);
+
+  //       // Update the specific driver's status in the local state
+  //       setAllDrivers((prevDrivers) =>
+  //         prevDrivers.map((d) =>
+  //           d.goods_driver_id === driver.goods_driver_id
+  //             ? { ...d, is_online: driver.is_online === 1 ? 0 : 1 }
+  //             : d
+  //         )
+  //       );
+  //     }
+  //   } catch (error) {
+  //     console.error("Toggle error:", error);
+  //     toast.error(
+  //       error.response?.data?.message || "Error updating driver status"
+  //     );
+  //   } finally {
+  //     // Clear loading state for specific driver
+  //     setTogglingDrivers((prev) => ({
+  //       ...prev,
+  //       [driver.goods_driver_id]: false,
+  //     }));
+  //   }
+  // };
+
   const handleOnlineStatusToggle = async (driver) => {
     try {
       // Set loading state for specific driver
@@ -383,14 +551,23 @@ const AllGoodsDrivers = () => {
       if (response.status === 200) {
         toast.success(driver.driver_first_name + " " + response.data.message);
 
-        // Update the specific driver's status in the local state
-        setAllDrivers((prevDrivers) =>
-          prevDrivers.map((d) =>
-            d.goods_driver_id === driver.goods_driver_id
-              ? { ...d, is_online: driver.is_online === 1 ? 0 : 1 }
-              : d
-          )
-        );
+        // Refresh data based on current active tab
+        if (activeTab === "connect-tab") {
+          await fetchVerifiedDriversData();
+        } else if (activeTab === "offline-driver-tab") {
+          await fetchOfflineDriversData();
+        } else if (activeTab === "online-driver-tab") {
+          await fetchOnlineDriversData();
+        }
+
+        // If the driver was online and is going offline, refresh offline drivers list
+        if (driver.is_online === 1) {
+          await fetchOfflineDriversData();
+        }
+        // If the driver was offline and is going online, refresh online drivers list
+        else {
+          await fetchOnlineDriversData();
+        }
       }
     } catch (error) {
       console.error("Toggle error:", error);
@@ -514,6 +691,23 @@ const AllGoodsDrivers = () => {
                     >
                       <i className="ti ti-square-rounded-x f-s-18 mg-b-3"></i>{" "}
                       Blocked
+                    </button>
+                  </li>
+                  <li className="nav-item" role="presentation">
+                    <button
+                      className={`nav-link d-flex align-items-center gap-1 ${
+                        activeTab === "offline-driver-tab" ? "active" : ""
+                      }`}
+                      id="offline-driver-tab"
+                      data-bs-toggle="tab"
+                      data-bs-target="#offline-driver-tab"
+                      type="button"
+                      role="tab"
+                      aria-controls="offline-driver-tab"
+                      aria-selected={activeTab === "offline-driver-tab"}
+                      onClick={() => handleTabClick("offline-driver-tab")}
+                    >
+                      <i className="ti ti-power f-s-18 mg-b-3"></i> Offline
                     </button>
                   </li>
                   <li className="nav-item" role="presentation">
@@ -670,7 +864,7 @@ const AllGoodsDrivers = () => {
                               </td>
                               <td>{driver.registration_date}</td>
 
-                              <td>
+                              {/* <td>
                                 <Link
                                   to={{
                                     pathname: `/dashboard/goods-driver-profile-details/${driver.goods_driver_id}`,
@@ -682,6 +876,43 @@ const AllGoodsDrivers = () => {
                                   className="btn btn-outline-primary icon-btn w-30 h-30 b-r-22 me-2"
                                 >
                                   <i className="ti ti-eye"></i>
+                                </Link>
+                              </td> */}
+                              <td>
+                                <Link
+                                  to={`/dashboard/goods-driver-profile-details/${driver.goods_driver_id}`}
+                                  role="button"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="btn btn-outline-primary icon-btn w-30 h-30 b-r-22 me-2"
+                                >
+                                  <i className="ti ti-eye"></i>
+                                </Link>
+                                {/* <button
+                                  onClick={() =>
+                                    handleViewRechargeHistory(driver)
+                                  }
+                                  className="btn btn-outline-info icon-btn w-30 h-30 b-r-22"
+                                >
+                                  <i className="ti ti-history"></i>
+                                </button> */}
+                                <Link
+                                  to={`/dashboard/goods-driver-recharge/${driver.goods_driver_id}/${driver.driver_first_name}`}
+                                  role="button"
+                                  className="btn btn-outline-info icon-btn w-30 h-30 b-r-22"
+                                  rel="noopener noreferrer"
+                                  target="_blank"
+                                >
+                                  <i className="ti ti-history"></i>
+                                </Link>
+                                <Link
+                                  to={`/dashboard/goods-driver-wallet-details/${driver.goods_driver_id}/${driver.driver_first_name}`}
+                                  role="button"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="btn btn-outline-primary icon-btn w-30 h-30 b-r-22 ms-2 me-2"
+                                >
+                                  <i className="ti ti-wallet"></i>
                                 </Link>
                               </td>
                             </tr>
@@ -1173,6 +1404,163 @@ const AllGoodsDrivers = () => {
                             setCurrentBlockedPage(currentBlockedPage + 1)
                           }
                           disabled={currentBlockedPage === totalBlockedPages}
+                        >
+                          Next
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Offline Drivers  */}
+              <div className="card-body offline-driver-tab-content p-0">
+                <div className="tab-content" id="OutlineContent">
+                  <div
+                    className={`tab-pane fade ${
+                      activeTab === "offline-driver-tab" ? "active show" : ""
+                    }`}
+                    id="offline-driver-pane"
+                    role="tabpanel"
+                    aria-labelledby="offline-driver-tab"
+                    tabIndex="5"
+                  >
+                    <div className="driver-list-table table-responsive app-scroll">
+                      {/* Search Input */}
+                      <div className="mb-3">
+                        <input
+                          type="text"
+                          className="form-control m-4 align-middle"
+                          placeholder="Search by Driver Name or Mobile"
+                          value={searchQueryOfflineDrivers}
+                          onChange={(e) =>
+                            setSearchQueryOfflineDrivers(e.target.value)
+                          }
+                        />
+                      </div>
+                      {/* Offline Drivers Table */}
+                      <table className="table table-bottom-bdriver align-middle mb-0">
+                        <thead>
+                          <tr>
+                            <th>Driver ID</th>
+                            <th scope="col">Driver Name</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">Vehicle Details</th>
+
+                            <th scope="col">Online Status</th>
+                            <th scope="col">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {displayedOfflineDrivers.map((driver, index) => (
+                            <tr key={index}>
+                              <td># {driver.goods_driver_id}</td>
+                              <td>
+                                <div className="position-relative">
+                                  <div className="h-40 w-40 d-flex-center b-r-15 overflow-hidden p-1 position-absolute">
+                                    <img
+                                      src={driver.profile_pic}
+                                      alt={driver.driver_first_name}
+                                      className="img-fluid"
+                                    />
+                                  </div>
+                                  <div className="ms-5">
+                                    <h6 className="mb-0 f-s-16">
+                                      {driver.driver_first_name}
+                                    </h6>
+                                    <p className="mb-0 f-s-14 text-secondary">
+                                      {driver.mobile_no}
+                                    </p>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <p className="mb-0 f-s-12 text-secondary">
+                                  {driver.full_address}
+                                </p>
+                              </td>
+                              <td>
+                                <div className="position-relative">
+                                  <div className="h-40 w-40 d-flex-center b-r-15 overflow-hidden p-1 position-absolute">
+                                    <img
+                                      src={driver.driver_vehicle_image}
+                                      alt={driver.vehicle_name}
+                                      className="img-fluid"
+                                    />
+                                  </div>
+                                  <div className="ms-5">
+                                    <h6 className="mb-0 f-s-16">
+                                      {driver.vehicle_name} {" | "}{" "}
+                                      {driver.vehicle_plate_no}
+                                    </h6>
+                                    <p className="mb-0 f-s-14 text-secondary">
+                                      {driver.vehicle_fuel_type}
+                                    </p>
+                                  </div>
+                                </div>
+                              </td>
+
+                              <td>
+                                <div className="d-flex align-items-center">
+                                  <Switch
+                                    checked={false}
+                                    onChange={() =>
+                                      handleOnlineStatusToggle(driver)
+                                    }
+                                    disabled={
+                                      togglingDrivers[driver.goods_driver_id]
+                                    }
+                                    color="success"
+                                    size="small"
+                                  />
+                                  <span className="ms-2 badge bg-secondary">
+                                    Offline
+                                  </span>
+                                </div>
+                              </td>
+                              <td>
+                                <Link
+                                  to={`/dashboard/goods-driver-profile-details/${driver.goods_driver_id}`}
+                                  role="button"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="btn btn-outline-primary icon-btn w-30 h-30 b-r-22 me-2"
+                                >
+                                  <i className="ti ti-eye"></i>
+                                </Link>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                      {/* Pagination Controls */}
+                      <div className="pagination-controls d-flex justify-content-end align-items-center mt-3 p-4">
+                        <button
+                          className="btn btn-outline-primary"
+                          onClick={() =>
+                            setCurrentPageOfflineDrivers(
+                              currentPageOfflineDrivers - 1
+                            )
+                          }
+                          disabled={currentPageOfflineDrivers === 1}
+                        >
+                          Previous
+                        </button>
+                        <span className="mx-2">
+                          Page {currentPageOfflineDrivers} of{" "}
+                          {totalPagesOfflineDrivers}
+                        </span>
+                        <button
+                          className="btn btn-outline-primary"
+                          onClick={() =>
+                            setCurrentPageOfflineDrivers(
+                              currentPageOfflineDrivers + 1
+                            )
+                          }
+                          disabled={
+                            currentPageOfflineDrivers ===
+                            totalPagesOfflineDrivers
+                          }
                         >
                           Next
                         </button>

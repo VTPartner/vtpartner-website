@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 // import React from "react";
+import { useLocation } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -19,6 +20,7 @@ import { useParams } from "react-router-dom";
 
 const GoodsAndCabRegistrationHeroBanner = () => {
   const { category_id, category_name, category_type } = useParams();
+  const location = useLocation();
   const { service } = location.state || {};
   const isMobile = useMediaQuery("(max-width: 600px)");
 
@@ -51,6 +53,12 @@ const GoodsAndCabRegistrationHeroBanner = () => {
 
   const fetchCities = async () => {
     try {
+      console.log("Location State:", location.state);
+      console.log("Service from state:", location.state?.service);
+      console.log(
+        "Background Image:",
+        location.state?.service?.attach_vehicle_background_image
+      );
       const endPoint = `${serverWebsiteEndPoint}/all_allowed_cities`;
       const response = await axios.post(endPoint);
       setCities(response.data.cities);
@@ -180,8 +188,14 @@ const GoodsAndCabRegistrationHeroBanner = () => {
     <div className="relative w-full sm:h-full sm:mt-[4rem] mt-[4rem] h-full sm:p-12 p-2  bg-white">
       {/* Background Image */}
       <div className="sm:block absolute inset-0 hidden">
-        <img
+        {/* <img
+        
           src="/assets/vt_trucks_bg.jpeg"
+          alt="Background"
+          className="object-cover bg-center w-[100%] h-full"
+        /> */}
+        <img
+          src={service?.attach_vehicle_background_image || ""} // Use service prop
           alt="Background"
           className="object-cover bg-center w-[100%] h-full"
         />

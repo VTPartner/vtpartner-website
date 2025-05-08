@@ -96,7 +96,7 @@ const HeaderMenu = () => {
           </div>
         </li>
 
-        <li className="header-apps">
+        {/* <li className="header-apps">
           <a
             href="#"
             className="d-block head-icon"
@@ -199,13 +199,13 @@ const HeaderMenu = () => {
               </div>
             </div>
           </div>
-        </li>
+        </li> */}
 
         {/* <li className="header-dark">
           <HeaderMode />
         </li> */}
 
-        <li className="header-notification">
+        {/* <li className="header-notification">
           <a
             href="#"
             className="d-block head-icon position-relative"
@@ -293,7 +293,7 @@ const HeaderMenu = () => {
               </div>
             </div>
           </div>
-        </li>
+        </li> */}
 
         <li className="header-profile">
           <a

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 // import React from "react";
 /* eslint-disable no-unused-vars */
@@ -19,7 +20,7 @@ import { serverWebsiteEndPoint } from "../../../../dashboard/app/constants";
 import { LoadingButton } from "@mui/lab";
 import { useParams } from "react-router-dom";
 
-const HandyManRegistrationHeroBanner = () => {
+const HandyManRegistrationHeroBanner = ({ attach_image }) => {
   const { category_id, category_name, category_type } = useParams();
   const isMobile = useMediaQuery("(max-width: 600px)");
 
@@ -223,8 +224,13 @@ const HandyManRegistrationHeroBanner = () => {
     <div className="relative w-full sm:h-full sm:mt-[3rem] mt-[4rem] h-full sm:p-12 p-2  bg-white">
       {/* Background Image */}
       <div className="sm:block absolute inset-0 hidden">
-        <img
+        {/* <img
           src="/assets/registration_bg.jpeg"
+          alt="Background"
+          className="object-cover bg-center w-[100%] h-full"
+        /> */}
+        <img
+          src={attach_image || ""} // Use service prop
           alt="Background"
           className="object-cover bg-center w-[100%] h-full"
         />

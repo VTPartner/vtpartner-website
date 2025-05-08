@@ -16,7 +16,7 @@ const GoodsAdminPanel = () => {
           <AllOnlineGoodsDrivers />
           <AdminCard />
           <AdminCardMore />
-          <OrdersCards />
+          {/* <OrdersCards /> */}
         </div>
       </div>
     </Suspense>

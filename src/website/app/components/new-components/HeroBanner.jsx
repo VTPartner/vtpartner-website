@@ -452,7 +452,7 @@ const HeroBanner = () => {
                 {services.map((item, index) => (
                   <Box key={index} textAlign="center" p={2}>
                     <img
-                      src={item.category_image}
+                      src={item.website_background_image}
                       alt={`slide-${index}`}
                       loading="lazy"
                       style={{
@@ -511,6 +511,7 @@ const HeroBanner = () => {
                         variant="contained"
                         sx={{ marginTop: "1rem" }}
                         onClick={() => {
+                          console.log("Item being passed:", item);
                           if (
                             item.category_id === 1 ||
                             item.category_id === 2
@@ -518,28 +519,52 @@ const HeroBanner = () => {
                             navigate(
                               `/agents/${item.category_id}/${item.category_name}/${item.category_type}`,
                               {
-                                state: { service: item },
+                                state: {
+                                  service: {
+                                    ...item,
+                                    attach_vehicle_background_image:
+                                      item.attach_vehicle_background_image,
+                                  },
+                                },
                               }
                             );
                           } else if (item.category_id === 3) {
                             navigate(
                               `/jcb_crane_registration/${item.category_id}/${item.category_name}/${item.category_type}`,
                               {
-                                state: { service: item },
+                                state: {
+                                  service: {
+                                    ...item,
+                                    attach_vehicle_background_image:
+                                      item.attach_vehicle_background_image,
+                                  },
+                                },
                               }
                             );
                           } else if (item.category_id === 4) {
                             navigate(
                               `/drivers_registration/${item.category_id}/${item.category_name}/${item.category_type}`,
                               {
-                                state: { service: item },
+                                state: {
+                                  service: {
+                                    ...item,
+                                    attach_vehicle_background_image:
+                                      item.attach_vehicle_background_image,
+                                  },
+                                },
                               }
                             );
                           } else {
                             navigate(
                               `/handy_man_registration/${item.category_id}/${item.category_name}/${item.category_type}`,
                               {
-                                state: { service: item },
+                                state: {
+                                  service: {
+                                    ...item,
+                                    attach_vehicle_background_image:
+                                      item.attach_vehicle_background_image,
+                                  },
+                                },
                               }
                             );
                           }
@@ -585,7 +610,12 @@ const HeroBanner = () => {
               <span style={{ color: "#0072ce" }}>Coming Soon</span>
             </Typography>
             <Box display="flex" mt={3}>
-              <Button component="a" href="" target="_blank">
+              <Button
+                component="a"
+                href="https://play.google.com/store/apps/details?id=com.kapstranspvtltd.kaps&hl=en_IN"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <img
                   src="/assets/images/play_store.png"
                   alt="Play Store"

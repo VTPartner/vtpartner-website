@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react"; // Add useState
 import { Card, CardBody, CardHeader, Col } from "reactstrap";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -9,6 +9,7 @@ import { mapKey, serverEndPoint } from "../../../../dashboard/app/constants";
 const AllOnlineGoodsDrivers = () => {
   const mapRef = useRef(null);
   const markersRef = useRef([]);
+  const [noDrivers, setNoDrivers] = useState(false); // Add state for no drivers
 
   useEffect(() => {
     const loadGoogleMapsScript = () => {
@@ -33,10 +34,17 @@ const AllOnlineGoodsDrivers = () => {
         return;
       }
 
-      // Initialize map
+      // Initialize map with default settings
       const map = new google.maps.Map(mapRef.current, {
         center: { lat: 20.5937, lng: 78.9629 }, // Default to India's center
         zoom: 5,
+        styles: [
+          {
+            featureType: "poi",
+            elementType: "labels",
+            stylers: [{ visibility: "off" }],
+          },
+        ],
       });
 
       fetchDriverLocations(map);
@@ -58,7 +66,12 @@ const AllOnlineGoodsDrivers = () => {
           config
         );
 
-        if (response.status === 200 && response.data.results.length > 0) {
+        // Clear existing markers
+        markersRef.current.forEach(marker => marker.setMap(null));
+        markersRef.current = [];
+
+        if (response.status === 200 && response.data.results && response.data.results.length > 0) {
+          setNoDrivers(false); // Reset no drivers state
           const drivers = response.data.results;
 
           drivers.forEach((driver) => {
@@ -72,7 +85,7 @@ const AllOnlineGoodsDrivers = () => {
               map,
               title: driver.driver_first_name,
               icon: {
-                url: "/assets/icon/car.png", // Car icon path
+                url: "/assets/icon/car.png",
                 scaledSize: new google.maps.Size(40, 40),
               },
             });
@@ -95,28 +108,59 @@ const AllOnlineGoodsDrivers = () => {
             markersRef.current.push(marker);
           });
         } else {
+          setNoDrivers(true); // Set no drivers state to true
           console.warn("No drivers found.");
         }
       } catch (error) {
+        setNoDrivers(true); // Set no drivers state to true on error
         console.error("Error fetching driver locations:", error);
       }
     };
 
     loadGoogleMapsScript();
+
+    // Cleanup function
+    return () => {
+      // Clear markers when component unmounts
+      markersRef.current.forEach(marker => marker.setMap(null));
+    };
   }, []);
 
   return (
     <Col lg={12}>
       <Card className="shadow-lg border-0 rounded">
-        <CardHeader>
+        <CardHeader className="d-flex justify-content-between align-items-center">
           <h5>All Online Goods Drivers</h5>
+          {noDrivers && (
+            <span className="text-muted">No online drivers available</span>
+          )}
         </CardHeader>
         <CardBody>
           <div
             className="w-100 h-400"
             ref={mapRef}
-            style={{ height: "400px" }}
-          ></div>
+            style={{ 
+              height: "400px",
+              position: "relative" 
+            }}
+          >
+            {noDrivers && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  backgroundColor: "rgba(255, 255, 255, 0.8)",
+                  padding: "15px",
+                  borderRadius: "5px",
+                  zIndex: 1,
+                }}
+              >
+                No online drivers available at the moment
+              </div>
+            )}
+          </div>
         </CardBody>
       </Card>
     </Col>

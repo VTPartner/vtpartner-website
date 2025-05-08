@@ -24,9 +24,7 @@ const DownloadApp = () => {
           </div>
           {/* Title and Subtitle */}
           <div>
-            <div className="sm:text-lg text-xs font-semibold">
-              VT Partner App
-            </div>
+            <div className="sm:text-lg text-xs font-semibold">KASP App</div>
             <div className="sm:text-sm text-xs text-gray-600">
               We are coming soon
             </div>

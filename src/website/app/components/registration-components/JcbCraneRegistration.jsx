@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 // import React from "react";
 import {
@@ -15,8 +16,9 @@ import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { serverWebsiteEndPoint } from "../../../../dashboard/app/constants";
 import { LoadingButton } from "@mui/lab";
+import { useLocation } from "react-router-dom";
 
-const JcbCraneRegistrationHeroBanner = () => {
+const JcbCraneRegistrationHeroBanner = ({ attach_image }) => {
   const isMobile = useMediaQuery("(max-width: 600px)");
 
   // States to store API fetched data
@@ -267,8 +269,13 @@ const JcbCraneRegistrationHeroBanner = () => {
     <div className="relative w-full sm:h-full sm:mt-[3rem] mt-[4rem] h-full sm:p-12 p-2  bg-white">
       {/* Background Image */}
       <div className="sm:block absolute inset-0 hidden">
-        <img
+        {/* <img
           src="/assets/registration_bg.jpeg"
+          alt="Background"
+          className="object-cover bg-center w-[100%] h-full"
+        /> */}
+        <img
+          src={attach_image || ""} // Use service prop
           alt="Background"
           className="object-cover bg-center w-[100%] h-full"
         />

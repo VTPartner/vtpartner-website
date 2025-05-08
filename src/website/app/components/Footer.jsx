@@ -71,9 +71,9 @@ const Footer = () => {
     <footer className="bg-white text-black p-6 mt-10">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* VT Partner Links Section */}
+          {/* KASP Links Section */}
           <div className="flex flex-col">
-            {/* <h4 className="text-lg font-titillium mb-2">VT Partner</h4> */}
+            {/* <h4 className="text-lg font-titillium mb-2">KASP</h4> */}
             <img
               src="/logo_new.png"
               alt="logo"
@@ -83,7 +83,7 @@ const Footer = () => {
               href=""
               className="hover:text-black text-gray-400"
               target="_self"
-              aria-label="Visit VT Partner's Help Center"
+              aria-label="Visit KASP's Help Center"
             >
               Visit Help Center
             </a> */}
@@ -180,10 +180,10 @@ const Footer = () => {
             <h4 className="text-lg font-titillium mb-2">Follow Us</h4>
             <div className="flex space-x-4">
               <a
-                href="https://www.facebook.com/VT Partner"
+                href="https://www.facebook.com/KASP"
                 className="hover:text-black text-gray-400"
                 target="_blank"
-                aria-label="Visit VT Partner's Facebook"
+                aria-label="Visit KASP's Facebook"
               >
                 <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none">
                   <path
@@ -193,10 +193,10 @@ const Footer = () => {
                 </svg>
               </a>
               <a
-                href="https://twitter.com/VT Partner"
+                href="https://twitter.com/KASP"
                 className="hover:text-black text-gray-400"
                 target="_blank"
-                aria-label="Visit VT Partner's Twitter"
+                aria-label="Visit KASP's Twitter"
               >
                 <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none">
                   <path
@@ -209,7 +209,7 @@ const Footer = () => {
                 href="https://www.youtube.com/"
                 className="hover:text-black text-gray-400"
                 target="_blank"
-                aria-label="Visit VT Partner's YouTube"
+                aria-label="Visit KASP's YouTube"
               >
                 <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none">
                   <path
@@ -222,7 +222,7 @@ const Footer = () => {
                 href="https://www.linkedin.com/company/1815218"
                 className="hover:text-black text-gray-400"
                 target="_blank"
-                aria-label="Visit VT Partner's LinkedIn"
+                aria-label="Visit KASP's LinkedIn"
               >
                 <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none">
                   <path
@@ -250,7 +250,7 @@ const Footer = () => {
 
       <div className="text-center sm:flex justify-between items-center m-10 text-secondary">
         <p className="sm:text-sm text-xs font-semibold font-titillium">
-          © {new Date().getFullYear()} VT Partner Trans Pvt Ltd, Inc. All rights
+          © {new Date().getFullYear()} KASP Trans Pvt Ltd, Inc. All rights
           reserved.
         </p>
         <div className="flex items-center sm:text-sm text-xs justify-center gap-4 sm:mt-0 mt-4 sm:mb-0 mb-4">
@@ -258,14 +258,14 @@ const Footer = () => {
             href=""
             className="hover:text-black text-gray-400  font-titillium"
             target="_self"
-            aria-label="Learn more about VT Partner gift cards"
+            aria-label="Learn more about KASP gift cards"
           >
             Privacy Policy
           </a> */}
           <Link
             to="/terms&conditions"
             className="hover:text-black text-gray-400 font-titillium"
-            aria-label="Learn more about VT Partner gift cards"
+            aria-label="Learn more about KASP gift cards"
           >
             Terms and Conditions
           </Link>
@@ -273,7 +273,7 @@ const Footer = () => {
             href="/terms&conditions"
             className="hover:text-black text-gray-400 font-titillium"
             target="_self"
-            aria-label="Learn more about VT Partner gift cards"
+            aria-label="Learn more about KASP gift cards"
           >
             Terms and Conditions
           </a> */}
@@ -281,7 +281,7 @@ const Footer = () => {
             href=""
             className="hover:text-black text-gray-400 font-titillium"
             target="_self"
-            aria-label="Learn more about VT Partner gift cards"
+            aria-label="Learn more about KASP gift cards"
           >
             Notices
           </a> */}

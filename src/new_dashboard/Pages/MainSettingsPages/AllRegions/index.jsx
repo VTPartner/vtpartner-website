@@ -22,6 +22,8 @@ import {
 } from "../../../../dashboard/app/constants";
 import Loader from "../../../Components/Loader";
 import { toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { format } from "date-fns";
 import { LoadingButton } from "@mui/lab";
 import {
@@ -57,6 +59,8 @@ const AllRegionsCovered = () => {
     pincode_until: false,
     description: false,
     bg_image: false,
+    base_price: false,
+    outstation_distance: false,
   });
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedCity, setSelectedCity] = useState(null);
@@ -67,6 +71,8 @@ const AllRegionsCovered = () => {
     description: "",
     bg_image: "", // To store the image URL
     status: "",
+    base_price: "",
+    outstation_distance: "",
   });
   const [isAddingNewCity, setIsAddingNewCity] = useState(false); // For differentiating between add/edit mode
   const [openNewCityDialog, setOpenNewCityDialog] = useState(false); // For controlling the Add City dialog
@@ -77,6 +83,8 @@ const AllRegionsCovered = () => {
     pincode: false,
     pincode_until: false,
     description: false,
+    base_price: false,
+    outstation_distance: false,
   });
   const cityNameRegex = /^[a-zA-Z\s]+$/; // Only letters and spaces
   const pincodeRegex = /^[0-9]+$/; // Only numbers
@@ -92,6 +100,8 @@ const AllRegionsCovered = () => {
       description: city.description || "",
       bg_image: city.bg_image || "", // Set the initial image URL
       status: parseInt(city.status) || 0,
+      base_price: city.base_price || "",
+      outstation_distance: city.outstation_distance || "",
     });
     setOpenDialog(true);
   };
@@ -118,7 +128,23 @@ const AllRegionsCovered = () => {
     });
   };
 
+  // Add validation regex for new fields
+  const priceRegex = /^\d+(\.\d{1,2})?$/; // Allows decimal numbers with up to 2 decimal places
+  const distanceRegex = /^\d+$/; // Only whole numbers
+
   const handleSaveCity = async () => {
+    // Check if the new name conflicts with any other city (excluding the current city)
+    const cityExists = cities.some(
+      (city) =>
+        city.city_name.toLowerCase() === editedCity.city_name.toLowerCase() &&
+        city.city_id !== selectedCity.city_id
+    );
+
+    if (cityExists) {
+      toast.error("A city with this name already exists!");
+      setBtnLoading(false);
+      return;
+    }
     setBtnLoading(true);
     const newErrors = {
       city_name: !cityNameRegex.test(editedCity.city_name), // Invalid if not matching regex
@@ -127,6 +153,8 @@ const AllRegionsCovered = () => {
       description: !descriptionRegex.test(editedCity.description), // Validate description content
       bg_image: !imageFile && !editedCity.bg_image, // Validate if image is selected
       status: !editedCity.status && editedCity.status !== 0,
+      base_price: !priceRegex.test(editedCity.base_price),
+      outstation_distance: !distanceRegex.test(editedCity.outstation_distance),
     };
 
     setErrors(newErrors);
@@ -172,6 +200,8 @@ const AllRegionsCovered = () => {
           description: editedCity.description,
           bg_image: imageUrl, // Use the uploaded or existing image URL
           status: editedCity.status,
+          base_price: editedCity.base_price,
+          outstation_distance: editedCity.outstation_distance,
         },
         {
           headers: {
@@ -210,6 +240,8 @@ const AllRegionsCovered = () => {
       pincode_until: "",
       description: "",
       bg_image: "", // Empty initial values
+      base_price: "", // Add this field
+      outstation_distance: "", // Add this field
     });
     setImageFile(null); // Reset image
     setIsAddingNewCity(true); // Set add mode
@@ -218,12 +250,27 @@ const AllRegionsCovered = () => {
 
   const handleNewCity = async () => {
     setBtnLoading(true);
+    // Check if city name already exists (case-insensitive)
+    const cityExists = cities.some(
+      (city) =>
+        city.city_name.toLowerCase() === editedCity.city_name.toLowerCase()
+    );
+
+    if (cityExists) {
+      toast.error("A city with this name already exists!");
+      setBtnLoading(false);
+      return;
+    }
+
+    // Add validation for base_price and outstation_distance
     const newErrors = {
       city_name: !cityNameRegex.test(editedCity.city_name),
       pincode: !pincodeRegex.test(editedCity.pincode),
       pincode_until: !pincodeRegex.test(editedCity.pincode_until),
       description: !descriptionRegex.test(editedCity.description),
       bg_image: !imageFile && !editedCity.bg_image,
+      base_price: !priceRegex.test(editedCity.base_price), // Add this
+      outstation_distance: !distanceRegex.test(editedCity.outstation_distance), // Add this
     };
 
     setAddNewCityErrors(newErrors);
@@ -264,6 +311,8 @@ const AllRegionsCovered = () => {
           pincode_until: editedCity.pincode_until,
           description: editedCity.description,
           bg_image: imageUrl,
+          base_price: editedCity.base_price, // Add this
+          outstation_distance: editedCity.outstation_distance, // Add this
         },
         {
           headers: {
@@ -274,9 +323,7 @@ const AllRegionsCovered = () => {
       );
 
       if (response.status === 200) {
-        // setError(null);
         toast.success(`${editedCity.city_name} City Added Successfully`);
-
         // Reload cities while maintaining pagination
         fetchCities(currentPage); // Fetch cities again with the current page
       } else {
@@ -408,6 +455,7 @@ const AllRegionsCovered = () => {
 
   return (
     <div>
+      <ToastContainer position="top-right" />
       <Container fluid>
         <Row className="m-1">
           <Col xs={12}>
@@ -498,6 +546,8 @@ const AllRegionsCovered = () => {
                             <th scope="col">City Name</th>
                             <th scope="col">Pincode</th>
                             <th scope="col">Last Updated</th>
+                            <th scope="col">Base Price</th>
+                            <th scope="col">Outstation Distance</th>
                             <th scope="col">Status</th>
                             <th scope="col">Actions</th>
                           </tr>
@@ -532,6 +582,8 @@ const AllRegionsCovered = () => {
                                   )}
                                 </p>
                               </td>
+                              <td>₹{city.base_price}</td>
+                              <td>{city.outstation_distance} km</td>
                               <td>
                                 <span
                                   className={`badge bg-${(() => {
@@ -646,6 +698,42 @@ const AllRegionsCovered = () => {
                 helperText={errors.city_name ? "City name is required." : ""}
               />
               <TextField
+                label="Base Price (₹)"
+                fullWidth
+                margin="normal"
+                name="base_price"
+                type="number"
+                value={editedCity.base_price}
+                onChange={handleInputChange}
+                required
+                error={errors.base_price}
+                helperText={
+                  errors.base_price ? "Please enter a valid base price" : ""
+                }
+                InputProps={{
+                  startAdornment: <span>₹</span>,
+                }}
+              />
+              <TextField
+                label="Outstation Distance (km)"
+                fullWidth
+                margin="normal"
+                name="outstation_distance"
+                type="number"
+                value={editedCity.outstation_distance}
+                onChange={handleInputChange}
+                required
+                error={errors.outstation_distance}
+                helperText={
+                  errors.outstation_distance
+                    ? "Please enter a valid distance"
+                    : ""
+                }
+                InputProps={{
+                  endAdornment: <span>km</span>,
+                }}
+              />
+              <TextField
                 label="Pincode"
                 fullWidth
                 margin="normal"
@@ -751,6 +839,42 @@ const AllRegionsCovered = () => {
             required
             error={errorNewCity.city_name}
             helperText={errorNewCity.city_name ? "City name is required." : ""}
+          />
+          <TextField
+            label="Base Price (₹)"
+            fullWidth
+            margin="normal"
+            name="base_price"
+            type="number"
+            value={editedCity.base_price}
+            onChange={handleInputChange}
+            required
+            error={errorNewCity.base_price}
+            helperText={
+              errorNewCity.base_price ? "Please enter a valid base price" : ""
+            }
+            InputProps={{
+              startAdornment: <span>₹</span>,
+            }}
+          />
+          <TextField
+            label="Outstation Distance (km)"
+            fullWidth
+            margin="normal"
+            name="outstation_distance"
+            type="number"
+            value={editedCity.outstation_distance}
+            onChange={handleInputChange}
+            required
+            error={errorNewCity.outstation_distance}
+            helperText={
+              errorNewCity.outstation_distance
+                ? "Please enter a valid distance"
+                : ""
+            }
+            InputProps={{
+              endAdornment: <span>km</span>,
+            }}
           />
           <TextField
             label="Pincode Start"

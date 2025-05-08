@@ -19,7 +19,7 @@ const VTPartnerAdvantages = () => {
     {
       title: "On-Time Payment",
       description:
-        "Be assured to receive all payments on time & get the best in class support when you attach a mini truck with VT Partner.",
+        "Be assured to receive all payments on time & get the best in class support when you attach a mini truck with KASP.",
       imgSrc:
         "https://dom-website-prod-cdn-cms.porter.in/feature_3_e6d1e49e25.png",
     },
@@ -28,7 +28,7 @@ const VTPartnerAdvantages = () => {
   return (
     <div className="py-10 bg-gray-100">
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-titillium">VT Partner Advantages</h2>
+        <h2 className="text-3xl font-titillium">KASP Advantages</h2>
       </div>
       <div className="flex flex-wrap justify-center gap-8 mt-5">
         {advantages.map((advantage, index) => (

@@ -1,10 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 
-
 import { Card, CardBody, Col, Container, Row } from "reactstrap";
-import { Link, useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import Cookies from "js-cookie";
@@ -20,6 +18,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const AddPinCodesPage = () => {
   const { city_id, city_name } = useParams();
+  const navigate = useNavigate();
   const [pinCodes, setPinCodes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -83,6 +82,12 @@ const AddPinCodesPage = () => {
     } else {
       toast.error("Failed to fetch data. Please check your connection.");
     }
+  };
+
+  // Navigate to map selector page
+  const goToMapSelector = () => {
+    // Navigate to map selector page with city information
+    navigate(`/dashboard/map-pincode-selector/${city_id}/${city_name}`);
   };
 
   // Filter pincodes based on search
@@ -185,21 +190,32 @@ const AddPinCodesPage = () => {
           <Col xs={12}>
             <Card className="shadow-lg border-0 rounded-lg">
               <CardBody>
-                {/* Add New Pincode Button */}
-                <button
-                  className="btn btn-primary mb-3"
-                  onClick={() => {
-                    setIsEditMode(false);
-                    setSelectedPincode({
-                      pincode: "",
-                      pincode_id: "",
-                      status: 1,
-                    });
-                    setShowPincodeModal(true);
-                  }}
-                >
-                  Add New Pincode
-                </button>
+                {/* Buttons row with flex layout */}
+                <div className="d-flex justify-content-between mb-3">
+                  {/* Add New Pincode Button */}
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => {
+                      setIsEditMode(false);
+                      setSelectedPincode({
+                        pincode: "",
+                        pincode_id: "",
+                        status: 1,
+                      });
+                      setShowPincodeModal(true);
+                    }}
+                  >
+                    <i className="ti ti-plus me-1"></i> Add New Pincode
+                  </button>
+
+                  {/* Add on Map Button */}
+                  <button
+                    className="btn btn-success"
+                    onClick={goToMapSelector}
+                  >
+                    <i className="ti ti-map-2 me-1"></i> Add on Map
+                  </button>
+                </div>
 
                 {/* Search Input */}
                 <div className="mb-3">

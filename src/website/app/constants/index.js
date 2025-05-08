@@ -334,7 +334,7 @@ const projects = [
     name: "JCB",
     price: "1500",
     description:
-      "At VT Partner, we offer professional JCB drivers to ensure your construction and excavation projects run smoothly and efficiently. Our skilled operators are trained to handle JCB machinery with expertise, ensuring safe and effective operation on any job site.",
+      "At KASP, we offer professional JCB drivers to ensure your construction and excavation projects run smoothly and efficiently. Our skilled operators are trained to handle JCB machinery with expertise, ensuring safe and effective operation on any job site.",
     tags: [
       {
         name: "Get Estimation",
@@ -358,7 +358,7 @@ const projects = [
     name: "Crane",
     price: "2000",
     description:
-      "At VT Partner, we offer professional crane services tailored to your heavy lifting and transportation needs. Our diverse fleet includes a range of cranes specifically designed for various applications, allowing us to effectively meet the unique requirements of your project—be it in construction, industrial work, or logistics.",
+      "At KASP, we offer professional crane services tailored to your heavy lifting and transportation needs. Our diverse fleet includes a range of cranes specifically designed for various applications, allowing us to effectively meet the unique requirements of your project—be it in construction, industrial work, or logistics.",
     tags: [
       {
         name: "Get Estimation",
@@ -382,7 +382,7 @@ const projects = [
     name: "Vendor Service",
     price: "200",
     description:
-      "VT Partner provides a range of professional vendor services to meet your everyday needs. From skilled electricians and plumbers to reliable mechanics and cleaners, our vetted experts are just a call away. We prioritize quality and efficiency, ensuring that you receive prompt, trustworthy service for all your household and business requirements.",
+      "KASP provides a range of professional vendor services to meet your everyday needs. From skilled electricians and plumbers to reliable mechanics and cleaners, our vetted experts are just a call away. We prioritize quality and efficiency, ensuring that you receive prompt, trustworthy service for all your household and business requirements.",
     tags: [
       {
         name: "Get Estimation",

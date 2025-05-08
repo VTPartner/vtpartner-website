@@ -66,7 +66,7 @@ const EstimationHeroBanner = ({ bgImage, onCitySelect }) => {
         <div className="relative z-10 flex lg:flex-row flex-col lg:justify-between justify-center w-full lg:p-10 p-2 lg:mt-0 mt-[10rem] items-center lg:mb-0 mb-[-8rem]">
           <div className="flex flex-col lg:items-start items-center w-full">
             <h1 className="text-white lg:text-5xl text-lg font-titillium">
-              Welcome to VT Partner
+              Welcome to KASP
             </h1>
             <p className="text-white lg:text-2xl text-sm mt-4">
               Reliable Transport & Vendor Services

@@ -104,11 +104,11 @@ const AllServices = () => {
           variants={fadeIn("", "", 0.1, 0.25)}
           className="mt-0 text-secondary text-[17px] max-w-3xl leading-[30px]"
         >
-          At VT Partner, we are committed to providing a wide range of reliable
-          and efficient services to meet your everyday needs. Whether you're
-          looking for Goods Delivery, Cab Booking, or heavy machinery like JCB
-          and Crane Booking, we’ve got you covered. Our services also extend to
-          expert Vendor Services, offering skilled professionals for tasks like
+          At KASP, we are committed to providing a wide range of reliable and
+          efficient services to meet your everyday needs. Whether you're looking
+          for Goods Delivery, Cab Booking, or heavy machinery like JCB and Crane
+          Booking, we’ve got you covered. Our services also extend to expert
+          Vendor Services, offering skilled professionals for tasks like
           plumbing, electrical work, mechanic services, car wash, laundry, and
           more – all available right at your doorstep.
         </motion.p>

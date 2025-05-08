@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 // import React from "react";
 import {
@@ -21,7 +22,7 @@ import { CgSpinner } from "react-icons/cg";
 import { auth } from "../../../../firebase";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 
-const DriversRegistrationHeroBanner = () => {
+const DriversRegistrationHeroBanner = ({ attach_image }) => {
   const { category_id, category_name, category_type } = useParams();
   const isMobile = useMediaQuery("(max-width: 600px)");
 
@@ -343,10 +344,15 @@ const DriversRegistrationHeroBanner = () => {
         {/* Background Image */}
         <div className="sm:block absolute inset-0 hidden">
           <img
-            src="/assets/registration_bg.jpeg"
+            src={attach_image || ""} // Use service prop
             alt="Background"
             className="object-cover bg-center w-[100%] h-full"
           />
+          {/* <img
+            src="/assets/registration_bg.jpeg"
+            alt="Background"
+            className="object-cover bg-center w-[100%] h-full"
+          /> */}
         </div>
 
         {/* DriversRegistrationHeroBanner Form Card */}

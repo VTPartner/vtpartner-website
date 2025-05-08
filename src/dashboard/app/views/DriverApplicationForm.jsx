@@ -137,7 +137,7 @@ const DriverApplicationForm = () => {
                 flexGrow={1}
               >
                 <Typography variant="h5" align="center">
-                  VT Partner Trans Private Limited
+                  KASP Trans Private Limited
                 </Typography>{" "}
                 {/* Company Name */}
                 <Typography variant="body1" align="center">

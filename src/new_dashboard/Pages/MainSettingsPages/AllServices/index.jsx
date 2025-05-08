@@ -53,6 +53,7 @@ const AllServicesPage = () => {
     setActiveTab(tab);
   };
 
+  const [websiteBackgroundFile, setWebsiteBackgroundFile] = useState(null);
   const [services, setServices] = useState([]);
   const [servicesTypes, setServicesType] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -62,25 +63,44 @@ const AllServicesPage = () => {
   const [imageFile, setImageFile] = useState(null);
   const [imageError, setImageError] = useState(false);
 
+  const [attachVehicleBackgroundFile, setAttachVehicleBackgroundFile] =
+    useState(null);
+
+  // Update selectedService state
   const [selectedService, setSelectedService] = useState({
     category_id: "",
     category_name: "",
     category_type_id: "",
     category_image: "",
+    website_background_image: "",
+    attach_vehicle_background_image: "", // Add this
     category_type: "",
     epoch: "",
     description: "",
   });
 
+  // Update error state
   const [errorService, setServiceErrors] = useState({
     category_id: false,
     category_name: false,
     category_type_id: false,
     category_image: false,
+    website_background_image: false,
+    attach_vehicle_background_image: false, // Add this
     category_type: false,
     epoch: false,
     description: false,
   });
+
+  const handleWebsiteBackgroundChange = (e) => {
+    const file = e.target.files[0];
+    setWebsiteBackgroundFile(file);
+  };
+
+  const handleAttachVehicleBackgroundChange = (e) => {
+    const file = e.target.files[0];
+    setAttachVehicleBackgroundFile(file);
+  };
 
   const [btnLoading, setBtnLoading] = useState(false);
   const [page, setPage] = useState(0);
@@ -243,11 +263,15 @@ const AllServicesPage = () => {
 
   const saveCategoryDetails = async () => {
     setBtnLoading(true);
-    console.log("selectedService::", selectedService);
     const newErrors = {
       category_name: !selectedService.category_name,
       category_type_id: !selectedService.category_type_id,
       category_image: !imageFile && !selectedService.category_image,
+      website_background_image:
+        !websiteBackgroundFile && !selectedService.website_background_image,
+      attach_vehicle_background_image:
+        !attachVehicleBackgroundFile &&
+        !selectedService.attach_vehicle_background_image,
     };
     setServiceErrors(newErrors);
 
@@ -255,58 +279,65 @@ const AllServicesPage = () => {
       setBtnLoading(false);
       return;
     }
-    let serviceImageUrl = selectedService.category_image;
 
-    //CATEGORY IMAGE UPLOAD
+    let serviceImageUrl = selectedService.category_image;
+    let websiteBackgroundUrl = selectedService.website_background_image;
+    let attachVehicleBackgroundUrl =
+      selectedService.attach_vehicle_background_image;
+
     try {
+      // Upload category image
       if (imageFile) {
-        console.log("Image File:", imageFile); // Log the image file for debugging
         const formData = new FormData();
         formData.append("image", imageFile);
-
-        // Log form data content
-        for (const [key, value] of formData.entries()) {
-          console.log(`${key}: ${value.name}`); // Will log the file name
-        }
-        console.log("formData:", formData);
         const uploadResponse = await axios.post(
           `${serverEndPointImage}/upload`,
-          formData, // No headers,
+          formData,
           {
             headers: {
               "Content-Type": "multipart/form-data",
             },
           }
         );
-
-        serviceImageUrl = uploadResponse.data.image_url; // Ensure correct key
-      }
-    } catch (error) {
-      console.error("Error uploading Vehicle Image:", error);
-      toast.error(
-        "Error uploading Vehicle Image or file size too large than 2 MB"
-      );
-      setBtnLoading(false);
-      return;
-    }
-
-    const token = Cookies.get("authToken");
-    const endpoint = isEditMode
-      ? `${serverEndPoint}/edit_service`
-      : `${serverEndPoint}/add_service`;
-
-    try {
-      const formData = new FormData();
-
-      // Append vehicle details to formData
-      for (const key in selectedService) {
-        formData.append(key, selectedService[key]);
+        serviceImageUrl = uploadResponse.data.image_url;
       }
 
-      // Append image file if it exists
-      if (imageFile) {
-        formData.append("image", imageFile);
+      // Upload website background image
+      if (websiteBackgroundFile) {
+        const formData = new FormData();
+        formData.append("image", websiteBackgroundFile);
+        const uploadResponse = await axios.post(
+          `${serverEndPointImage}/upload`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        websiteBackgroundUrl = uploadResponse.data.image_url;
       }
+
+      // Upload attach vehicle background image
+      if (attachVehicleBackgroundFile) {
+        const formData = new FormData();
+        formData.append("image", attachVehicleBackgroundFile);
+        const uploadResponse = await axios.post(
+          `${serverEndPointImage}/upload`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        attachVehicleBackgroundUrl = uploadResponse.data.image_url;
+      }
+
+      const token = Cookies.get("authToken");
+      const endpoint = isEditMode
+        ? `${serverEndPoint}/edit_service`
+        : `${serverEndPoint}/add_service`;
 
       const response = await axios.post(
         endpoint,
@@ -315,6 +346,8 @@ const AllServicesPage = () => {
           category_name: selectedService.category_name,
           category_type_id: selectedService.category_type_id,
           category_image: serviceImageUrl,
+          website_background_image: websiteBackgroundUrl,
+          attach_vehicle_background_image: attachVehicleBackgroundUrl,
           description: selectedService.description,
         },
         {
@@ -334,6 +367,8 @@ const AllServicesPage = () => {
         fetchAllServices();
         handleCloseDialog();
         setImageFile(null);
+        setWebsiteBackgroundFile(null);
+        setAttachVehicleBackgroundFile(null);
       } else {
         toast.error("Failed to save Category.");
       }
@@ -599,7 +634,45 @@ const AllServicesPage = () => {
             <Typography variant="h6" gutterBottom>
               {isEditMode ? "Edit Service" : "Add New Service"}
             </Typography>
-
+            <Typography variant="subtitle2" sx={{ mt: 2 }}>
+              Website Background Image
+            </Typography>
+            {isEditMode && selectedService.website_background_image && (
+              <Box display="flex" alignItems="center" mb={2} width="100%">
+                <img
+                  src={selectedService.website_background_image}
+                  alt="Website Background"
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    maxHeight: "100px",
+                    objectFit: "contain",
+                    borderRadius: "26px",
+                  }}
+                />
+              </Box>
+            )}
+            <Typography variant="subtitle2" sx={{ mt: 2 }}>
+              Attach Vehicle Background Image
+            </Typography>
+            {isEditMode && selectedService.attach_vehicle_background_image && (
+              <Box display="flex" alignItems="center" mb={2} width="100%">
+                <img
+                  src={selectedService.attach_vehicle_background_image}
+                  alt="Attach Vehicle Background"
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    maxHeight: "100px",
+                    objectFit: "contain",
+                    borderRadius: "26px",
+                  }}
+                />
+              </Box>
+            )}
+            <Typography variant="subtitle2" sx={{ mt: 2 }}>
+              Mobile Home Image
+            </Typography>
             {isEditMode ? (
               <Box display="flex" alignItems="center" mb={2} width="100%">
                 {selectedService.category_image ? (
@@ -683,6 +756,38 @@ const AllServicesPage = () => {
               error={errorService.category_image} // Set error state for image
               helperText={
                 errorService.category_image ? "Category Image is required." : ""
+              }
+            />
+            <Typography variant="subtitle2">
+              Website Home Slider Image
+            </Typography>
+            <TextField
+              fullWidth
+              margin="normal"
+              type="file"
+              onChange={handleWebsiteBackgroundChange}
+              required
+              error={errorService.website_background_image}
+              helperText={
+                errorService.website_background_image
+                  ? "Website Background Image is required."
+                  : ""
+              }
+            />
+            <Typography variant="subtitle2" sx={{ mt: 2 }}>
+              Attach Vehicle Background Image
+            </Typography>
+            <TextField
+              fullWidth
+              margin="normal"
+              type="file"
+              onChange={handleAttachVehicleBackgroundChange}
+              required
+              error={errorService.attach_vehicle_background_image}
+              helperText={
+                errorService.attach_vehicle_background_image
+                  ? "Attach Vehicle Background Image is required."
+                  : ""
               }
             />
 

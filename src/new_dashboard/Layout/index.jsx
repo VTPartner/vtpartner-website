@@ -11,11 +11,11 @@ import { useEffect, useState } from "react";
 const Layout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   useEffect(() => {
-    if (window.location.pathname === "/dashboard/ecommerce") {
-      $(function () {
-        $("#welcomeCard").modal("show");
-      });
-    }
+    // if (window.location.pathname === "/dashboard/home") {
+    //   $(function () {
+    //     $("#welcomeCard").modal("show");
+    //   });
+    // }
   }, []);
   return (
     <div className="app-wrapper default">

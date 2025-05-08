@@ -61,6 +61,48 @@ import CouponsPage from "../Pages/MainSettingsPages/AddCoupons";
 import AllCustomers from "../Components/AllCustomers";
 import OrdersReport from "../Components/Admindashboard/OrdersReport";
 import { DeleteAccount } from "../../website/app/components";
+import RechargePlans from "../Pages/MainSettingsPages/AddRechargePlans";
+import GoodsTypes from "../Pages/MainSettingsPages/AddGoodsType";
+import GoodsDriverWallet from "../Components/Admindashboard/AllGoodsDrivers/GoodsDriverWallet";
+import CustomerWallet from "../Components/Admindashboard/AllGoodsDrivers/CustomerWallet";
+import AllCabDrivers from "../Components/CabAdminDashboard/AllCabDriversTab";
+import CabDriverProfileDetails from "../Components/CabAdminDashboard/CabDriverDetails";
+import CabDriverWallet from "../Components/CabAdminDashboard/CabDriverWallet";
+import AllCabBookings from "../Components/CabAdminDashboard/AllCabBookings";
+import CabBookingDetails from "../Components/CabAdminDashboard/CabBookingDetails";
+import AllCabOrders from "../Components/CabAdminDashboard/AllCabOrders";
+import CabOrderDetails from "../Components/CabAdminDashboard/CabOrderDetails";
+import CabInvoiceDetails from "../Components/CabAdminDashboard/CabOrderInvoiceDetails";
+import GoodsDriverRechargeScreen from "../Components/Admindashboard/GoodsDriverRechargeScreen";
+import CabDriverRechargeScreen from "../Components/CabAdminDashboard/CabDriverRechargeHistory";
+import AllJCBCraneDrivers from "../Components/JCBCraneAdminDashboard/AllJcbCraneDrivers";
+import AllOtherDrivers from "../Components/DriversAdminDashboard/AllDrivers";
+import JCBCraneDriverProfileDetails from "../Components/JCBCraneAdminDashboard/JcbCraneDriverProfileDetails";
+import OtherDriverProfileDetails from "../Components/DriversAdminDashboard/DriverProfileDetails";
+import HandyManAgentProfileDetails from "../Components/HandyManDashboard/HandymanProfileDetails";
+import AllHandyman from "../Components/HandyManDashboard/AllHandyMans";
+import MapPincodeSelector from "../Pages/MainSettingsPages/AddPincodesOnMap";
+import AllDriversBookings from "../Components/DriversAdminDashboard/AllDriversBookings";
+import AllHandyManBookings from "../Components/HandyManDashboard/AllHandyManBookings";
+import AllJcbCraneBookings from "../Components/JCBCraneAdminDashboard/AllJcbCraneBookings";
+import AllJcbCraneOrders from "../Components/JCBCraneAdminDashboard/AllJcbCraneOrders";
+import AllHandymansOrders from "../Components/HandyManDashboard/AllHandyManOrders";
+import AllDriversOrders from "../Components/DriversAdminDashboard/AllDriversOrders";
+import JcbCraneDriverRechargeScreen from "../Components/JCBCraneAdminDashboard/JcbCraneDriverRechargeScreen";
+import OtherDriverRechargeScreen from "../Components/DriversAdminDashboard/DriverRechargeScreen";
+import HandymanRechargeScreen from "../Components/HandyManDashboard/HandymanRechargeScreen";
+import JcbCraneDriverWallet from "../Components/JCBCraneAdminDashboard/JcbCraneDriverWallet";
+import OtherDriverWallet from "../Components/DriversAdminDashboard/OtherDriverWallet";
+import HandymanWallet from "../Components/HandyManDashboard/HandymanWallet";
+import HandymanOrderDetails from "../Components/HandyManDashboard/HandymanOrderDetails";
+import HandymanInvoiceDetails from "../Components/HandyManDashboard/HandymanInvoiceDetails";
+import HandymanBookingDetails from "../Components/HandyManDashboard/HandymanBookingDetails";
+import JcbCraneBookingDetails from "../Components/JCBCraneAdminDashboard/JcbCraneBookingDetails";
+import JcbCraneInvoiceDetails from "../Components/JCBCraneAdminDashboard/JcbCraneInvoiceDetails";
+import JcbCraneOrderDetails from "../Components/JCBCraneAdminDashboard/JcbCraneOrderDetails";
+import OtherDriverBookingDetails from "../Components/DriversAdminDashboard/OtherDriverBookingDetails";
+import OtherDriverInvoiceDetails from "../Components/DriversAdminDashboard/OtherDriverInvoiceDetails";
+import OtherDriverOrderDetails from "../Components/DriversAdminDashboard/OtherDriverOrderDetails";
 // DashboardRoutes
 // const GoodsDriversHome = React.lazy(() =>
 //   import("@/Pages/Dashboard/GoodsDriversHome")
@@ -188,13 +230,52 @@ const Routes = () => {
         { path: "/dashboard/drivers-home", element: <DriversAdminPanel /> },
         { path: "/dashboard/handyman-home", element: <HandyManAdminPanel /> },
         { path: "/dashboard/goods/orders", element: <AllGoodsDriverOrders /> },
+        { path: "/dashboard/cab/orders", element: <AllCabOrders /> },
+        { path: "/dashboard/jcb-crane/orders", element: <AllJcbCraneOrders /> },
+        {
+          path: "/dashboard/other-drivers/orders",
+          element: <AllDriversOrders />,
+        },
+        { path: "/dashboard/handyman/orders", element: <AllHandymansOrders /> },
         {
           path: "/dashboard/goods/bookings",
           element: <AllGoodsDriverBookings />,
         },
         {
+          path: "/dashboard/cab/bookings",
+          element: <AllCabBookings />,
+        },
+        {
+          path: "/dashboard/other-drivers/bookings",
+          element: <AllDriversBookings />,
+        },
+        {
+          path: "/dashboard/jcb-crane/bookings",
+          element: <AllJcbCraneBookings />,
+        },
+        {
+          path: "/dashboard/handyman/bookings",
+          element: <AllHandyManBookings />,
+        },
+        {
           path: "/dashboard/all-goods-drivers",
           element: <AllGoodsDrivers />,
+        },
+        {
+          path: "/dashboard/all-cab-drivers",
+          element: <AllCabDrivers />,
+        },
+        {
+          path: "/dashboard/all-jcb-crane-drivers",
+          element: <AllJCBCraneDrivers />,
+        },
+        {
+          path: "/dashboard/all-other-drivers",
+          element: <AllOtherDrivers />,
+        },
+        {
+          path: "/dashboard/all-handyman",
+          element: <AllHandyman />,
         },
         {
           path: "/dashboard/all-customers",
@@ -209,8 +290,20 @@ const Routes = () => {
           element: <AllRegionsCovered />,
         },
         {
+          path: "/dashboard/all-recharge-plans",
+          element: <RechargePlans />,
+        },
+        {
+          path: "/dashboard/all-goods_types",
+          element: <GoodsTypes />,
+        },
+        {
           path: "/dashboard/all-allowed-pincodes/:city_id/:city_name",
           element: <AddPinCodesPage />,
+        },
+        {
+          path: "/dashboard/map-pincode-selector/:city_id/:city_name",
+          element: <MapPincodeSelector />,
         },
         {
           path: "/dashboard/all-services",
@@ -259,16 +352,124 @@ const Routes = () => {
       element: <GoodsOrderDetails />,
     },
     {
+      path: "/dashboard/cab-order-details/:booking_id/:order_id",
+      element: <CabOrderDetails />,
+    },
+    {
+      path: "/dashboard/jcb-crane-order-details/:booking_id/:order_id",
+      element: <JcbCraneOrderDetails />,
+    },
+    {
+      path: "/dashboard/other-driver-order-details/:booking_id/:order_id",
+      element: <OtherDriverOrderDetails />,
+    },
+    {
+      path: "/dashboard/handyman-order-details/:booking_id/:order_id",
+      element: <HandymanOrderDetails />,
+    },
+    {
       path: "/goods-invoice/:order_id",
       element: <GoodsDriverInvoiceDetails />,
+    },
+    {
+      path: "/cab-invoice/:order_id",
+      element: <CabInvoiceDetails />,
+    },
+    {
+      path: "/jcb-crane-invoice/:order_id",
+      element: <JcbCraneInvoiceDetails />,
+    },
+    {
+      path: "/other-driver-invoice/:order_id",
+      element: <OtherDriverInvoiceDetails />,
+    },
+    {
+      path: "/handyman-invoice/:order_id",
+      element: <HandymanInvoiceDetails />,
     },
     {
       path: "/dashboard/booking-details/:booking_id",
       element: <GoodsBookingDetails />,
     },
     {
+      path: "/dashboard/cab-booking-details/:booking_id",
+      element: <CabBookingDetails />,
+    },
+    {
+      path: "/dashboard/jcb-crane-booking-details/:booking_id",
+      element: <JcbCraneBookingDetails />,
+    },
+    {
+      path: "/dashboard/other-driver-booking-details/:booking_id",
+      element: <OtherDriverBookingDetails />,
+    },
+    {
+      path: "/dashboard/handyman-booking-details/:booking_id",
+      element: <HandymanBookingDetails />,
+    },
+    {
       path: "/dashboard/goods-driver-profile-details/:agent_id",
       element: <GoodsDriverProfileDetails />,
+    },
+    {
+      path: "/dashboard/cab-driver-profile-details/:agent_id",
+      element: <CabDriverProfileDetails />,
+    },
+    {
+      path: "/dashboard/jcb-crane-driver-profile-details/:agent_id",
+      element: <JCBCraneDriverProfileDetails />,
+    },
+    {
+      path: "/dashboard/handyman-profile-details/:agent_id",
+      element: <HandyManAgentProfileDetails />,
+    },
+    {
+      path: "/dashboard/other-driver-profile-details/:agent_id",
+      element: <OtherDriverProfileDetails />,
+    },
+    {
+      path: "/dashboard/goods-driver-wallet-details/:driverId/:driverName",
+      element: <GoodsDriverWallet />,
+    },
+    {
+      path: "/dashboard/goods-driver-recharge/:driverId/:driverName",
+      element: <GoodsDriverRechargeScreen />,
+    },
+    {
+      path: "/dashboard/cab-driver-recharge/:driverId/:driverName",
+      element: <CabDriverRechargeScreen />,
+    },
+    {
+      path: "/dashboard/jcb-crane-driver-recharge/:driverId/:driverName",
+      element: <JcbCraneDriverRechargeScreen />,
+    },
+    {
+      path: "/dashboard/other-driver-recharge/:driverId/:driverName",
+      element: <OtherDriverRechargeScreen />,
+    },
+    {
+      path: "/dashboard/handyman/:driverId/:driverName",
+      element: <HandymanRechargeScreen />,
+    },
+    {
+      path: "/dashboard/cab-driver-wallet-details/:driverId/:driverName",
+      element: <CabDriverWallet />,
+    },
+    {
+      path: "/dashboard/jcb-crane-driver-wallet-details/:driverId/:driverName",
+      element: <JcbCraneDriverWallet />,
+    },
+    {
+      path: "/dashboard/other-driver-wallet-details/:driverId/:driverName",
+      element: <OtherDriverWallet />,
+    },
+    {
+      path: "/dashboard/handyman-wallet-details/:driverId/:driverName",
+      element: <HandymanWallet />,
+    },
+    {
+      path: "/dashboard/customer-wallet-details/:customerID/:customerName",
+      element: <CustomerWallet />,
     },
   ];
   return useRoutes(element);

@@ -6,7 +6,7 @@ const ChangingLives = () => {
       name: "Krishna",
       location: "Hyderabad",
       description:
-        "Getting business at vehicle stand has become very tough today due to intense competition. But with VT Partner's partner driver app, transparent fare structure and standard pricing, my life has become easier. Now I don't worry about finding customers and getting payments.",
+        "Getting business at vehicle stand has become very tough today due to intense competition. But with KASP's partner driver app, transparent fare structure and standard pricing, my life has become easier. Now I don't worry about finding customers and getting payments.",
       imgSrc:
         "https://dom-website-prod-cdn-cms.porter.in/testimonial_1_8da683159d.png",
     },
@@ -14,7 +14,7 @@ const ChangingLives = () => {
       name: "Umesh",
       location: "Bangalore",
       description:
-        "Earlier there were many restrictions on earnings because I got limited trips in market which were only from my known customers and to nearby places. I gave my truck on rent with VT Partner there are no such restrictions, there are a lot of orders throughout the city. I enjoy being a part of the VT Partner family.",
+        "Earlier there were many restrictions on earnings because I got limited trips in market which were only from my known customers and to nearby places. I gave my truck on rent with KASP there are no such restrictions, there are a lot of orders throughout the city. I enjoy being a part of the KASP family.",
       imgSrc:
         "https://dom-website-prod-cdn-cms.porter.in/testimonial_2_48f5b79f50.png",
     },
@@ -22,7 +22,7 @@ const ChangingLives = () => {
       name: "Birju",
       location: "Chennai",
       description:
-        "I was new to Chennai and went ahead to attach my tata ace with VT Partner. VT Partner app's inbuilt map and navigational capability never made me feel new to the city. Payment is done on time and their vendor helpdesk provides immediate solutions to all my issues.",
+        "I was new to Chennai and went ahead to attach my tata ace with KASP. KASP app's inbuilt map and navigational capability never made me feel new to the city. Payment is done on time and their vendor helpdesk provides immediate solutions to all my issues.",
       imgSrc:
         "https://dom-website-prod-cdn-cms.porter.in/testimonial_3_c0bfc6bc11.png",
     },

@@ -181,7 +181,7 @@ const GoodsDriverAboutMeCard = ({ driverData }) => {
       const profileBase64 = await getBase64FromUrl(driverData.profile_pic);
       const stampBase64 = await getBase64FromUrl("/stamp.png");
 
-      // Add VT Partner Logo (Maintain aspect ratio)
+      // Add KASP Logo (Maintain aspect ratio)
       if (logoBase64) {
         const img = new Image();
         img.src = logoBase64;
@@ -198,7 +198,7 @@ const GoodsDriverAboutMeCard = ({ driverData }) => {
           doc.addImage(logoBase64, "PNG", 27, 5, maxWidth, logoScaledHeight);
         };
       } else {
-        console.error("VT Partner logo image missing or corrupt");
+        console.error("KASP logo image missing or corrupt");
       }
 
       //   if (profileBase64) {
