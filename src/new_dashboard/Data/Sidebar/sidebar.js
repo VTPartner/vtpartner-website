@@ -130,18 +130,18 @@ export const sidebarConfig = [
     path: "/dashboard/reports",
     children: [
       { name: "Goods Orders Report", path: "/dashboard/all-orders-report" },
-      { name: "Cab Orders Report", path: "/dashboard/all-cab-report" },
+      { name: "Cab Orders Report", path: "/dashboard/all-cab-orders-report" },
       {
         name: "Drivers Orders Report",
-        path: "/dashboard/all-other-drivers-report",
+        path: "/dashboard/all-other-drivers-orders-report",
       },
       {
         name: "Jcb/Crane Orders Report",
-        path: "/dashboard/all-jcb-crane-drivers-report",
+        path: "/dashboard/all-jcb-crane-drivers-orders-report",
       },
       {
         name: "Handyman Orders Report",
-        path: "/dashboard/all-handyman-report",
+        path: "/dashboard/all-handyman-orders-report",
       },
     ],
   },

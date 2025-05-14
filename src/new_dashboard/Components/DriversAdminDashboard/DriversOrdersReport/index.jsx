@@ -11,7 +11,7 @@ import Cookies from "js-cookie";
 import { serverEndPoint } from "../../../../dashboard/app/constants";
 import Loader from "../../Loader";
 
-const OrdersReport = () => {
+const OtherDriverOrdersReport = () => {
   const [loading, setLoading] = useState(false);
   const [range, setRange] = useState([]);
   const [reportData, setReportData] = useState(null);
@@ -33,7 +33,7 @@ const OrdersReport = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        `${serverEndPoint}/get_orders_report`,
+        `${serverEndPoint}/get_other_driver_orders_report`,
         {
           start_date: format(range[0], "yyyy-MM-dd"),
           end_date: format(range[1], "yyyy-MM-dd"),
@@ -56,60 +56,25 @@ const OrdersReport = () => {
     }
 
     // Prepare data for export
-    const exportData = reportData.results.map((order) => {
-      // Handle multiple drops
-      let dropAddresses = order.drop_address;
-      let dropContacts = "";
-
-      if (order.multiple_drops > 0) {
-        try {
-          const locations =
-            typeof order.drop_locations === "string"
-              ? JSON.parse(order.drop_locations)
-              : order.drop_locations;
-
-          const contacts =
-            typeof order.drop_contacts === "string"
-              ? JSON.parse(order.drop_contacts)
-              : order.drop_contacts;
-
-          dropAddresses = locations
-            .map((loc, index) => `Drop ${index + 1}: ${loc.address}`)
-            .join("\n");
-
-          dropContacts = contacts
-            .map(
-              (contact, index) =>
-                `Drop ${index + 1} Contact: ${contact.name} (${contact.mobile})`
-            )
-            .join("\n");
-        } catch (error) {
-          console.error("Error parsing drop locations:", error);
-        }
-      }
-
-      return {
-        "Order ID": order.order_id,
-        "Booking Date": order.booking_date,
-        "Customer Name": order.customer_name,
-        "Customer Mobile": order.customer_mobile_no,
-        "Driver Name": order.driver_first_name,
-        "Driver Mobile": order.driver_mobile_no,
-        Vehicle: order.vehicle_name,
-        "Pickup Address": order.pickup_address,
-        "Drop Addresses": dropAddresses,
-        "Drop Contacts": dropContacts,
-        "Multiple Drops": order.multiple_drops > 0 ? "Yes" : "No",
-        "Number of Drops": order.multiple_drops || 1,
-        "Distance (km)": order.distance,
-        "Base Price": order.base_price,
-        GST: order.gst_amount,
-        IGST: order.igst_amount,
-        "Total Amount": order.total_price,
-        "Payment Method": order.payment_method,
-        Status: order.booking_status,
-      };
-    });
+    const exportData = reportData.results.map((order) => ({
+      "Order ID": order.order_id,
+      "Booking Date": order.booking_date,
+      "Customer Name": order.customer_name,
+      "Customer Mobile": order.customer_mobile_no,
+      "Driver Name": order.driver_first_name,
+      "Driver Mobile": order.driver_mobile_no,
+      "Service Category": order.sub_cat_name,
+      "Service Name": order.service_name,
+      "Pickup Address": order.pickup_address,
+      "Drop Address": order.drop_address,
+      "Distance (km)": order.distance,
+      "Base Price": order.base_price,
+      GST: order.gst_amount,
+      IGST: order.igst_amount,
+      "Total Amount": order.total_price,
+      "Payment Method": order.payment_method,
+      Status: order.booking_status,
+    }));
 
     // Add totals row
     exportData.push({
@@ -120,58 +85,23 @@ const OrdersReport = () => {
 
     const ws = XLSX.utils.json_to_sheet(exportData);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Orders Report");
+    XLSX.utils.book_append_sheet(wb, ws, "Other Driver Orders Report");
 
     // Save the file
     XLSX.writeFile(
       wb,
-      `Orders_Report_${format(range[0], "yyyy-MM-dd")}_to_${format(
+      `Only_Driver_Orders_Report_${format(range[0], "yyyy-MM-dd")}_to_${format(
         range[1],
         "yyyy-MM-dd"
       )}.xlsx`
     );
   };
 
-  const renderDropAddresses = (order) => {
-    if (order.multiple_drops > 0) {
-      try {
-        const locations =
-          typeof order.drop_locations === "string"
-            ? JSON.parse(order.drop_locations)
-            : order.drop_locations;
-
-        const contacts =
-          typeof order.drop_contacts === "string"
-            ? JSON.parse(order.drop_contacts)
-            : order.drop_contacts;
-
-        return (
-          <div>
-            {locations.map((loc, index) => (
-              <div key={index} className="mb-2">
-                <strong>Drop {index + 1}:</strong> {loc.address}
-                {contacts[index] && (
-                  <div className="text-muted small">
-                    Contact: {contacts[index].name} ({contacts[index].mobile})
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        );
-      } catch (error) {
-        console.error("Error parsing drop locations:", error);
-        return order.drop_address;
-      }
-    }
-    return order.drop_address;
-  };
-
   return (
     <Container fluid>
       <Row className="m-1">
         <Col xs={12}>
-          <h4 className="main-title">Orders Report</h4>
+          <h4 className="main-title">Other Driver Orders Report</h4>
           <Card className="shadow-lg border-0 rounded-lg">
             <CardBody>
               <Row className="mb-4">
@@ -224,7 +154,7 @@ const OrdersReport = () => {
                           <th>Booking Date</th>
                           <th>Customer</th>
                           <th>Driver</th>
-                          <th>Vehicle</th>
+                          <th>Service</th>
                           <th>Pickup</th>
                           <th>Drop</th>
                           <th>Distance</th>
@@ -249,9 +179,14 @@ const OrdersReport = () => {
                                 {order.driver_mobile_no}
                               </small>
                             </td>
-                            <td>{order.vehicle_name}</td>
+                            <td>
+                              <div>{order.sub_cat_name}</div>
+                              <small className="text-muted">
+                                {order.service_name}
+                              </small>
+                            </td>
                             <td>{order.pickup_address}</td>
-                            <td>{renderDropAddresses(order)}</td>
+                            <td>{order.drop_address}</td>
                             <td>{order.distance} km</td>
                             <td>₹{order.total_price}</td>
                             <td>
@@ -290,4 +225,4 @@ const OrdersReport = () => {
   );
 };
 
-export default OrdersReport;
+export default OtherDriverOrdersReport;

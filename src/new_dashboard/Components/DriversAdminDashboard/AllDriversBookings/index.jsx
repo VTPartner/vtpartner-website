@@ -68,10 +68,47 @@ const AllDriversBookings = () => {
   };
 
   // Page change handlers
+  const handleScheduledPageChange = (pageNumber) =>
+    setCurrentScheduledPage(pageNumber);
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
   const handleOngoingPageChange = (pageNumber) =>
     setCurrentOngoingPage(pageNumber);
   const handleAllPageChange = (pageNumber) => setCurrentAllPage(pageNumber);
+
+  const [allScheduledBookings, setAllScheduledBookings] = useState([]);
+  const [currentScheduledPage, setCurrentScheduledPage] = useState(1);
+  const [searchScheduledQuery, setSearchScheduledQuery] = useState("");
+
+  // Add new search handler
+  const handleScheduledSearch = (e) => {
+    setSearchScheduledQuery(e.target.value.toLowerCase());
+    setCurrentScheduledPage(1);
+  };
+
+  // Add new fetch function
+  const fetchAllScheduledBookingsData = async () => {
+    const token = Cookies.get("authToken");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        `${serverEndPoint}/get_other_driver_scheduled_bookings_details`,
+        {},
+        config
+      );
+      setAllScheduledBookings(response.data.results || []);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -79,6 +116,8 @@ const AllDriversBookings = () => {
       fetchAllCancelledBookingsData();
     } else if (tab === "ongoing-bookings-tabs") {
       fetchAllOngoingBookingsData();
+    } else if (tab === "scheduled-bookings-tab") {
+      fetchAllScheduledBookingsData();
     } else {
       fetchAllBookingsData();
     }
@@ -275,6 +314,19 @@ const AllDriversBookings = () => {
                 <span className="badge bg-primary">Rs.{order.total_price}</span>
               </td>
               <td>
+                {order.driver_first_name != "Driver Not Assigned" && (
+                  <Link
+                    to={`/dashboard/other-driver-booking-details/${order.booking_id}`}
+                    role="button"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-outline-primary icon-btn w-30 h-30 b-r-22 me-2"
+                  >
+                    <i className="ti ti-eye"></i>
+                  </Link>
+                )}
+              </td>
+              {/* <td>
                 <Link
                   to={`/dashboard/other-driver-booking-details/${order.booking_id}`}
                   target="_blank"
@@ -283,7 +335,7 @@ const AllDriversBookings = () => {
                 >
                   <i className="ti ti-eye"></i>
                 </Link>
-              </td>
+              </td> */}
             </tr>
           ))}
         </tbody>
@@ -371,6 +423,17 @@ const AllDriversBookings = () => {
                       Cancelled
                     </button>
                   </li>
+
+                  <li className="nav-item" role="presentation">
+                    <button
+                      className={`nav-link d-flex align-items-center gap-1 ${
+                        activeTab === "scheduled-bookings-tab" ? "active" : ""
+                      }`}
+                      onClick={() => handleTabClick("scheduled-bookings-tab")}
+                    >
+                      <i className="ti ti-calendar f-s-18 mg-b-3"></i> Scheduled
+                    </button>
+                  </li>
                 </ul>
               </CardBody>
 
@@ -423,6 +486,24 @@ const AllDriversBookings = () => {
                       handlePageChange,
                       searchQuery,
                       handleSearch
+                    )}
+                  </div>
+
+                  {/* Scheduled bookings */}
+                  <div
+                    className={`tab-pane fade ${
+                      activeTab === "scheduled-bookings-tab"
+                        ? "active show"
+                        : ""
+                    }`}
+                  >
+                    {renderBookingTable(
+                      allScheduledBookings,
+                      currentScheduledPage,
+                      Math.ceil(allScheduledBookings.length / itemsPerPage),
+                      handleScheduledPageChange,
+                      searchScheduledQuery,
+                      handleScheduledSearch
                     )}
                   </div>
                 </div>

@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { Card, CardBody, Col, Container, Row, Input } from "reactstrap";
+import { Card, CardBody, Col, Container, Row } from "reactstrap";
 import {
   Box,
   Button,
@@ -12,6 +13,8 @@ import {
   Icon,
   MenuItem,
 } from "@mui/material";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/flatpickr.css";
 
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -76,24 +79,19 @@ const PeakHourPricing = () => {
     }
   };
 
-  // Handle error responses
   const handleError = (error) => {
     if (error.response) {
       if (error.response.status === 404) {
         toast.error("No Data Found.");
-        // setError("No Data Found");
       } else if (error.response.status === 409) {
         toast.error("Sub Service Name already assigned.");
       } else if (error.response.status === 500) {
         toast.error("Internal server error. Please try again later.");
-        // setError("Internal Server Error");
       } else {
         toast.error("An unexpected error occurred. Please try again.");
-        // setError("Unexpected Error");
       }
     } else {
       toast.error("Failed to fetch all FAQ's. Please check your connection.");
-      //   setError("Network Error");
     }
     setLoading(false);
   };
@@ -110,6 +108,7 @@ const PeakHourPricing = () => {
           },
         }
       );
+      console.log("Peak Hours Response:", response.data);
       setPeakHours(response.data.peak_hours);
       setLoading(false);
     } catch (error) {
@@ -159,11 +158,13 @@ const PeakHourPricing = () => {
     }));
   };
 
-  const handleTimeChange = (time, field) => {
-    setSelectedPeakHour((prev) => ({
-      ...prev,
-      [field]: time,
-    }));
+  const handleTimeChange = (dates, field) => {
+    if (dates && dates[0]) {
+      setSelectedPeakHour((prev) => ({
+        ...prev,
+        [field]: format(dates[0], "HH:mm:ss"),
+      }));
+    }
   };
 
   const savePeakHourDetails = async () => {
@@ -198,9 +199,6 @@ const PeakHourPricing = () => {
         end_time: selectedPeakHour.end_time,
         status: selectedPeakHour.status,
       };
-
-      //   start_time: format(selectedPeakHour.start_time, "HH:mm:ss"),
-      //     end_time: format(selectedPeakHour.end_time, "HH:mm:ss"),
 
       const response = await axios.post(endpoint, formData, {
         headers: {
@@ -263,19 +261,6 @@ const PeakHourPricing = () => {
         <Col xs={12}>
           <Card>
             <CardBody>
-              {/* <Box display="flex" justifyContent="space-between" mb={3}>
-                <Typography variant="h6">
-                  Peak Hour Pricing For {vehicle_name}
-                </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleOpenDialog}
-                >
-                  Add Peak Hour
-                </Button>
-              </Box> */}
-
               <table className="table table-bottom-border align-middle mb-0">
                 <thead>
                   <tr>
@@ -305,7 +290,15 @@ const PeakHourPricing = () => {
                         </div>
                       </td>
                       <td>
-                        {peak.start_time} -{peak.end_time}
+                        {format(
+                          new Date(`2000-01-01T${peak.start_time}`),
+                          "hh:mm a"
+                        )}{" "}
+                        -{" "}
+                        {format(
+                          new Date(`2000-01-01T${peak.end_time}`),
+                          "hh:mm a"
+                        )}
                       </td>
                       <td>₹{peak.price_per_km}/-</td>
                       <td>
@@ -342,7 +335,6 @@ const PeakHourPricing = () => {
             {isEditMode ? "Edit Peak Hour" : "Add Peak Hour"}
           </Typography>
 
-          {/* City Selection */}
           <FormControl fullWidth margin="normal">
             <Autocomplete
               options={cities}
@@ -372,16 +364,21 @@ const PeakHourPricing = () => {
             />
           </FormControl>
 
-          {/* Start & End Time Pickers */}
           <Box display="flex" gap={2} mt={2}>
             <FormControl fullWidth>
               <label>Start Time</label>
-              <Input
-                type="time"
-                name="start_time"
+              <Flatpickr
+                className="form-control"
+                options={{
+                  enableTime: true,
+                  noCalendar: true,
+                  dateFormat: "H:i",
+                  time_24hr: true,
+                  defaultHour: 0,
+                  defaultMinute: 0,
+                }}
                 value={selectedPeakHour.start_time}
-                onChange={(e) => handleTimeChange(e.target.value, "start_time")}
-                invalid={errors.start_time}
+                onChange={(dates) => handleTimeChange(dates, "start_time")}
               />
               {errors.start_time && (
                 <small className="text-danger">Start time is required</small>
@@ -390,12 +387,18 @@ const PeakHourPricing = () => {
 
             <FormControl fullWidth>
               <label>End Time</label>
-              <Input
-                type="time"
-                name="end_time"
+              <Flatpickr
+                className="form-control"
+                options={{
+                  enableTime: true,
+                  noCalendar: true,
+                  dateFormat: "H:i",
+                  time_24hr: true,
+                  defaultHour: 0,
+                  defaultMinute: 0,
+                }}
                 value={selectedPeakHour.end_time}
-                onChange={(e) => handleTimeChange(e.target.value, "end_time")}
-                invalid={errors.end_time}
+                onChange={(dates) => handleTimeChange(dates, "end_time")}
               />
               {errors.end_time && (
                 <small className="text-danger">End time is required</small>
@@ -403,7 +406,6 @@ const PeakHourPricing = () => {
             </FormControl>
           </Box>
 
-          {/* Price per KM */}
           <TextField
             label="Price per KM"
             fullWidth
@@ -417,7 +419,6 @@ const PeakHourPricing = () => {
             inputProps={{ step: "0.01" }}
           />
 
-          {/* Status Selection (Only in Edit Mode) */}
           {isEditMode && (
             <FormControl fullWidth margin="normal">
               <TextField
@@ -433,7 +434,6 @@ const PeakHourPricing = () => {
             </FormControl>
           )}
 
-          {/* Action Buttons */}
           <Box mt={2} display="flex" justifyContent="flex-end">
             <Button onClick={handleCloseDialog} sx={{ marginRight: 1 }}>
               Cancel

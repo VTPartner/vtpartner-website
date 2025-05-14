@@ -31,6 +31,10 @@ const AllGoodsDriverBookings = () => {
   const itemsAllPerPage = 7;
   const [searchAllQuery, setSearchAllQuery] = useState("");
 
+  const [allScheduledBookings, setAllScheduledBookings] = useState([]);
+  const [currentScheduledPage, setCurrentScheduledPage] = useState(1);
+  const [searchScheduledQuery, setSearchScheduledQuery] = useState("");
+
   // Handle search input change
   const handleSearch = (e) => {
     setSearchQuery(e.target.value.toLowerCase());
@@ -97,6 +101,61 @@ const AllGoodsDriverBookings = () => {
     setCurrentAllPage(1); // Reset to page 1 when search query changes
   };
 
+  // Filter scheduled bookings based on the search query
+  const filteredScheduledBookings = allScheduledBookings.filter((order) => {
+    return (
+      order.booking_id.toString().includes(searchScheduledQuery) ||
+      order.customer_name.toLowerCase().includes(searchScheduledQuery) ||
+      order.driver_first_name.toLowerCase().includes(searchScheduledQuery) ||
+      order.customer_mobile_no.toLowerCase().includes(searchScheduledQuery)
+    );
+  });
+
+  // Get status color for badges
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "Cancelled":
+        return "danger";
+      case "End Trip":
+        return "success";
+      case "Driver Arrived":
+        return "warning";
+      case "Driver Accepted":
+        return "info";
+      case "Start Trip":
+        return "secondary";
+      case "Processing":
+        return "primary";
+      case "Scheduled":
+        return "info";
+      default:
+        return "light";
+    }
+  };
+
+  const handleScheduledSearch = (e) => {
+    setSearchScheduledQuery(e.target.value.toLowerCase());
+    setCurrentScheduledPage(1); // Reset to page 1 when search query changes
+  };
+
+  // Pagination logic for scheduled bookings
+  const indexOfScheduledLastItem = currentScheduledPage * itemsPerPage;
+  const indexOfScheduledFirstItem = indexOfScheduledLastItem - itemsPerPage;
+  const currentScheduledItems = filteredScheduledBookings.slice(
+    indexOfScheduledFirstItem,
+    indexOfScheduledLastItem
+  );
+
+  // Handle scheduled bookings page change
+  const handleScheduledPageChange = (pageNumber) => {
+    setCurrentScheduledPage(pageNumber);
+  };
+
+  // Calculate total pages for scheduled bookings
+  const totalScheduledPages = Math.ceil(
+    filteredScheduledBookings.length / itemsPerPage
+  );
+
   // Filter bookings based on the search query
   const filteredAllBookings = allBookings.filter((order) => {
     return (
@@ -124,8 +183,10 @@ const AllGoodsDriverBookings = () => {
     setActiveTab(tab);
     if (tab === "cancelled-bookings-tab") {
       fetchAllCancelledBookingsData();
-    } else if (tab == "ongoing-bookings-tabs") {
+    } else if (tab === "ongoing-bookings-tabs") {
       fetchAllOngoingBookingsData();
+    } else if (tab === "scheduled-bookings-tab") {
+      fetchAllScheduledBookingsData();
     } else {
       fetchAllBookingsData();
     }
@@ -135,6 +196,30 @@ const AllGoodsDriverBookings = () => {
   //   const goToOrderDetailPage = (category) => {
   //     navigate(`/dashboard/order-details/1`, {});
   //   };
+
+  const fetchAllScheduledBookingsData = async () => {
+    const token = Cookies.get("authToken");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        `${serverEndPoint}/get_goods_scheduled_bookings_details`,
+        {},
+        config
+      );
+      setAllScheduledBookings(response.data.results || []);
+    } catch (error) {
+      console.error("Error fetching scheduled bookings:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchAllBookingsData = async () => {
     const token = Cookies.get("authToken");
@@ -317,6 +402,24 @@ const AllGoodsDriverBookings = () => {
                       Cancelled
                     </button>
                   </li>
+
+                  <li className="nav-item" role="presentation">
+                    <button
+                      className={`nav-link d-flex align-items-center gap-1 ${
+                        activeTab === "scheduled-bookings-tab" ? "active" : ""
+                      }`}
+                      id="scheduled-bookings-tab"
+                      data-bs-toggle="tab"
+                      data-bs-target="#scheduled-bookings-tab-pane"
+                      type="button"
+                      role="tab"
+                      aria-controls="scheduled-bookings-tab-pane"
+                      aria-selected={activeTab === "scheduled-bookings-tab"}
+                      onClick={() => handleTabClick("scheduled-bookings-tab")}
+                    >
+                      <i className="ti ti-calendar f-s-18 mg-b-3"></i> Scheduled
+                    </button>
+                  </li>
                 </ul>
               </CardBody>
 
@@ -402,9 +505,67 @@ const AllGoodsDriverBookings = () => {
                                 </p>
                               </td>
                               <td>
-                                <p className="mb-0 f-s-12 text-secondary">
-                                  {order.drop_address}
-                                </p>
+                                {order.multiple_drops > 0 ? (
+                                  <div>
+                                    <p className="mb-0 f-s-12 text-secondary">
+                                      Multiple Drops ({order.multiple_drops})
+                                    </p>
+                                    {(() => {
+                                      try {
+                                        // Parse the JSON string from the database
+                                        const dropLocations =
+                                          typeof order.drop_locations ===
+                                          "string"
+                                            ? JSON.parse(order.drop_locations)
+                                            : order.drop_locations;
+
+                                        // Also parse the contacts if needed
+                                        const dropContacts =
+                                          typeof order.drop_contacts ===
+                                          "string"
+                                            ? JSON.parse(order.drop_contacts)
+                                            : order.drop_contacts;
+
+                                        return Array.isArray(dropLocations) ? (
+                                          dropLocations.map((drop, idx) => (
+                                            <div key={idx} className="mb-2">
+                                              <p className="mb-0 f-s-12 text-secondary">
+                                                <strong>Drop {idx + 1}:</strong>{" "}
+                                                {drop.address}
+                                              </p>
+                                              {dropContacts &&
+                                                dropContacts[idx] && (
+                                                  <p className="mb-0 f-s-12 text-secondary">
+                                                    <strong>Contact:</strong>{" "}
+                                                    {dropContacts[idx].name} (
+                                                    {dropContacts[idx].mobile})
+                                                  </p>
+                                                )}
+                                            </div>
+                                          ))
+                                        ) : (
+                                          <p className="mb-0 f-s-12 text-secondary">
+                                            {order.drop_address}
+                                          </p>
+                                        );
+                                      } catch (error) {
+                                        console.error(
+                                          "Error parsing drop locations:",
+                                          error
+                                        );
+                                        return (
+                                          <p className="mb-0 f-s-12 text-secondary">
+                                            {order.drop_address}
+                                          </p>
+                                        );
+                                      }
+                                    })()}
+                                  </div>
+                                ) : (
+                                  <p className="mb-0 f-s-12 text-secondary">
+                                    {order.drop_address}
+                                  </p>
+                                )}
                               </td>
                               <td>
                                 <span
@@ -444,18 +605,21 @@ const AllGoodsDriverBookings = () => {
                                 </span>
                               </td>
                               <td>
-                                <Link
-                                  to={{
-                                    pathname: `/dashboard/booking-details/${order.booking_id}`,
-                                    state: { orderDetails: order }, // Pass additional data
-                                  }}
-                                  role="button"
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="btn btn-outline-primary icon-btn w-30 h-30 b-r-22 me-2"
-                                >
-                                  <i className="ti ti-eye"></i>
-                                </Link>
+                                {order.driver_first_name !=
+                                  "Driver Not Assigned" && (
+                                  <Link
+                                    to={{
+                                      pathname: `/dashboard/booking-details/${order.booking_id}`,
+                                      state: { orderDetails: order }, // Pass additional data
+                                    }}
+                                    role="button"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="btn btn-outline-primary icon-btn w-30 h-30 b-r-22 me-2"
+                                  >
+                                    <i className="ti ti-eye"></i>
+                                  </Link>
+                                )}
                               </td>
                             </tr>
                           ))}
@@ -487,7 +651,6 @@ const AllGoodsDriverBookings = () => {
                       </div>
                     </div>
                   </div>
-
                   {/* Ongoing bookings  */}
                   <div
                     className={`tab-pane fade ${
@@ -569,9 +732,67 @@ const AllGoodsDriverBookings = () => {
                                 </p>
                               </td>
                               <td>
-                                <p className="mb-0 f-s-12 text-secondary">
-                                  {order.drop_address}
-                                </p>
+                                {order.multiple_drops > 0 ? (
+                                  <div>
+                                    <p className="mb-0 f-s-12 text-secondary">
+                                      Multiple Drops ({order.multiple_drops})
+                                    </p>
+                                    {(() => {
+                                      try {
+                                        // Parse the JSON string from the database
+                                        const dropLocations =
+                                          typeof order.drop_locations ===
+                                          "string"
+                                            ? JSON.parse(order.drop_locations)
+                                            : order.drop_locations;
+
+                                        // Also parse the contacts if needed
+                                        const dropContacts =
+                                          typeof order.drop_contacts ===
+                                          "string"
+                                            ? JSON.parse(order.drop_contacts)
+                                            : order.drop_contacts;
+
+                                        return Array.isArray(dropLocations) ? (
+                                          dropLocations.map((drop, idx) => (
+                                            <div key={idx} className="mb-2">
+                                              <p className="mb-0 f-s-12 text-secondary">
+                                                <strong>Drop {idx + 1}:</strong>{" "}
+                                                {drop.address}
+                                              </p>
+                                              {dropContacts &&
+                                                dropContacts[idx] && (
+                                                  <p className="mb-0 f-s-12 text-secondary">
+                                                    <strong>Contact:</strong>{" "}
+                                                    {dropContacts[idx].name} (
+                                                    {dropContacts[idx].mobile})
+                                                  </p>
+                                                )}
+                                            </div>
+                                          ))
+                                        ) : (
+                                          <p className="mb-0 f-s-12 text-secondary">
+                                            {order.drop_address}
+                                          </p>
+                                        );
+                                      } catch (error) {
+                                        console.error(
+                                          "Error parsing drop locations:",
+                                          error
+                                        );
+                                        return (
+                                          <p className="mb-0 f-s-12 text-secondary">
+                                            {order.drop_address}
+                                          </p>
+                                        );
+                                      }
+                                    })()}
+                                  </div>
+                                ) : (
+                                  <p className="mb-0 f-s-12 text-secondary">
+                                    {order.drop_address}
+                                  </p>
+                                )}
                               </td>
                               <td>
                                 <span
@@ -651,8 +872,7 @@ const AllGoodsDriverBookings = () => {
                       </div>
                     </div>
                   </div>
-
-                  {/* Cancelled Bookings  */}
+                  ;{/* Cancelled Bookings  */}
                   <div
                     className={`tab-pane fade ${
                       activeTab === "cancelled-bookings-tab"
@@ -735,9 +955,67 @@ const AllGoodsDriverBookings = () => {
                                 </p>
                               </td>
                               <td>
-                                <p className="mb-0 f-s-12 text-secondary">
-                                  {order.drop_address}
-                                </p>
+                                {order.multiple_drops > 0 ? (
+                                  <div>
+                                    <p className="mb-0 f-s-12 text-secondary">
+                                      Multiple Drops ({order.multiple_drops})
+                                    </p>
+                                    {(() => {
+                                      try {
+                                        // Parse the JSON string from the database
+                                        const dropLocations =
+                                          typeof order.drop_locations ===
+                                          "string"
+                                            ? JSON.parse(order.drop_locations)
+                                            : order.drop_locations;
+
+                                        // Also parse the contacts if needed
+                                        const dropContacts =
+                                          typeof order.drop_contacts ===
+                                          "string"
+                                            ? JSON.parse(order.drop_contacts)
+                                            : order.drop_contacts;
+
+                                        return Array.isArray(dropLocations) ? (
+                                          dropLocations.map((drop, idx) => (
+                                            <div key={idx} className="mb-2">
+                                              <p className="mb-0 f-s-12 text-secondary">
+                                                <strong>Drop {idx + 1}:</strong>{" "}
+                                                {drop.address}
+                                              </p>
+                                              {dropContacts &&
+                                                dropContacts[idx] && (
+                                                  <p className="mb-0 f-s-12 text-secondary">
+                                                    <strong>Contact:</strong>{" "}
+                                                    {dropContacts[idx].name} (
+                                                    {dropContacts[idx].mobile})
+                                                  </p>
+                                                )}
+                                            </div>
+                                          ))
+                                        ) : (
+                                          <p className="mb-0 f-s-12 text-secondary">
+                                            {order.drop_address}
+                                          </p>
+                                        );
+                                      } catch (error) {
+                                        console.error(
+                                          "Error parsing drop locations:",
+                                          error
+                                        );
+                                        return (
+                                          <p className="mb-0 f-s-12 text-secondary">
+                                            {order.drop_address}
+                                          </p>
+                                        );
+                                      }
+                                    })()}
+                                  </div>
+                                ) : (
+                                  <p className="mb-0 f-s-12 text-secondary">
+                                    {order.drop_address}
+                                  </p>
+                                )}
                               </td>
                               <td>
                                 <span
@@ -808,6 +1086,216 @@ const AllGoodsDriverBookings = () => {
                           className="btn btn-outline-secondary"
                           onClick={() => handlePageChange(currentPage + 1)}
                           disabled={currentPage === totalPages}
+                        >
+                          Next
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  ; ;{/* Scheduled Bookings */}
+                  <div
+                    className={`tab-pane fade ${
+                      activeTab === "scheduled-bookings-tab"
+                        ? "active show"
+                        : ""
+                    }`}
+                    id="scheduled-bookings-tab-pane"
+                    role="tabpanel"
+                    aria-labelledby="scheduled-bookings-tab"
+                    tabIndex="0"
+                  >
+                    <div className="order-list-table table-responsive app-scroll">
+                      {/* Search Input */}
+                      <div className="mb-3">
+                        <input
+                          type="text"
+                          className="form-control m-4 align-middle"
+                          placeholder="Search by Booking ID, Customer, Driver, or Mobile"
+                          value={searchScheduledQuery}
+                          onChange={handleScheduledSearch}
+                        />
+                      </div>
+                      <table className="table table-bottom-border align-middle mb-0">
+                        <thead>
+                          <tr>
+                            <th>Booking ID</th>
+                            <th>Customer</th>
+                            <th>Driver</th>
+                            <th>Pickup</th>
+                            <th>Drops</th>
+                            <th>Status</th>
+                            <th>Scheduled Time</th>
+                            <th>Distance</th>
+                            <th>Amount</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {currentScheduledItems.map((order, index) => (
+                            <tr key={index}>
+                              <td># {order.booking_id}</td>
+                              <td>
+                                <div className="position-relative">
+                                  <div>
+                                    <h6 className="mb-0 f-s-16">
+                                      {order.customer_name}
+                                    </h6>
+                                    <p className="mb-0 f-s-14 text-secondary">
+                                      {order.customer_mobile_no}
+                                    </p>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div className="position-relative">
+                                  <div className="ms-5">
+                                    <h6 className="mb-0 f-s-16">
+                                      {order.driver_first_name}
+                                    </h6>
+                                    <p className="mb-0 f-s-14 text-secondary">
+                                      {order.driver_mobile_no}
+                                    </p>
+                                    <p className="mb-0 f-s-14 text-secondary">
+                                      {order.vehicle_name}
+                                    </p>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <p className="mb-0 f-s-12 text-secondary">
+                                  {order.pickup_address}
+                                </p>
+                              </td>
+                              <td>
+                                {order.multiple_drops > 0 ? (
+                                  <div>
+                                    <p className="mb-0 f-s-12 text-secondary">
+                                      Multiple Drops ({order.multiple_drops})
+                                    </p>
+                                    {(() => {
+                                      try {
+                                        // Parse the JSON string from the database
+                                        const dropLocations =
+                                          typeof order.drop_locations ===
+                                          "string"
+                                            ? JSON.parse(order.drop_locations)
+                                            : order.drop_locations;
+
+                                        // Also parse the contacts if needed
+                                        const dropContacts =
+                                          typeof order.drop_contacts ===
+                                          "string"
+                                            ? JSON.parse(order.drop_contacts)
+                                            : order.drop_contacts;
+
+                                        return Array.isArray(dropLocations) ? (
+                                          dropLocations.map((drop, idx) => (
+                                            <div key={idx} className="mb-2">
+                                              <p className="mb-0 f-s-12 text-secondary">
+                                                <strong>Drop {idx + 1}:</strong>{" "}
+                                                {drop.address}
+                                              </p>
+                                              {dropContacts &&
+                                                dropContacts[idx] && (
+                                                  <p className="mb-0 f-s-12 text-secondary">
+                                                    <strong>Contact:</strong>{" "}
+                                                    {dropContacts[idx].name} (
+                                                    {dropContacts[idx].mobile})
+                                                  </p>
+                                                )}
+                                            </div>
+                                          ))
+                                        ) : (
+                                          <p className="mb-0 f-s-12 text-secondary">
+                                            {order.drop_address}
+                                          </p>
+                                        );
+                                      } catch (error) {
+                                        console.error(
+                                          "Error parsing drop locations:",
+                                          error
+                                        );
+                                        return (
+                                          <p className="mb-0 f-s-12 text-secondary">
+                                            {order.drop_address}
+                                          </p>
+                                        );
+                                      }
+                                    })()}
+                                  </div>
+                                ) : (
+                                  <p className="mb-0 f-s-12 text-secondary">
+                                    {order.drop_address}
+                                  </p>
+                                )}
+                              </td>
+                              <td>
+                                <span
+                                  className={`badge bg-${getStatusColor(
+                                    order.booking_status
+                                  )}`}
+                                >
+                                  {order.booking_status}
+                                </span>
+                              </td>
+                              <td>
+                                {new Date(
+                                  order.scheduled_time
+                                ).toLocaleString()}
+                              </td>
+                              <td>
+                                <span className="badge bg-info">
+                                  {order.distance} Km
+                                </span>
+                              </td>
+                              <td>
+                                <span className="badge bg-primary">
+                                  Rs.{order.total_price}
+                                </span>
+                              </td>
+                              <td>
+                                {order.driver_first_name !=
+                                  "Driver Not Assigned" && (
+                                  <Link
+                                    to={{
+                                      pathname: `/dashboard/booking-details/${order.booking_id}`,
+                                      state: { orderDetails: order }, // Pass additional data
+                                    }}
+                                    role="button"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="btn btn-outline-primary icon-btn w-30 h-30 b-r-22 me-2"
+                                  >
+                                    <i className="ti ti-eye"></i>
+                                  </Link>
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                      {/* Pagination Controls */}
+                      <div className="pagination-controls d-flex justify-content-end align-items-center mt-3 p-4">
+                        <button
+                          className="btn btn-outline-secondary"
+                          onClick={() =>
+                            handleScheduledPageChange(currentScheduledPage - 1)
+                          }
+                          disabled={currentScheduledPage === 1}
+                        >
+                          Previous
+                        </button>
+                        <span className="mx-2">
+                          Page {currentScheduledPage} of {totalScheduledPages}
+                        </span>
+                        <button
+                          className="btn btn-outline-secondary"
+                          onClick={() =>
+                            handleScheduledPageChange(currentScheduledPage + 1)
+                          }
+                          disabled={
+                            currentScheduledPage === totalScheduledPages
+                          }
                         >
                           Next
                         </button>

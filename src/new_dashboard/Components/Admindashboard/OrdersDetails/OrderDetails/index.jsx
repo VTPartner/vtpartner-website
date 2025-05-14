@@ -100,6 +100,8 @@ const GoodsOrderDetails = () => {
   const [pickup, setPickup] = useState(null);
   const [drop, setDrop] = useState(null);
   const [driverLocation, setDriverLocation] = useState(null);
+  const [dropLocations, setDropLocations] = useState([]);
+  const [dropContacts, setDropContacts] = useState([]);
 
   // Set pickup & drop locations when bookingDetails is available
   useEffect(() => {
@@ -109,10 +111,31 @@ const GoodsOrderDetails = () => {
         lng: parseFloat(bookingDetails.pickup_lng),
       });
 
-      setDrop({
-        lat: parseFloat(bookingDetails.destination_lat),
-        lng: parseFloat(bookingDetails.destination_lng),
-      });
+      if (bookingDetails.multiple_drops > 0) {
+        try {
+          const locations =
+            typeof bookingDetails.drop_locations === "string"
+              ? JSON.parse(bookingDetails.drop_locations)
+              : bookingDetails.drop_locations;
+
+          const contacts =
+            typeof bookingDetails.drop_contacts === "string"
+              ? JSON.parse(bookingDetails.drop_contacts)
+              : bookingDetails.drop_contacts;
+
+          if (Array.isArray(locations)) {
+            setDropLocations(locations);
+            setDropContacts(contacts);
+          }
+        } catch (error) {
+          console.error("Error parsing drop locations:", error);
+        }
+      } else {
+        setDrop({
+          lat: parseFloat(bookingDetails.destination_lat),
+          lng: parseFloat(bookingDetails.destination_lng),
+        });
+      }
     }
   }, [bookingDetails]);
 
@@ -244,6 +267,12 @@ const GoodsOrderDetails = () => {
           bookingDetailsResponse.data.results[0]["booking_status"],
         distance: bookingDetailsResponse.data.results[0]["distance"],
         total_time: bookingDetailsResponse.data.results[0]["total_time"],
+        multiple_drops: Number(
+          bookingDetailsResponse.data.results[0]["multiple_drops"]
+        ),
+        drop_locations:
+          bookingDetailsResponse.data.results[0]["drop_locations"],
+        drop_contacts: bookingDetailsResponse.data.results[0]["drop_contacts"],
       });
 
       console.log("bookingDetails.customer_name::" + bookingDetails.ratings);
@@ -319,13 +348,16 @@ const GoodsOrderDetails = () => {
       state: { bookingDetails },
     });
   };
-
   const statusColors = {
     "Driver Accepted": "primary",
     "Driver Arrived": "secondary",
+    "Otp Verified": "dark",
     "OTP Verified": "dark",
-    "Start Trip": "info",
+    "Start Trip": "primary",
+    "Reached Drop Location 1": "primary",
+    "Reached Drop Location 2": "primary",
     "Make Payment": "warning",
+    Completed: "success",
     "End Trip": "success",
   };
 
@@ -365,12 +397,23 @@ const GoodsOrderDetails = () => {
                     <h5>Route</h5>
                   </CardHeader>
                   <CardBody>
-                    <LoadScript googleMapsApiKey={mapKey}>
-                      {pickup && drop ? (
+                    <LoadScript
+                      googleMapsApiKey={mapKey}
+                      libraries={["places"]}
+                    >
+                      {pickup && (drop || dropLocations.length > 0) ? (
                         <GoogleMap
                           mapContainerStyle={mapContainerStyle}
                           center={pickup}
                           zoom={12}
+                          options={{
+                            disableDefaultUI: false,
+                            zoomControl: true,
+                            streetViewControl: true,
+                            scaleControl: true,
+                            mapTypeControl: true,
+                            fullscreenControl: true,
+                          }}
                         >
                           {/* Pickup Marker */}
                           <Marker
@@ -378,19 +421,64 @@ const GoodsOrderDetails = () => {
                             icon="http://maps.google.com/mapfiles/ms/icons/green-dot.png"
                           />
 
-                          {/* Drop Marker */}
-                          <Marker
-                            position={drop}
-                            icon="http://maps.google.com/mapfiles/ms/icons/red-dot.png"
-                          />
+                          {/* Multiple Drop Markers */}
+                          {dropLocations.length > 0 ? (
+                            dropLocations.map((location, index) => (
+                              <Marker
+                                key={index}
+                                position={{
+                                  lat: parseFloat(location.lat),
+                                  lng: parseFloat(location.lng),
+                                }}
+                                icon="http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                                label={`${index + 1}`}
+                              />
+                            ))
+                          ) : (
+                            <Marker
+                              position={drop}
+                              icon="http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                            />
+                          )}
 
-                          {/* Polyline Between Pickup & Drop */}
-                          <Polyline
-                            path={[pickup, drop]}
-                            options={polylineOptions}
-                          />
+                          {/* Polylines */}
+                          {dropLocations.length > 0 ? (
+                            <>
+                              <Polyline
+                                path={[
+                                  pickup,
+                                  {
+                                    lat: parseFloat(dropLocations[0].lat),
+                                    lng: parseFloat(dropLocations[0].lng),
+                                  },
+                                ]}
+                                options={polylineOptions}
+                              />
+                              {dropLocations.slice(1).map((location, index) => (
+                                <Polyline
+                                  key={index}
+                                  path={[
+                                    {
+                                      lat: parseFloat(dropLocations[index].lat),
+                                      lng: parseFloat(dropLocations[index].lng),
+                                    },
+                                    {
+                                      lat: parseFloat(location.lat),
+                                      lng: parseFloat(location.lng),
+                                    },
+                                  ]}
+                                  options={polylineOptions}
+                                />
+                              ))}
+                            </>
+                          ) : (
+                            <Polyline
+                              path={[pickup, drop]}
+                              options={polylineOptions}
+                            />
+                          )}
 
-                          {/* Driver Marker (Live Tracking) */}
+                          {/* Driver Marker */}
                           {driverLocation && (
                             <Marker
                               position={driverLocation}
@@ -565,7 +653,7 @@ const GoodsOrderDetails = () => {
               <Col lg={12}>
                 <Card className="order-details-card shadow-lg border-0">
                   <CardHeader>
-                    <h5 className="text-nowrap">Address Details </h5>
+                    <h5 className="text-nowrap">Address Details</h5>
                   </CardHeader>
                   <CardBody>
                     <div className="d-flex justify-content-between">
@@ -573,25 +661,56 @@ const GoodsOrderDetails = () => {
                         <i className="ti ti-map-pin f-s-18 me-2 text-secondary"></i>
                         Pickup
                       </h6>
-                      <div className="text-end ">
+                      <div className="text-end">
                         <p>{bookingDetails.pickup_address}</p>
                       </div>
                     </div>
-                    <div className="d-flex justify-content-between mt-3">
-                      <h6 className="f-w-600 text-dark">
-                        <i className="ti ti-map-2 f-s-18 me-2"></i>Drop
-                      </h6>
-                      <div className="text-end">
-                        <p>{bookingDetails.drop_address}</p>
+                    {bookingDetails.multiple_drops > 0 ? (
+                      <div>
+                        <div className="d-flex justify-content-between mt-3">
+                          <h6 className="f-w-600 text-dark">
+                            <i className="ti ti-map-2 f-s-18 me-2"></i>
+                            Multiple Drops ({bookingDetails.multiple_drops})
+                          </h6>
+                        </div>
+                        {dropLocations.map((location, index) => (
+                          <div key={index} className="mt-3">
+                            <div className="d-flex justify-content-between">
+                              <h6 className="f-w-600 text-dark">
+                                <i className="ti ti-map-pin f-s-18 me-2"></i>
+                                Drop {index + 1}
+                              </h6>
+                              <div className="text-end">
+                                <p>{location.address}</p>
+                                {dropContacts[index] && (
+                                  <p className="text-secondary">
+                                    Contact: {dropContacts[index].name} (
+                                    {dropContacts[index].mobile})
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    </div>
+                    ) : (
+                      <div className="d-flex justify-content-between mt-3">
+                        <h6 className="f-w-600 text-dark">
+                          <i className="ti ti-map-2 f-s-18 me-2"></i>
+                          Drop
+                        </h6>
+                        <div className="text-end">
+                          <p>{bookingDetails.drop_address}</p>
+                        </div>
+                      </div>
+                    )}
                     <div className="d-flex justify-content-between mt-3">
                       <h6 className="f-w-600 text-dark">
                         <i className="ti ti-map-pins f-s-18 me-2"></i>
                         Total Distance
                       </h6>
                       <div className="text-end badge bg-primary">
-                        <p> {bookingDetails.distance} KM</p>
+                        <p>{bookingDetails.distance} KM</p>
                       </div>
                     </div>
                     <div className="d-flex justify-content-between mt-3">
@@ -600,7 +719,7 @@ const GoodsOrderDetails = () => {
                         Total Time
                       </h6>
                       <div className="text-end badge bg-primary">
-                        <p> {bookingDetails.total_time}</p>
+                        <p>{bookingDetails.total_time}</p>
                       </div>
                     </div>
                   </CardBody>

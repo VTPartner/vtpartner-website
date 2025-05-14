@@ -15,6 +15,25 @@ const GoodsDriverInvoiceDetails = () => {
   const location = useLocation();
   const bookingDetails = location.state?.bookingDetails;
 
+  let dropLocations = [];
+  let dropContacts = [];
+  if (bookingDetails?.multiple_drops > 0) {
+    try {
+      dropLocations =
+        typeof bookingDetails.drop_locations === "string"
+          ? JSON.parse(bookingDetails.drop_locations)
+          : bookingDetails.drop_locations || [];
+      dropContacts =
+        typeof bookingDetails.drop_contacts === "string"
+          ? JSON.parse(bookingDetails.drop_contacts)
+          : bookingDetails.drop_contacts || [];
+    } catch (e) {
+      e.print();
+      console.error("Error parsing drop locations or contacts:", e);
+      dropLocations = [];
+      dropContacts = [];
+    }
+  }
   // const handlePrint = async () => {
   //   if (!cardRef.current) return;
 
@@ -321,13 +340,35 @@ const GoodsDriverInvoiceDetails = () => {
                     </div>
                     <div className="w-full">
                       <h6 className="f-w-600 font-semibold mb-2">
-                        Drop Address
+                        {bookingDetails.multiple_drops > 0
+                          ? `Drop Addresses (${bookingDetails.multiple_drops})`
+                          : "Drop Address"}
                       </h6>
-                      {bookingDetails.receiver_name} {" - "}
-                      {bookingDetails.receiver_number}
-                      <address className="w-1/2">
-                        {bookingDetails.drop_address}
-                      </address>
+                      {bookingDetails.multiple_drops > 0 ? (
+                        dropLocations.map((location, idx) => (
+                          <div key={idx} className="mb-2">
+                            <strong>Drop {idx + 1}:</strong>{" "}
+                            {dropContacts[idx]?.name ? (
+                              <>
+                                {dropContacts[idx].name} -{" "}
+                                {dropContacts[idx].mobile}
+                                <br />
+                              </>
+                            ) : null}
+                            <address className="w-1/2">
+                              {location.address}
+                            </address>
+                          </div>
+                        ))
+                      ) : (
+                        <>
+                          {bookingDetails.receiver_name} {" - "}
+                          {bookingDetails.receiver_number}
+                          <address className="w-1/2">
+                            {bookingDetails.drop_address}
+                          </address>
+                        </>
+                      )}
                     </div>
                   </div>
                   <div className="w-full">

@@ -58,6 +58,7 @@ const AddOtherServicesPage = () => {
     sub_cat_id: "",
     service_image: "",
     time_updated: "",
+    service_base_price: "",
   });
 
   const [errorService, setServiceErrors] = useState({
@@ -66,6 +67,7 @@ const AddOtherServicesPage = () => {
     sub_cat_id: false,
     service_image: false,
     time_updated: false,
+    service_base_price: false,
   });
 
   const [btnLoading, setBtnLoading] = useState(false);
@@ -172,6 +174,7 @@ const AddOtherServicesPage = () => {
     const newErrors = {
       service_name: !selectedOtherService.service_name,
       service_image: !imageFile && !selectedOtherService.service_image,
+      service_base_price: !selectedOtherService.service_base_price,
     };
     setServiceErrors(newErrors);
 
@@ -237,6 +240,7 @@ const AddOtherServicesPage = () => {
           sub_cat_id: sub_cat_id,
           service_name: selectedOtherService.service_name,
           service_image: serviceImageUrl,
+          service_base_price: selectedOtherService.service_base_price,
         },
         {
           headers: {
@@ -393,6 +397,7 @@ const AddOtherServicesPage = () => {
                           <tr>
                             <th>Sl No</th>
                             <th scope="col">Service Name</th>
+                            <th scope="col">Base Price</th>
                             <th scope="col">Last Updated</th>
                             <th scope="col">Actions</th>
                           </tr>
@@ -418,6 +423,8 @@ const AddOtherServicesPage = () => {
                                   </div>
                                 </div>
                               </td>
+
+                              <td>₹{service.service_base_price}</td>
 
                               <td>
                                 <p className="mb-0 f-s-12 text-secondary">
@@ -527,6 +534,23 @@ const AddOtherServicesPage = () => {
               error={errorService.service_image} // Set error state for image
               helperText={
                 errorService.service_image ? "Service Image is required." : ""
+              }
+            />
+
+            <TextField
+              label="Service Base Price"
+              fullWidth
+              margin="normal"
+              name="service_base_price"
+              type="number"
+              value={selectedOtherService.service_base_price}
+              onChange={handleInputChange}
+              required
+              error={errorService.service_base_price}
+              helperText={
+                errorService.service_base_price
+                  ? "Service base price is required."
+                  : ""
               }
             />
 

@@ -320,6 +320,12 @@ const GoodsBookingDetails = () => {
           bookingDetailsResponse.data.results[0]["booking_status"],
         distance: bookingDetailsResponse.data.results[0]["distance"],
         total_time: bookingDetailsResponse.data.results[0]["total_time"],
+        multiple_drops: Number(
+          bookingDetailsResponse.data.results[0]["multiple_drops"]
+        ),
+        drop_locations:
+          bookingDetailsResponse.data.results[0]["drop_locations"],
+        drop_contacts: bookingDetailsResponse.data.results[0]["drop_contacts"],
       });
 
       console.log("bookingDetails.customer_name::" + bookingDetails.ratings);
@@ -388,11 +394,35 @@ const GoodsBookingDetails = () => {
   const statusColors = {
     "Driver Accepted": "primary",
     "Driver Arrived": "secondary",
+    "Otp Verified": "dark",
     "OTP Verified": "dark",
-    "Start Trip": "info",
+    "Start Trip": "primary",
+    "Reached Drop Location 1": "primary",
+    "Reached Drop Location 2": "primary",
     "Make Payment": "warning",
+    Completed: "success",
     "End Trip": "success",
   };
+
+  // Parse drop locations and contacts
+  let dropLocations = [];
+  let dropContacts = [];
+  if (bookingDetails?.multiple_drops > 0) {
+    try {
+      dropLocations =
+        typeof bookingDetails.drop_locations === "string"
+          ? JSON.parse(bookingDetails.drop_locations)
+          : bookingDetails.drop_locations || [];
+      dropContacts =
+        typeof bookingDetails.drop_contacts === "string"
+          ? JSON.parse(bookingDetails.drop_contacts)
+          : bookingDetails.drop_contacts || [];
+    } catch (e) {
+      print("Error parsing drop locations or contacts:", e);
+      dropLocations = [];
+      dropContacts = [];
+    }
+  }
 
   if (loading) {
     return <Loader />;
@@ -608,14 +638,44 @@ const GoodsBookingDetails = () => {
                         <p>{bookingDetails.pickup_address}</p>
                       </div>
                     </div>
-                    <div className="d-flex justify-content-between mt-3">
-                      <h6 className="f-w-600 text-dark">
-                        <i className="ti ti-map-2 f-s-18 me-2"></i>Drop
-                      </h6>
-                      <div className="text-end">
-                        <p>{bookingDetails.drop_address}</p>
+                    {bookingDetails.multiple_drops > 0 ? (
+                      <div>
+                        <div className="d-flex justify-content-between mt-3">
+                          <h6 className="f-w-600 text-dark">
+                            <i className="ti ti-map-2 f-s-18 me-2"></i>
+                            Multiple Drops ({bookingDetails.multiple_drops})
+                          </h6>
+                        </div>
+                        {dropLocations.map((location, index) => (
+                          <div key={index} className="mt-3">
+                            <div className="d-flex justify-content-between">
+                              <h6 className="f-w-600 text-dark">
+                                <i className="ti ti-map-pin f-s-18 me-2"></i>
+                                Drop {index + 1}
+                              </h6>
+                              <div className="text-end">
+                                <p>{location.address}</p>
+                                {dropContacts[index] && (
+                                  <p className="text-secondary">
+                                    Contact: {dropContacts[index].name} (
+                                    {dropContacts[index].mobile})
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    </div>
+                    ) : (
+                      <div className="d-flex justify-content-between mt-3">
+                        <h6 className="f-w-600 text-dark">
+                          <i className="ti ti-map-2 f-s-18 me-2"></i>Drop
+                        </h6>
+                        <div className="text-end">
+                          <p>{bookingDetails.drop_address}</p>
+                        </div>
+                      </div>
+                    )}
                     <div className="d-flex justify-content-between mt-3">
                       <h6 className="f-w-600 text-dark">
                         <i className="ti ti-map-pins f-s-18 me-2"></i>
@@ -667,32 +727,36 @@ const GoodsBookingDetails = () => {
                 </Card>
               </Col>
 
-              <Col lg={3}>
-                <Card className="order-details-card shadow-lg border-0">
-                  <CardHeader>
-                    <h5>Receiver Details</h5>
-                  </CardHeader>
-                  <CardBody>
-                    <div className="d-flex justify-content-between">
-                      <h6 className="f-w-600 text-dark">
-                        <i className="ti ti-user-check f-s-18 me-2 text-secondary"></i>
-                        Name
-                      </h6>
-                      <div className="text-end">
-                        <p>{bookingDetails.receiver_name}</p>
+              {bookingDetails.multiple_drops <= 0 ? (
+                <Col lg={3}>
+                  <Card className="order-details-card shadow-lg border-0">
+                    <CardHeader>
+                      <h5>Receiver Details</h5>
+                    </CardHeader>
+                    <CardBody>
+                      <div className="d-flex justify-content-between">
+                        <h6 className="f-w-600 text-dark">
+                          <i className="ti ti-user-check f-s-18 me-2 text-secondary"></i>
+                          Name
+                        </h6>
+                        <div className="text-end">
+                          <p>{bookingDetails.receiver_name}</p>
+                        </div>
                       </div>
-                    </div>
-                    <div className="d-flex justify-content-between mt-3">
-                      <h6 className="f-w-600 text-dark">
-                        <i className="ti ti-phone f-s-18 me-2"></i>Contact
-                      </h6>
-                      <div className="text-end">
-                        <p>{bookingDetails.receiver_number}</p>
+                      <div className="d-flex justify-content-between mt-3">
+                        <h6 className="f-w-600 text-dark">
+                          <i className="ti ti-phone f-s-18 me-2"></i>Contact
+                        </h6>
+                        <div className="text-end">
+                          <p>{bookingDetails.receiver_number}</p>
+                        </div>
                       </div>
-                    </div>
-                  </CardBody>
-                </Card>
-              </Col>
+                    </CardBody>
+                  </Card>
+                </Col>
+              ) : (
+                <></>
+              )}
             </Row>
           </Col>
 

@@ -239,9 +239,67 @@ const AllGoodsDriverOrders = () => {
                                 </p>
                               </td>
                               <td>
-                                <p className="mb-0 f-s-12 text-secondary">
-                                  {order.drop_address}
-                                </p>
+                                {order.multiple_drops > 0 ? (
+                                  <div>
+                                    <p className="mb-0 f-s-12 text-secondary">
+                                      Multiple Drops ({order.multiple_drops})
+                                    </p>
+                                    {(() => {
+                                      try {
+                                        // Parse the JSON string from the database
+                                        const dropLocations =
+                                          typeof order.drop_locations ===
+                                          "string"
+                                            ? JSON.parse(order.drop_locations)
+                                            : order.drop_locations;
+
+                                        // Also parse the contacts if needed
+                                        const dropContacts =
+                                          typeof order.drop_contacts ===
+                                          "string"
+                                            ? JSON.parse(order.drop_contacts)
+                                            : order.drop_contacts;
+
+                                        return Array.isArray(dropLocations) ? (
+                                          dropLocations.map((drop, idx) => (
+                                            <div key={idx} className="mb-2">
+                                              <p className="mb-0 f-s-12 text-secondary">
+                                                <strong>Drop {idx + 1}:</strong>{" "}
+                                                {drop.address}
+                                              </p>
+                                              {dropContacts &&
+                                                dropContacts[idx] && (
+                                                  <p className="mb-0 f-s-12 text-secondary">
+                                                    <strong>Contact:</strong>{" "}
+                                                    {dropContacts[idx].name} (
+                                                    {dropContacts[idx].mobile})
+                                                  </p>
+                                                )}
+                                            </div>
+                                          ))
+                                        ) : (
+                                          <p className="mb-0 f-s-12 text-secondary">
+                                            {order.drop_address}
+                                          </p>
+                                        );
+                                      } catch (error) {
+                                        console.error(
+                                          "Error parsing drop locations:",
+                                          error
+                                        );
+                                        return (
+                                          <p className="mb-0 f-s-12 text-secondary">
+                                            {order.drop_address}
+                                          </p>
+                                        );
+                                      }
+                                    })()}
+                                  </div>
+                                ) : (
+                                  <p className="mb-0 f-s-12 text-secondary">
+                                    {order.drop_address}
+                                  </p>
+                                )}
                               </td>
                               <td>
                                 <span

@@ -73,12 +73,54 @@ const AllHandyManBookings = () => {
     setCurrentOngoingPage(pageNumber);
   const handleAllPageChange = (pageNumber) => setCurrentAllPage(pageNumber);
 
+  const [allScheduledBookings, setAllScheduledBookings] = useState([]);
+  const [currentScheduledPage, setCurrentScheduledPage] = useState(1);
+  const [searchScheduledQuery, setSearchScheduledQuery] = useState("");
+
+  // Add new search handler
+  const handleScheduledSearch = (e) => {
+    setSearchScheduledQuery(e.target.value.toLowerCase());
+    setCurrentScheduledPage(1);
+  };
+
+  // Add new page change handler
+  const handleScheduledPageChange = (pageNumber) =>
+    setCurrentScheduledPage(pageNumber);
+
+  // Add new fetch function
+  const fetchAllScheduledBookingsData = async () => {
+    const token = Cookies.get("authToken");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        `${serverEndPoint}/get_handyman_scheduled_bookings_details`,
+        {},
+        config
+      );
+      setAllScheduledBookings(response.data.results || []);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Update handleTabClick function
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     if (tab === "cancelled-bookings-tab") {
       fetchAllCancelledBookingsData();
     } else if (tab === "ongoing-bookings-tabs") {
       fetchAllOngoingBookingsData();
+    } else if (tab === "scheduled-bookings-tab") {
+      fetchAllScheduledBookingsData();
     } else {
       fetchAllBookingsData();
     }
@@ -172,6 +214,15 @@ const AllHandyManBookings = () => {
     getCurrentItems(allOngoingBookings, currentOngoingPage, searchOngoingQuery);
   const { currentItems: currentCancelledItems, totalPages: totalPages } =
     getCurrentItems(allCancelledBookings, currentPage, searchQuery);
+
+  const {
+    currentItems: currentScheduledItems,
+    totalPages: totalScheduledPages,
+  } = getCurrentItems(
+    allScheduledBookings,
+    currentScheduledPage,
+    searchScheduledQuery
+  );
 
   const renderBookingTable = (
     items,
@@ -365,6 +416,17 @@ const AllHandyManBookings = () => {
                       Cancelled
                     </button>
                   </li>
+
+                  <li className="nav-item" role="presentation">
+                    <button
+                      className={`nav-link d-flex align-items-center gap-1 ${
+                        activeTab === "scheduled-bookings-tab" ? "active" : ""
+                      }`}
+                      onClick={() => handleTabClick("scheduled-bookings-tab")}
+                    >
+                      <i className="ti ti-calendar f-s-18 mg-b-3"></i> Scheduled
+                    </button>
+                  </li>
                 </ul>
               </CardBody>
 
@@ -417,6 +479,24 @@ const AllHandyManBookings = () => {
                       handlePageChange,
                       searchQuery,
                       handleSearch
+                    )}
+                  </div>
+
+                  {/* Scheduled Bookings Tab */}
+                  <div
+                    className={`tab-pane fade ${
+                      activeTab === "scheduled-bookings-tab"
+                        ? "active show"
+                        : ""
+                    }`}
+                  >
+                    {renderBookingTable(
+                      currentScheduledItems,
+                      currentScheduledPage,
+                      totalScheduledPages,
+                      handleScheduledPageChange,
+                      searchScheduledQuery,
+                      handleScheduledSearch
                     )}
                   </div>
                 </div>

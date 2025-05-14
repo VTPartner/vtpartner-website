@@ -103,6 +103,10 @@ import JcbCraneOrderDetails from "../Components/JCBCraneAdminDashboard/JcbCraneO
 import OtherDriverBookingDetails from "../Components/DriversAdminDashboard/OtherDriverBookingDetails";
 import OtherDriverInvoiceDetails from "../Components/DriversAdminDashboard/OtherDriverInvoiceDetails";
 import OtherDriverOrderDetails from "../Components/DriversAdminDashboard/OtherDriverOrderDetails";
+import CabOrdersReport from "../Components/CabAdminDashboard/CabOrdersReports";
+import OtherDriverOrdersReport from "../Components/DriversAdminDashboard/DriversOrdersReport";
+import JcbCraneOrdersReport from "../Components/JCBCraneAdminDashboard/JcbCraneOrdersReports";
+import HandymanOrdersReport from "../Components/HandyManDashboard/HandyManOrdersReport";
 // DashboardRoutes
 // const GoodsDriversHome = React.lazy(() =>
 //   import("@/Pages/Dashboard/GoodsDriversHome")
@@ -284,6 +288,22 @@ const Routes = () => {
         {
           path: "/dashboard/all-orders-report",
           element: <OrdersReport />,
+        },
+        {
+          path: "/dashboard/all-cab-orders-report",
+          element: <CabOrdersReport />,
+        },
+        {
+          path: "/dashboard/all-other-drivers-orders-report",
+          element: <OtherDriverOrdersReport />,
+        },
+        {
+          path: "/dashboard/all-jcb-crane-drivers-orders-report",
+          element: <JcbCraneOrdersReport />,
+        },
+        {
+          path: "/dashboard/all-handyman-orders-report",
+          element: <HandymanOrdersReport />,
         },
         {
           path: "/dashboard/all-regions",
