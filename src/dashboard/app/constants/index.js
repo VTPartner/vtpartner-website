@@ -2,16 +2,16 @@
 
 // Define the variables
 let serverEndPoint, serverWebsiteEndPoint, serverEndPointImage;
-const devMode = 0; // Change this to 1 for development mode
+const devMode = 1; // Change this to 1 for development mode
 
 if (devMode === 1) {
   serverEndPoint = "http://100.24.44.74:8000/api/dashboard";
   serverWebsiteEndPoint = "http://100.24.44.74:8000/api/website";
   serverEndPointImage = "http://100.24.44.74:8000/api/dashboard";
 } else {
-  serverEndPoint = "http://100.24.44.74/api/dashboard";
+  serverEndPoint = "https://www.kaps9.in/api/dashboard";
   serverWebsiteEndPoint = "https://www.kaps9.in/api/website";
-  serverEndPointImage = "http://100.24.44.74/api/dashboard";
+  serverEndPointImage = "https://www.kaps9.in/api/dashboard";
 }
 
 // if (devMode === 1) {

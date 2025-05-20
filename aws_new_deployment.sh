@@ -1,5 +1,7 @@
 #!/bin/bash
 # deploy.sh
+# Allow the ssh
+chmod 400 "kaps-ec2-instance-key.pem"
 
 # Exit on error
 set -e

@@ -31,6 +31,7 @@ export const sidebarConfig = [
       { name: "Recharge Plans", path: "/dashboard/all-recharge-plans" },
       { name: "Banners", path: "/dashboard/all-banners" },
       { name: "Coupons", path: "/dashboard/all-coupons" },
+      { name: "Cancel Reasons", path: "/dashboard/cancel-reasons" },
     ],
   },
 

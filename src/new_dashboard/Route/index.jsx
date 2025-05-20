@@ -107,6 +107,12 @@ import CabOrdersReport from "../Components/CabAdminDashboard/CabOrdersReports";
 import OtherDriverOrdersReport from "../Components/DriversAdminDashboard/DriversOrdersReport";
 import JcbCraneOrdersReport from "../Components/JCBCraneAdminDashboard/JcbCraneOrdersReports";
 import HandymanOrdersReport from "../Components/HandyManDashboard/HandyManOrdersReport";
+import MobileGoodsDriverLocationDetails from "../Components/Admindashboard/BookingsDetails/ShareBookingDetails";
+import MobileCabDriverLocationDetails from "../Components/CabAdminDashboard/ShareCabBookingDetails";
+import MobileOtherDriverLocationDetails from "../Components/DriversAdminDashboard/ShareDriverDetails";
+import MobileHandymanLocationDetails from "../Components/HandyManDashboard/ShareHandymanBookingDetails";
+import MobileJcbCraneLocationDetails from "../Components/JCBCraneAdminDashboard/ShareJcbCraneBookingDetail";
+import CancelReasons from "../Pages/MainSettingsPages/AddCancelReasons";
 // DashboardRoutes
 // const GoodsDriversHome = React.lazy(() =>
 //   import("@/Pages/Dashboard/GoodsDriversHome")
@@ -314,6 +320,10 @@ const Routes = () => {
           element: <RechargePlans />,
         },
         {
+          path: "/dashboard/cancel-reasons",
+          element: <CancelReasons />,
+        },
+        {
           path: "/dashboard/all-goods_types",
           element: <GoodsTypes />,
         },
@@ -490,6 +500,26 @@ const Routes = () => {
     {
       path: "/dashboard/customer-wallet-details/:customerID/:customerName",
       element: <CustomerWallet />,
+    },
+    {
+      path: "/goods-booking-details/:booking_id",
+      element: <MobileGoodsDriverLocationDetails />,
+    },
+    {
+      path: "/cab-booking-details/:booking_id",
+      element: <MobileCabDriverLocationDetails />,
+    },
+    {
+      path: "/driver-booking-details/:booking_id",
+      element: <MobileOtherDriverLocationDetails />,
+    },
+    {
+      path: "/jcb-crane-booking-details/:booking_id",
+      element: <MobileJcbCraneLocationDetails />,
+    },
+    {
+      path: "/handyman-booking-details/:booking_id",
+      element: <MobileHandymanLocationDetails />,
     },
   ];
   return useRoutes(element);

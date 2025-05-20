@@ -53,7 +53,7 @@ const HeaderMenu = () => {
   return (
     <>
       <ul className="d-flex align-items-center">
-        <li className="header-cloud">
+        {/* <li className="header-cloud">
           <a
             href="#"
             className="head-icon"
@@ -94,7 +94,7 @@ const HeaderMenu = () => {
               </div>
             </div>
           </div>
-        </li>
+        </li> */}
 
         {/* <li className="header-apps">
           <a
@@ -304,11 +304,11 @@ const HeaderMenu = () => {
             data-bs-target="#profilecanvasRight"
             aria-controls="profilecanvasRight"
           >
-            <img
+            {/* <img
               src="/assets/images/avtar/woman.jpg"
               alt="avtar"
               className="b-r-10 h-35 w-35"
-            />
+            /> */}
           </a>
 
           <div
@@ -337,7 +337,7 @@ const HeaderMenu = () => {
                   </div>
                 </li>
 
-                <li className="app-divider-v dotted my-1"></li>
+                {/* <li className="app-divider-v dotted my-1"></li>
                 <li>
                   <Link className="f-w-500" href="/apps/profile-page/profile">
                     <i className="ph-duotone  ph-user-circle pe-1 f-s-20"></i>
@@ -382,7 +382,7 @@ const HeaderMenu = () => {
                   </Link>
                 </li>
 
-                <li className="app-divider-v dotted my-1"></li>
+                <li className="app-divider-v dotted my-1"></li> */}
 
                 <li>
                   <Link className="mb-0 text-danger" href="">
