@@ -21,9 +21,13 @@ import {
   Icon,
   Avatar,
   Tooltip,
+  Chip,
+  FormControlLabel,
+  Switch,
 } from "@mui/material";
+import PriceChangeIcon from "@mui/icons-material/PriceChange";
 import { LoadingButton } from "@mui/lab";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { styled } from "@mui/system";
@@ -38,12 +42,10 @@ import { Card, CardBody, Col, Container, Row } from "reactstrap";
 
 const AddSubCategoryPage = () => {
   const [activeTab, setActiveTab] = useState("connect-tab");
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-  };
   const { category_id, category_name } = useParams();
   const [subServices, setSubServices] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [statusLoading, setStatusLoading] = useState(false);
   const [error, setError] = useState(null);
   const [openSubServicesDialog, setOpenSubServicesDialog] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -58,39 +60,37 @@ const AddSubCategoryPage = () => {
     epoch_time: "",
     service_base_price: "",
     penalty_charges_amount: "",
+    is_active: 1,
   });
 
   const [errorService, setServiceErrors] = useState({
-    sub_cat_id: false,
     sub_cat_name: false,
-    cat_id: false,
     image: false,
-    epoch_time: false,
     service_base_price: false,
     penalty_charges_amount: false,
   });
 
   const [btnLoading, setBtnLoading] = useState(false);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  // Fetch all vehicles and vehicle types
   const fetchAllSubServices = async () => {
-    // Check if the user is online
     if (!navigator.onLine) {
       toast.error("No internet connection. Please check your connection.");
       setLoading(false);
-      return; // Exit if no internet connection
+      return;
     }
 
-    const token = Cookies.get("authToken");
-
     try {
+      const token = Cookies.get("authToken");
+
+      if (!token) {
+        toast.error("Authentication token not found. Please login again.");
+        navigate("/login");
+        return;
+      }
+
       const response = await axios.post(
         `${serverEndPoint}/all_sub_categories`,
-        {
-          category_id: category_id,
-        }, // Send an empty object as the body if needed
+        { category_id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -99,12 +99,11 @@ const AddSubCategoryPage = () => {
         }
       );
 
-      // Update state with vehicle details
       setSubServices(response.data.sub_categories_details);
     } catch (error) {
-      handleError(error); // Handle errors using your existing error handling function
+      handleError(error);
     } finally {
-      setLoading(false); // Ensure loading state is reset
+      setLoading(false);
     }
   };
 
@@ -112,28 +111,67 @@ const AddSubCategoryPage = () => {
     fetchAllSubServices();
   }, []);
 
-  // Handle error responses
   const handleError = (error) => {
     if (error.response) {
-      if (error.response.status === 404) {
-        toast.error("No Data Found.");
-        setError("No Data Found");
-      } else if (error.response.status === 409) {
-        toast.error("Sub Service Name already assigned.");
-      } else if (error.response.status === 500) {
-        toast.error("Internal server error. Please try again later.");
-        setError("Internal Server Error");
-      } else {
-        toast.error("An unexpected error occurred. Please try again.");
-        setError("Unexpected Error");
+      switch (error.response.status) {
+        case 404:
+          toast.error("No Data Found.");
+          setError("No Data Found");
+          break;
+        case 409:
+          toast.error("Sub Service Name already exists.");
+          break;
+        case 500:
+          toast.error("Internal server error. Please try again later.");
+          setError("Internal Server Error");
+          break;
+        default:
+          toast.error("An unexpected error occurred. Please try again.");
+          setError("Unexpected Error");
       }
     } else {
-      toast.error(
-        "Failed to fetch all Sub Services. Please check your connection."
-      );
+      toast.error("Network error. Please check your connection.");
       setError("Network Error");
     }
-    setLoading(false);
+  };
+
+  const handleStatusChange = async (service) => {
+    try {
+      setStatusLoading(true);
+      const token = Cookies.get("authToken");
+
+      const response = await axios.post(
+        `${serverEndPoint}/edit_sub_category`,
+        {
+          sub_cat_id: service.sub_cat_id,
+          category_id,
+          sub_cat_name: service.sub_cat_name,
+          image: service.image,
+          service_base_price: service.service_base_price,
+          penalty_charges_amount: service.penalty_charges_amount,
+          is_active: service.is_active === 1 ? 0 : 1,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        toast.success(`${service.sub_cat_name} status updated successfully!`);
+        await fetchAllSubServices();
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setStatusLoading(false);
+    }
+  };
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
   };
 
   const handleOpenDialog = () => {
@@ -143,6 +181,9 @@ const AddSubCategoryPage = () => {
       cat_id: "",
       image: "",
       epoch_time: "",
+      service_base_price: "",
+      penalty_charges_amount: "",
+      is_active: 1,
     });
     setIsEditMode(false);
     setOpenSubServicesDialog(true);
@@ -164,7 +205,17 @@ const AddSubCategoryPage = () => {
   };
 
   const handleEditClick = (service) => {
-    setSelectedSubServices(service);
+    // setSelectedSubServices(service);
+    setSelectedSubServices({
+      sub_cat_id: service.sub_cat_id,
+      sub_cat_name: service.sub_cat_name,
+      cat_id: service.cat_id,
+      image: service.image,
+      epoch_time: service.epoch_time,
+      service_base_price: service.service_base_price,
+      penalty_charges_amount: service.penalty_charges_amount,
+      is_active: service.is_active,
+    });
     setIsEditMode(true);
     setOpenSubServicesDialog(true);
   };
@@ -187,6 +238,8 @@ const AddSubCategoryPage = () => {
     const newErrors = {
       sub_cat_name: !selectedSubService.sub_cat_name,
       image: !imageFile && !selectedSubService.image,
+      service_base_price: !selectedSubService.service_base_price,
+      penalty_charges_amount: !selectedSubService.penalty_charges_amount,
     };
     setServiceErrors(newErrors);
 
@@ -194,18 +247,14 @@ const AddSubCategoryPage = () => {
       setBtnLoading(false);
       return;
     }
+
     let serviceImageUrl = selectedSubService.image;
 
-    //CATEGORY IMAGE UPLOAD
     try {
       if (imageFile) {
         const formData = new FormData();
         formData.append("image", imageFile);
-        // Log form data content
-        for (const [key, value] of formData.entries()) {
-          console.log(`${key}: ${value.name}`); // Will log 'vehicleImage: lal-mahal.jpg'
-        }
-        console.log(formData);
+
         const uploadResponse = await axios.post(
           `${serverEndPointImage}/upload`,
           formData,
@@ -218,42 +267,24 @@ const AddSubCategoryPage = () => {
 
         serviceImageUrl = uploadResponse.data.image_url;
       }
-    } catch (error) {
-      console.error("Error uploading Sub category Image:", error);
-      toast.error(
-        "Error uploading Sub category Image or file size too large then 2 Mb"
-      );
-      setBtnLoading(false);
-      return;
-    }
 
-    const token = Cookies.get("authToken");
-    const endpoint = isEditMode
-      ? `${serverEndPoint}/edit_sub_category`
-      : `${serverEndPoint}/add_sub_category`;
+      const token = Cookies.get("authToken");
+      const endpoint = isEditMode
+        ? `${serverEndPoint}/edit_sub_category`
+        : `${serverEndPoint}/add_sub_category`;
 
-    try {
-      const formData = new FormData();
-
-      // Append vehicle details to formData
-      for (const key in selectedSubService) {
-        formData.append(key, selectedSubService[key]);
-      }
-
-      // Append image file if it exists
-      if (imageFile) {
-        formData.append("image", imageFile);
-      }
+      const isActive = selectedSubService.is_active ? "1" : "0";
 
       const response = await axios.post(
         endpoint,
         {
           sub_cat_id: isEditMode ? selectedSubService.sub_cat_id : "0",
-          category_id: category_id,
+          category_id,
           sub_cat_name: selectedSubService.sub_cat_name,
           image: serviceImageUrl,
           service_base_price: selectedSubService.service_base_price,
           penalty_charges_amount: selectedSubService.penalty_charges_amount,
+          is_active: isActive,
         },
         {
           headers: {
@@ -265,17 +296,13 @@ const AddSubCategoryPage = () => {
 
       if (response.status === 200) {
         toast.success(
-          isEditMode
-            ? selectedSubService.sub_cat_name +
-                " Sub Category updated successfully!"
-            : selectedSubService.sub_cat_name +
-                " Sub Category added successfully!"
+          `${selectedSubService.sub_cat_name} ${
+            isEditMode ? "updated" : "added"
+          } successfully!`
         );
-        fetchAllSubServices();
+        await fetchAllSubServices();
         handleCloseDialog();
         setImageFile(null);
-      } else {
-        toast.error("Failed to save Category.");
       }
     } catch (error) {
       handleError(error);
@@ -321,6 +348,7 @@ const AddSubCategoryPage = () => {
   return (
     <div>
       <Container fluid>
+        <ToastContainer position="top-right" />
         <Row className="m-1">
           <Col xs={12}>
             <h4 className="main-title">Service Settings</h4>
@@ -410,6 +438,7 @@ const AddSubCategoryPage = () => {
                             <th>Sub Category Name</th>
                             <th scope="col">Base Price</th>
                             <th scope="col">Penalty Charges</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Last Updated</th>
                             <th scope="col">Actions</th>
                           </tr>
@@ -435,6 +464,14 @@ const AddSubCategoryPage = () => {
                                   <div className="ms-5">
                                     <h6 className="mb-0 f-s-16">
                                       {service.sub_cat_name}
+                                      {service.is_active === 0 && (
+                                        <Chip
+                                          label="Inactive"
+                                          size="small"
+                                          color="error"
+                                          sx={{ ml: 1 }}
+                                        />
+                                      )}
                                     </h6>
                                   </div>
                                 </div>
@@ -442,7 +479,11 @@ const AddSubCategoryPage = () => {
 
                               <td>₹{service.service_base_price}</td>
                               <td>₹{service.penalty_charges_amount}</td>
-
+                              <td>
+                                {service.is_active === 1
+                                  ? "Active"
+                                  : "Inactive"}
+                              </td>
                               <td>
                                 <p className="mb-0 f-s-12 text-secondary">
                                   {format(
@@ -465,6 +506,23 @@ const AddSubCategoryPage = () => {
                                     onClick={() => goToOtherServices(service)}
                                   >
                                     <Icon color="gray">arrow_forward</Icon>
+                                  </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Service Plan Upgrades" arrow>
+                                  <IconButton
+                                    onClick={() =>
+                                      navigate(
+                                        `/dashboard/service-plan-upgrades/${-1}/${
+                                          service.sub_cat_id
+                                        }/${encodeURIComponent(
+                                          "NA"
+                                        )}/${encodeURIComponent(
+                                          service.sub_cat_name
+                                        )}`
+                                      )
+                                    }
+                                  >
+                                    <PriceChangeIcon color="primary" />
                                   </IconButton>
                                 </Tooltip>
                               </td>
@@ -596,6 +654,23 @@ const AddSubCategoryPage = () => {
                   ? "Penalty charges amount is required."
                   : ""
               }
+            />
+
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={selectedSubService.is_active === 1}
+                  onChange={(e) =>
+                    setSelectedSubServices((prev) => ({
+                      ...prev,
+                      is_active: e.target.checked ? 1 : 0,
+                    }))
+                  }
+                  color="primary"
+                />
+              }
+              label={selectedSubService.is_active === 1 ? "Active" : "Inactive"}
+              sx={{ mt: 2, mb: 1 }}
             />
 
             <Box mt={2} display="flex" justifyContent="flex-end">

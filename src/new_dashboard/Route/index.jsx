@@ -113,6 +113,13 @@ import MobileOtherDriverLocationDetails from "../Components/DriversAdminDashboar
 import MobileHandymanLocationDetails from "../Components/HandyManDashboard/ShareHandymanBookingDetails";
 import MobileJcbCraneLocationDetails from "../Components/JCBCraneAdminDashboard/ShareJcbCraneBookingDetail";
 import CancelReasons from "../Pages/MainSettingsPages/AddCancelReasons";
+import ControlSettings from "../Pages/MainSettingsPages/ControlsSettingsForApp";
+import AllCityBranches from "../Pages/MainSettingsPages/AddNewBranches";
+import BranchAdmins from "../Pages/MainSettingsPages/AdminManagement";
+import VehicleUpgradePrices from "../Pages/MainSettingsPages/AllAddUpgradePrices";
+import ServicePlanUpgrades from "../Pages/MainSettingsPages/ServicePriceUpgrade";
+import EstimationRequests from "../Pages/EstimationsRequest/AllEstimationRequest";
+import Enquiries from "../Pages/EstimationsRequest/AllAgentsRequest";
 // DashboardRoutes
 // const GoodsDriversHome = React.lazy(() =>
 //   import("@/Pages/Dashboard/GoodsDriversHome")
@@ -312,8 +319,24 @@ const Routes = () => {
           element: <HandymanOrdersReport />,
         },
         {
+          path: "/dashboard/all-enquiries",
+          element: <EstimationRequests />,
+        },
+        {
+          path: "/dashboard/all-agents-enquiries",
+          element: <Enquiries />,
+        },
+        {
           path: "/dashboard/all-regions",
           element: <AllRegionsCovered />,
+        },
+        {
+          path: "/dashboard/all-city-branches/:cityId/:cityName",
+          element: <AllCityBranches />,
+        },
+        {
+          path: "/dashboard/branch-admins/:cityId/:branchId/:branchName",
+          element: <BranchAdmins />,
         },
         {
           path: "/dashboard/all-recharge-plans",
@@ -322,6 +345,10 @@ const Routes = () => {
         {
           path: "/dashboard/cancel-reasons",
           element: <CancelReasons />,
+        },
+        {
+          path: "/dashboard/app-controls",
+          element: <ControlSettings />,
         },
         {
           path: "/dashboard/all-goods_types",
@@ -366,6 +393,14 @@ const Routes = () => {
         {
           path: "/dashboard/all_vehicles/:category_id/:category_name",
           element: <AddNewVehiclePage />,
+        },
+        {
+          path: "/dashboard/vehicle-upgrade-prices/:vehicleId/:vehicleName",
+          element: <VehicleUpgradePrices />,
+        },
+        {
+          path: "/dashboard/service-plan-upgrades/:serviceId/:subCatId/:serviceName/:subCatName",
+          element: <ServicePlanUpgrades />,
         },
         {
           path: "/dashboard/vehicle-price/:vehicle_id/:vehicle_name",

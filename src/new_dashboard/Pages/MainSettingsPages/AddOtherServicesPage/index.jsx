@@ -21,9 +21,13 @@ import {
   Icon,
   Avatar,
   Tooltip,
+  Chip,
+  FormControlLabel,
+  Switch,
 } from "@mui/material";
+import PriceChangeIcon from "@mui/icons-material/PriceChange";
 import { LoadingButton } from "@mui/lab";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { styled } from "@mui/system";
@@ -59,6 +63,7 @@ const AddOtherServicesPage = () => {
     service_image: "",
     time_updated: "",
     service_base_price: "",
+    is_active_service: 1, // Add this line
   });
 
   const [errorService, setServiceErrors] = useState({
@@ -143,6 +148,7 @@ const AddOtherServicesPage = () => {
       sub_cat_id: "",
       service_image: "",
       time_updated: "",
+      is_active_service: 1,
     });
     setIsEditMode(false);
     setOpenOtherServicesDialog(true);
@@ -151,7 +157,16 @@ const AddOtherServicesPage = () => {
   const navigate = useNavigate();
 
   const handleEditClick = (service) => {
-    setSelectedOtherServices(service);
+    // setSelectedOtherServices(service);
+    setSelectedOtherServices({
+      service_id: service.service_id,
+      service_name: service.service_name,
+      sub_cat_id: service.sub_cat_id,
+      service_image: service.service_image,
+      time_updated: service.time_updated,
+      service_base_price: service.service_base_price,
+      is_active_service: service.is_active_service,
+    });
     setIsEditMode(true);
     setOpenOtherServicesDialog(true);
   };
@@ -241,6 +256,7 @@ const AddOtherServicesPage = () => {
           service_name: selectedOtherService.service_name,
           service_image: serviceImageUrl,
           service_base_price: selectedOtherService.service_base_price,
+          is_active_service: selectedOtherService.is_active_service ? "1" : "0",
         },
         {
           headers: {
@@ -269,6 +285,42 @@ const AddOtherServicesPage = () => {
       handleError(error);
     } finally {
       setBtnLoading(false);
+    }
+  };
+
+  const [statusLoading, setStatusLoading] = useState(false);
+
+  const handleStatusChange = async (service) => {
+    try {
+      setStatusLoading(true);
+      const token = Cookies.get("authToken");
+
+      const response = await axios.post(
+        `${serverEndPoint}/edit_other_service`,
+        {
+          service_id: service.service_id,
+          service_name: service.service_name,
+          sub_cat_id: sub_cat_id,
+          service_image: service.service_image,
+          service_base_price: service.service_base_price,
+          is_active_service: service.is_active_service === 1 ? 0 : 1,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        toast.success(`${service.service_name} status updated successfully!`);
+        await fetchAllServices();
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setStatusLoading(false);
     }
   };
 
@@ -309,6 +361,7 @@ const AddOtherServicesPage = () => {
   return (
     <div>
       <Container fluid>
+        <ToastContainer position="top-right" />
         <Row className="m-1">
           <Col xs={12}>
             <h4 className="main-title">Service Settings</h4>
@@ -398,6 +451,7 @@ const AddOtherServicesPage = () => {
                             <th>Sl No</th>
                             <th scope="col">Service Name</th>
                             <th scope="col">Base Price</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Last Updated</th>
                             <th scope="col">Actions</th>
                           </tr>
@@ -419,13 +473,25 @@ const AddOtherServicesPage = () => {
                                   <div className="ms-5">
                                     <h6 className="mb-0 f-s-16">
                                       {service.service_name}
+                                      {service.is_active_service === 0 && (
+                                        <Chip
+                                          label="Inactive"
+                                          size="small"
+                                          color="error"
+                                          sx={{ ml: 1 }}
+                                        />
+                                      )}
                                     </h6>
                                   </div>
                                 </div>
                               </td>
 
                               <td>₹{service.service_base_price}</td>
-
+                              <td>
+                                {service.is_active_service === 1
+                                  ? "Active"
+                                  : "Inactive"}
+                              </td>
                               <td>
                                 <p className="mb-0 f-s-12 text-secondary">
                                   {format(
@@ -440,6 +506,21 @@ const AddOtherServicesPage = () => {
                                     onClick={() => handleEditClick(service)}
                                   >
                                     <Icon color="primary">edit</Icon>
+                                  </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Service Plan Upgrades" arrow>
+                                  <IconButton
+                                    onClick={() =>
+                                      navigate(
+                                        `/dashboard/service-plan-upgrades/${
+                                          service.service_id
+                                        }/${sub_cat_id}/${encodeURIComponent(
+                                          service.service_name
+                                        )}/${encodeURIComponent(sub_cat_name)}`
+                                      )
+                                    }
+                                  >
+                                    <PriceChangeIcon color="primary" />
                                   </IconButton>
                                 </Tooltip>
                               </td>
@@ -552,6 +633,27 @@ const AddOtherServicesPage = () => {
                   ? "Service base price is required."
                   : ""
               }
+            />
+
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={selectedOtherService.is_active_service === 1}
+                  onChange={(e) =>
+                    setSelectedOtherServices((prev) => ({
+                      ...prev,
+                      is_active_service: e.target.checked ? 1 : 0,
+                    }))
+                  }
+                  color="primary"
+                />
+              }
+              label={
+                selectedOtherService.is_active_service === 1
+                  ? "Active"
+                  : "Inactive"
+              }
+              sx={{ mt: 2, mb: 1 }}
             />
 
             <Box mt={2} display="flex" justifyContent="flex-end">

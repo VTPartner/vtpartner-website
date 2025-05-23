@@ -16,6 +16,20 @@ export const sidebarConfig = [
     ],
   },
 
+  //Estimation Requests
+  {
+    type: "dropdown",
+    title: "Website Requests",
+    iconClass: "ph-bold ph-gear-fine",
+    name: "Enquiries",
+    collapseId: "Website",
+    path: "/dashboard/enquiries",
+    children: [
+      { name: "All Enquiries", path: "/dashboard/all-enquiries" },
+      { name: "All Agents Enquiries", path: "/dashboard/all-agents-enquiries" },
+    ],
+  },
+
   //Goods All Routes
   {
     type: "dropdown",
@@ -32,6 +46,7 @@ export const sidebarConfig = [
       { name: "Banners", path: "/dashboard/all-banners" },
       { name: "Coupons", path: "/dashboard/all-coupons" },
       { name: "Cancel Reasons", path: "/dashboard/cancel-reasons" },
+      { name: "App Controls", path: "/dashboard/app-controls" },
     ],
   },
 

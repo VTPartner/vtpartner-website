@@ -115,6 +115,11 @@ const AllRegionsCovered = () => {
       }
     );
   };
+  const goToAllBranches = (city) => {
+    navigate(`/dashboard/all-city-branches/${city.city_id}/${city.city_name}`, {
+      state: { cities, currentPage }, // Pass cities and current page state
+    });
+  };
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
@@ -614,6 +619,14 @@ const AllRegionsCovered = () => {
                                     </IconButton>
                                   </Tooltip>
                                 ) : null}{" "}
+                                <Tooltip title="Manage Branches" arrow>
+                                  <IconButton
+                                    onClick={() => goToAllBranches(city)}
+                                    className="ms-2"
+                                  >
+                                    <Icon color="primary">business</Icon>
+                                  </IconButton>
+                                </Tooltip>
                               </td>
                             </tr>
                           ))}

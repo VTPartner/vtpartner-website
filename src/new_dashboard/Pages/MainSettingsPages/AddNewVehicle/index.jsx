@@ -23,7 +23,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { styled } from "@mui/system";
 
 import { useNavigate, useParams } from "react-router-dom";
@@ -31,7 +31,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Card, CardBody, Col, Container, Row } from "reactstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
-
+import UpgradeIcon from "@mui/icons-material/Upgrade";
 import Cookies from "js-cookie";
 import {
   formatEpoch,
@@ -54,8 +54,18 @@ const AddNewVehiclePage = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileSizeImage, setImageFileSizeImage] = useState(null);
+  const [imageMapFileSizeImage, setImageMapFileSizeImage] = useState(null);
   const [imageError, setImageError] = useState(false);
   const [imageErrorSizeImage, setImageErrorSizeImage] = useState(false);
+  const [imageErrorMapImage, setImageErrorMapImage] = useState(false);
+
+  const goToUpgradeRidePricePage = (vehicle) => {
+    navigate(
+      `/dashboard/vehicle-upgrade-prices/${
+        vehicle.vehicle_id
+      }/${encodeURIComponent(vehicle.vehicle_name)}`
+    );
+  };
 
   const [selectedVehicle, setSelectedVehicle] = useState({
     vehicle_id: "",
@@ -65,6 +75,9 @@ const AddNewVehiclePage = () => {
     description: "",
     image: "",
     size_image: "",
+    minimum_waiting_time: "", // Default value
+    penalty_charge: "", // Default value
+    vehicle_map_image: "",
   });
 
   const [errorVehicle, setVehicleErrors] = useState({
@@ -74,6 +87,9 @@ const AddNewVehiclePage = () => {
     description: false,
     image: false,
     size_image: false,
+    minimum_waiting_time: false,
+    penalty_charge: false,
+    vehicle_map_image: false,
   });
   const [vehicleTypes, setVehicleTypes] = useState([]);
   const [btnLoading, setBtnLoading] = useState(false);
@@ -184,6 +200,9 @@ const AddNewVehiclePage = () => {
       description: "",
       image: "",
       size_image: "",
+      minimum_waiting_time: "", // Default value
+      penalty_charge: "", // Default value
+      vehicle_map_image: "",
     });
     setIsEditMode(false);
     setOpenVehicleDialog(true);
@@ -238,6 +257,10 @@ const AddNewVehiclePage = () => {
       description: !selectedVehicle.description,
       image: !imageFile && !selectedVehicle.image,
       size_image: !imageFileSizeImage && !selectedVehicle.size_image,
+      minimum_waiting_time: !selectedVehicle.minimum_waiting_time,
+      penalty_charge: !selectedVehicle.penalty_charge,
+      vehicle_map_image:
+        !imageMapFileSizeImage && !selectedVehicle.vehicle_map_image,
     };
     setVehicleErrors(newErrors);
 
@@ -247,6 +270,7 @@ const AddNewVehiclePage = () => {
     }
     let vehicleImageUrl = selectedVehicle.image;
     let vehicleSizeImageUrl = selectedVehicle.size_image;
+    let vehicleMapImageUrl = selectedVehicle.vehicle_map_image;
 
     //VEHICLE IMAGE UPLOAD
     try {
@@ -306,6 +330,32 @@ const AddNewVehiclePage = () => {
       setBtnLoading(false);
       return;
     }
+    //VEHICLE MAP IMAGE UPLOAD
+    try {
+      if (imageMapFileSizeImage) {
+        const formData2 = new FormData();
+        formData2.append("image", imageMapFileSizeImage);
+
+        const uploadResponse = await axios.post(
+          `${serverEndPointImage}/upload`,
+          formData2,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        vehicleMapImageUrl = uploadResponse.data.image_url;
+      }
+    } catch (error) {
+      console.error("Error uploading Vehicle Size Image:", error);
+      toast.error(
+        "Error uploading Vehicle Size Image or file size too large then 2 Mb"
+      );
+      setBtnLoading(false);
+      return;
+    }
 
     const token = Cookies.get("authToken");
     const endpoint = isEditMode
@@ -336,6 +386,9 @@ const AddNewVehiclePage = () => {
           description: selectedVehicle.description,
           image: vehicleImageUrl,
           size_image: vehicleSizeImageUrl,
+          minimum_waiting_time: selectedVehicle.minimum_waiting_time,
+          penalty_charge: selectedVehicle.penalty_charge,
+          vehicle_map_image: vehicleMapImageUrl,
         },
         {
           headers: {
@@ -457,6 +510,35 @@ const AddNewVehiclePage = () => {
       }
     }
   };
+  const handleChangeVehicleMapImage = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const validImageTypes = [
+        "image/png",
+        "image/jpeg",
+        "image/jpg",
+        "image/svg+xml",
+      ];
+
+      if (!validImageTypes.includes(file.type)) {
+        setImageErrorMapImage((prevErrors) => ({
+          ...prevErrors,
+          image: true,
+        }));
+        toast.warning(
+          "Only .png, .jpeg, .jpg, and .svg file formats are allowed."
+        );
+        e.target.value = ""; // Clear the selected file input
+        return; // Return early without setting the image file
+      } else {
+        setImageMapFileSizeImage(file); // Set the valid image file
+        setImageErrorMapImage((prevErrors) => ({
+          ...prevErrors,
+          image: false,
+        }));
+      }
+    }
+  };
 
   if (loading) {
     return <Loader />;
@@ -464,6 +546,7 @@ const AddNewVehiclePage = () => {
 
   return (
     <div>
+      <ToastContainer position="top-right" />
       <Container fluid>
         <Row className="m-1">
           <Col xs={12}>
@@ -554,6 +637,8 @@ const AddNewVehiclePage = () => {
                             <th scope="col">Vehicle Name</th>
                             <th scope="col">Weight (kg)</th>
                             <th scope="col">Vehicle Type</th>
+                            <th scope="col">Waiting Time</th>
+                            <th scope="col">Penalty Charge</th>
                             <th scope="col">Actions</th>
                           </tr>
                         </thead>
@@ -589,6 +674,16 @@ const AddNewVehiclePage = () => {
                                   {vehicle.vehicle_type_name}
                                 </p>
                               </td>
+                              <td>
+                                <p className="mb-0 f-s-12 text-secondary">
+                                  {vehicle.minimum_waiting_time} mins
+                                </p>
+                              </td>
+                              <td>
+                                <p className="mb-0 f-s-12 text-secondary">
+                                  ₹{vehicle.penalty_charge}/min
+                                </p>
+                              </td>
 
                               <td>
                                 <Tooltip title="Edit Vehicle Details" arrow>
@@ -612,6 +707,15 @@ const AddNewVehiclePage = () => {
                                     }
                                   >
                                     <Icon color="gray">access_time</Icon>
+                                  </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Add Upgrade Ride Prices" arrow>
+                                  <IconButton
+                                    onClick={() =>
+                                      goToUpgradeRidePricePage(vehicle)
+                                    }
+                                  >
+                                    <UpgradeIcon color="gray" />
                                   </IconButton>
                                 </Tooltip>
                               </td>
@@ -657,8 +761,7 @@ const AddNewVehiclePage = () => {
             <Typography variant="h6" gutterBottom>
               {isEditMode ? "Edit Vehicle" : "Add New Vehicle"}
             </Typography>
-
-            {isEditMode ? (
+            {/* {isEditMode ? (
               <Box display="flex" alignItems="center" mb={2} width="100%">
                 <img
                   src={selectedVehicle.size_image}
@@ -691,8 +794,51 @@ const AddNewVehiclePage = () => {
               </Box>
             ) : (
               <></>
-            )}
+            )} */}
 
+            {isEditMode ? (
+              <Box
+                display="flex"
+                alignItems="center"
+                mb={2}
+                width="100%"
+                gap={2}
+              >
+                <img
+                  src={selectedVehicle.size_image}
+                  alt="Size"
+                  style={{
+                    width: "33%",
+                    height: "auto",
+                    maxHeight: "100px",
+                    objectFit: "contain",
+                    borderRadius: "8px",
+                  }}
+                />
+                <img
+                  src={selectedVehicle.image}
+                  alt={selectedVehicle.vehicle_name}
+                  style={{
+                    width: "33%",
+                    height: "auto",
+                    maxHeight: "100px",
+                    objectFit: "contain",
+                    borderRadius: "8px",
+                  }}
+                />
+                <img
+                  src={selectedVehicle.vehicle_map_image}
+                  alt="Map"
+                  style={{
+                    width: "33%",
+                    height: "auto",
+                    maxHeight: "100px",
+                    objectFit: "contain",
+                    borderRadius: "8px",
+                  }}
+                />
+              </Box>
+            ) : null}
             <TextField
               label="Vehicle Name"
               fullWidth
@@ -706,7 +852,40 @@ const AddNewVehiclePage = () => {
                 errorVehicle.vehicle_name ? "Vehicle name is required." : ""
               }
             />
-
+            <TextField
+              label="Minimum Waiting Time (minutes)"
+              fullWidth
+              margin="normal"
+              name="minimum_waiting_time"
+              type="number"
+              value={selectedVehicle.minimum_waiting_time}
+              onChange={handleInputChange}
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
+              error={errorVehicle.minimum_waiting_time}
+              helperText={
+                errorVehicle.minimum_waiting_time
+                  ? "Minimum waiting time is required."
+                  : ""
+              }
+            />
+            <TextField
+              label="Penalty Charge (per minute)"
+              fullWidth
+              margin="normal"
+              name="penalty_charge"
+              type="number"
+              value={selectedVehicle.penalty_charge}
+              onChange={handleInputChange}
+              InputProps={{
+                inputProps: { min: 0, step: "0.01" },
+              }}
+              error={errorVehicle.penalty_charge}
+              helperText={
+                errorVehicle.penalty_charge ? "Penalty charge is required." : ""
+              }
+            />
             <TextField
               label="Weight (kg)"
               fullWidth
@@ -721,7 +900,6 @@ const AddNewVehiclePage = () => {
                 errorVehicle.weight ? "Vehicle Weight in Kgs is required." : ""
               }
             />
-
             <FormControl fullWidth margin="normal" variant="outlined">
               <InputLabel>Vehicle Type</InputLabel>
               <Select
@@ -742,7 +920,6 @@ const AddNewVehiclePage = () => {
                 ))}
               </Select>
             </FormControl>
-
             <TextField
               label="Description"
               fullWidth
@@ -757,7 +934,6 @@ const AddNewVehiclePage = () => {
                   : ""
               }
             />
-
             <Typography variant="subtitle1">Vehicle Image</Typography>
             <TextField
               fullWidth
@@ -770,7 +946,6 @@ const AddNewVehiclePage = () => {
                 errorVehicle.image ? "Vehicle Image is required." : ""
               }
             />
-
             <Typography variant="subtitle1">
               Vehicle Size Guideline Image
             </Typography>
@@ -785,7 +960,22 @@ const AddNewVehiclePage = () => {
                 errorVehicle.size_image ? "Vehicle Size Image is required." : ""
               }
             />
-
+            <Typography variant="subtitle1" sx={{ mt: 2 }}>
+              Vehicle Map Image
+            </Typography>
+            <TextField
+              fullWidth
+              margin="normal"
+              type="file"
+              onChange={handleChangeVehicleMapImage}
+              required
+              error={errorVehicle.vehicle_map_image}
+              helperText={
+                errorVehicle.vehicle_map_image
+                  ? "Vehicle Map Image is required."
+                  : ""
+              }
+            />
             <Box mt={2} display="flex" justifyContent="flex-end">
               <Button onClick={handleCloseDialog} sx={{ marginRight: 1 }}>
                 Cancel
