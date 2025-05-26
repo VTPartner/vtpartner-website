@@ -2,7 +2,7 @@
 
 // Define the variables
 let serverEndPoint, serverWebsiteEndPoint, serverEndPointImage;
-const devMode = 1; // Change this to 1 for development mode
+const devMode = 0; // Change this to 1 for development mode
 
 if (devMode === 1) {
   serverEndPoint = "http://100.24.44.74:8000/api/dashboard";
@@ -57,3 +57,4 @@ export {
   devMode,
   formatEpoch,
 };
+

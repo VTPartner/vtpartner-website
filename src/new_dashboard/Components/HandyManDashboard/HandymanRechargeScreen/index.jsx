@@ -41,19 +41,51 @@ const HandymanRechargeScreen = () => {
     remarks: "",
   });
 
+  const calculateRechargeStatus = (rechargeTime, expiryTime) => {
+    const currentEpoch = Math.floor(Date.now() / 1000); // Current time in seconds
+    const rechargeEpoch = parseInt(rechargeTime);
+    const expiryEpoch = parseInt(expiryTime);
+
+    if (!rechargeEpoch || !expiryEpoch) {
+      return {
+        status: "INVALID",
+        color: "danger",
+      };
+    }
+
+    if (currentEpoch > expiryEpoch) {
+      return {
+        status: "EXPIRED",
+        color: "danger",
+      };
+    }
+
+    if (currentEpoch >= rechargeEpoch && currentEpoch <= expiryEpoch) {
+      return {
+        status: "ACTIVE",
+        color: "success",
+      };
+    }
+
+    return {
+      status: "PENDING",
+      color: "warning",
+    };
+  };
+
   const fetchRechargeHistory = async () => {
     try {
       const [walletRes, historyRes] = await Promise.all([
         axios.post(`${serverEndPoint}/get_handyman_wallet_balance`, {
-          driver_id: driverId,
+          handyman_id: driverId,
         }),
         axios.post(`${serverEndPoint}/get_handyman_recharge_history`, {
-          driver_id: driverId,
+          handyman_id: driverId,
         }),
       ]);
 
       setWallet(walletRes.data.wallet);
-      setRechargeHistory(historyRes.data.recharge_history || []);
+      setRechargeHistory(historyRes.data.history || []);
     } catch (error) {
       console.error("Error fetching recharge history:", error);
       toast.error("Failed to fetch recharge history");
@@ -150,40 +182,48 @@ const HandymanRechargeScreen = () => {
                     <thead>
                       <tr>
                         <th>Date & Time</th>
+                        <th>Recharge Plan</th>
+                        <th>Plan Expiry Days</th>
                         <th>Amount</th>
-                        <th>Payment Mode</th>
-                        <th>Reference ID</th>
+                        <th>Razorpay ID</th>
+                        <th>Plan Expiry Time</th>
                         <th>Status</th>
-                        <th>Remarks</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {currentItems.map((recharge) => (
-                        <tr key={recharge.recharge_id}>
-                          <td>{formatEpoch(recharge.recharge_time)}</td>
-                          <td>
-                            <span className="badge bg-success">
-                              ₹ {recharge.amount}
-                            </span>
+                      {currentItems.map((recharge) => {
+                        const status = calculateRechargeStatus(
+                          recharge.recharge_time,
+                          recharge.plan_expiry_time
+                        );
+
+                        return (
+                          <tr key={recharge.recharge_history_id}>
+                            <td>{formatEpoch(recharge.recharge_time)}</td>
+                            <td>{recharge.plan_title}</td>
+                            <td>{recharge.expiry_days} Day</td>
+                            <td>
+                              <span className="badge bg-success">
+                                ₹ {recharge.plan_price}
+                              </span>
+                            </td>
+                            <td>{recharge.razorpay_payment_id}</td>
+                            <td>{recharge.plan_expiry_time}</td>
+                            <td>
+                              <Badge color={status.color}>
+                                {status.status}
+                              </Badge>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                      {currentItems.length === 0 && (
+                        <tr>
+                          <td colSpan="8" className="text-center">
+                            No recharge history found
                           </td>
-                          <td>{recharge.payment_mode}</td>
-                          <td>{recharge.reference_id}</td>
-                          <td>
-                            <Badge
-                              color={
-                                recharge.status === "COMPLETED"
-                                  ? "success"
-                                  : recharge.status === "PENDING"
-                                  ? "warning"
-                                  : "danger"
-                              }
-                            >
-                              {recharge.status}
-                            </Badge>
-                          </td>
-                          <td>{recharge.remarks}</td>
                         </tr>
-                      ))}
+                      )}
                     </tbody>
                   </Table>
                 </div>

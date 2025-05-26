@@ -513,7 +513,7 @@ const Routes = () => {
       element: <OtherDriverRechargeScreen />,
     },
     {
-      path: "/dashboard/handyman/:driverId/:driverName",
+      path: "/dashboard/handyman-recharge/:driverId/:driverName",
       element: <HandymanRechargeScreen />,
     },
     {

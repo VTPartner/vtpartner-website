@@ -40,10 +40,10 @@ const HandymanWallet = () => {
     try {
       const [walletRes, transactionsRes] = await Promise.all([
         axios.post(`${serverEndPoint}/get_handyman_wallet_balance`, {
-          driver_id: driverId,
+          handyman_id: driverId,
         }),
         axios.post(`${serverEndPoint}/get_handyman_wallet_transactions`, {
-          driver_id: driverId,
+          handyman_id: driverId,
         }),
       ]);
 
@@ -64,7 +64,7 @@ const HandymanWallet = () => {
     e.preventDefault();
     try {
       await axios.post(`${serverEndPoint}/add_handyman_wallet_transaction`, {
-        driver_id: driverId,
+        handyman_id: driverId,
         ...transactionForm,
       });
 
