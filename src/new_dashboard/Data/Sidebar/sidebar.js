@@ -45,8 +45,13 @@ export const sidebarConfig = [
       { name: "Recharge Plans", path: "/dashboard/all-recharge-plans" },
       { name: "Banners", path: "/dashboard/all-banners" },
       { name: "Coupons", path: "/dashboard/all-coupons" },
-      { name: "Cancel Reasons", path: "/dashboard/cancel-reasons" },
+      { name: "Customer Cancel Reasons", path: "/dashboard/cancel-reasons" },
+      {
+        name: "Agent Cancel Reasons",
+        path: "/dashboard/agents-cancel-reasons",
+      },
       { name: "App Controls", path: "/dashboard/app-controls" },
+      { name: "Query Controls", path: "/dashboard/query-controls" },
     ],
   },
 

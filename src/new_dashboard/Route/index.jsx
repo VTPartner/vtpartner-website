@@ -120,6 +120,9 @@ import VehicleUpgradePrices from "../Pages/MainSettingsPages/AllAddUpgradePrices
 import ServicePlanUpgrades from "../Pages/MainSettingsPages/ServicePriceUpgrade";
 import EstimationRequests from "../Pages/EstimationsRequest/AllEstimationRequest";
 import Enquiries from "../Pages/EstimationsRequest/AllAgentsRequest";
+import QueryControlSettings from "../Pages/MainSettingsPages/QueryControlSettingsPanel";
+import AgentsCancelReasons from "../Pages/MainSettingsPages/DriverCancelReasons";
+import PeakHourPincodeWisePricing from "../Pages/MainSettingsPages/PeakHoursPincodeWise";
 // DashboardRoutes
 // const GoodsDriversHome = React.lazy(() =>
 //   import("@/Pages/Dashboard/GoodsDriversHome")
@@ -347,8 +350,16 @@ const Routes = () => {
           element: <CancelReasons />,
         },
         {
+          path: "/dashboard/agents-cancel-reasons",
+          element: <AgentsCancelReasons />,
+        },
+        {
           path: "/dashboard/app-controls",
           element: <ControlSettings />,
+        },
+        {
+          path: "/dashboard/query-controls",
+          element: <QueryControlSettings />,
         },
         {
           path: "/dashboard/all-goods_types",
@@ -408,7 +419,8 @@ const Routes = () => {
         },
         {
           path: "/dashboard/vehicle-peak-hours-price/:vehicle_id/:vehicle_name",
-          element: <PeakHourPricing />,
+          element: <PeakHourPincodeWisePricing />,
+          // element: <PeakHourPricing />,
         },
       ],
     },

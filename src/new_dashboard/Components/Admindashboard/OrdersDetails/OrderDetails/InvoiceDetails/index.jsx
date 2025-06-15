@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
 import { useRef, useState } from "react"; // Added useState
 import { Button, Col, Row } from "reactstrap";
@@ -7,7 +8,9 @@ import { useLocation } from "react-router-dom";
 
 import { Divider } from "@mui/material";
 import Loader from "../../../../Loader";
-import { formatEpoch } from "../../../../../../dashboard/app/constants";
+import { formatEpoch, mapKey } from "../../../../../../dashboard/app/constants";
+import { LoadScript } from "@react-google-maps/api";
+import DeliveryMap from "../../../../DriverMapForInvoice";
 
 const GoodsDriverInvoiceDetails = () => {
   const cardRef = useRef(null);
@@ -422,6 +425,31 @@ const GoodsDriverInvoiceDetails = () => {
                       </div>
                     </div>
                   </div>
+                </div>
+
+                {/* After payment details card */}
+                <div className="w-full mb-5">
+                  <LoadScript googleMapsApiKey={mapKey}>
+                    <DeliveryMap
+                      pickupLocation={{
+                        lat: bookingDetails.pickup_lat,
+                        lng: bookingDetails.pickup_lng,
+                      }}
+                      dropLocations={
+                        bookingDetails.multiple_drops > 0
+                          ? dropLocations.map((loc, index) => ({
+                              lat: loc.latitude,
+                              lng: loc.longitude,
+                            }))
+                          : [
+                              {
+                                lat: bookingDetails.destination_lat,
+                                lng: bookingDetails.destination_lng,
+                              },
+                            ]
+                      }
+                    />
+                  </LoadScript>
                 </div>
                 <div className="mb-2">
                   <h3 className="text-gray-400 text-lg">Declaration</h3>
